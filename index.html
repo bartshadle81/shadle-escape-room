@@ -283,20 +283,37 @@ body::before {
 .polaroid-back {
   position: absolute; inset: 0;
   background: #f8f4ee;
-  padding: 20px;
+  padding: 16px;
   transform: rotateY(180deg);
   box-shadow: 0 8px 32px rgba(0,0,0,0.7);
-  overflow-y: auto;
+  display: flex; flex-direction: column;
+  overflow: hidden;
 }
 
 .polaroid-back-text {
   font-family: 'Caveat', cursive;
-  font-size: 1rem; color: var(--ink);
-  line-height: 1.6;
+  font-size: 0.88rem; color: var(--ink);
+  line-height: 1.55;
+  overflow-y: auto;
+  flex: 1;
+  -webkit-overflow-scrolling: touch;
+  padding-right: 2px;
 }
 
 .polaroid-back-text strong {
   font-weight: 700; color: #1a0a00;
+}
+
+.polaroid-back-maxim {
+  display: block;
+  margin-top: 10px;
+  padding: 7px 10px;
+  background: rgba(180,140,70,0.12);
+  border-left: 2px solid rgba(180,140,70,0.6);
+  font-style: italic;
+  font-size: 0.82rem;
+  color: #3a2010;
+  line-height: 1.5;
 }
 
 .leah-tap-hint {
@@ -559,6 +576,65 @@ body::before {
   font-size: 1rem;
 }
 
+/* ─── NARRATIVE OVERLAY ─── */
+.narrative-overlay {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 28px 24px;
+  background: linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-dark) 100%);
+  z-index: 5;
+  transition: opacity 0.7s ease;
+}
+.narrative-overlay.hidden {
+  opacity: 0; pointer-events: none;
+}
+
+.narrative-inner {
+  max-width: 520px; width: 100%;
+  text-align: center;
+}
+
+.narrative-eyebrow {
+  font-family: 'Special Elite', monospace;
+  font-size: 0.65rem; color: rgba(245,217,168,0.4);
+  letter-spacing: 0.25em; text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+.narrative-text {
+  font-family: 'Crimson Text', serif;
+  font-size: clamp(1.05rem, 2.5vw, 1.2rem);
+  color: var(--parchment); line-height: 1.85;
+  font-style: italic;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.6);
+  margin-bottom: 36px;
+}
+
+.narrative-text em { font-style: normal; color: var(--amber-pale); }
+
+.narrative-btn {
+  display: inline-block;
+  padding: 14px 32px;
+  background: transparent;
+  border: 1px solid rgba(196,134,46,0.5);
+  cursor: pointer;
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem; font-style: italic;
+  color: var(--amber-light);
+  letter-spacing: 0.04em;
+  transition: background 0.25s, border-color 0.25s, transform 0.15s;
+}
+.narrative-btn:hover {
+  background: rgba(196,134,46,0.12);
+  border-color: rgba(196,134,46,0.9);
+  transform: translateY(-1px);
+}
+.narrative-btn:active { transform: translateY(0); }
+
+.clue-reveal { transition: opacity 0.6s ease; }
+.clue-reveal.hidden { opacity: 0; pointer-events: none; }
+
 /* ─── TIMER ─── */
 #timer-display {
   position: fixed; top: 12px; right: 16px;
@@ -767,19 +843,29 @@ body::before {
       <br>
       <p>If you find anything that belonged to them, please let the front desk know. We are still trying to reach them.</p>
       <br>
+      <p>Please also don't <strong><u>MIND THE LETTERS</u></strong> in the mailbox — we will have those collected by end of week.</p>
+      <br>
       <p style="text-align:right; font-style:italic; opacity:0.6">— Ridgeline Management</p>
     </div>
-    <button class="note-proceed" id="opening-proceed-btn">I Understand — Show Me My Clue</button>
+    <button class="note-proceed" id="opening-proceed-btn">I Understand — Begin Exploring</button>
   </div>
 </div>
 
-<div id="screen-clue" class="screen">
+<div id="screen-clue" class="screen" style="position:relative;">
   <div class="player-badge">
     <div class="badge-dot"></div>
     <span class="badge-name" id="clue-player-badge"></span>
   </div>
-  <!-- Clue content injected here -->
-  <div id="clue-content"></div>
+  <!-- Narrative overlay (shown first) -->
+  <div class="narrative-overlay" id="narrative-overlay">
+    <div class="narrative-inner">
+      <p class="narrative-eyebrow">Ridgeline Cabin #4 · August 1987</p>
+      <p class="narrative-text" id="narrative-text"></p>
+      <button class="narrative-btn" id="narrative-btn"></button>
+    </div>
+  </div>
+  <!-- Clue content (revealed after narrative) -->
+  <div id="clue-content" class="clue-reveal hidden"></div>
 </div>
 
 <div id="screen-puzzle2" class="screen">
@@ -876,6 +962,43 @@ function hideOverlay(id) {
   document.getElementById('overlay-' + id).classList.remove('active');
 }
 
+// ─── NARRATIVES ───
+const NARRATIVES = {
+  Leah: {
+    text: `You begin moving through the cabin, room by room. The air is still — pine resin, cold ash, the faint smell of something old and woolen. The fireplace sits dark and unlit, but on the mantlepiece above it, something stops you. A small photograph in a simple wooden frame. <em>A dog.</em> She's sitting very straight, looking directly at the camera, as if she knew exactly what she wanted to say.`,
+    button: 'Examine the photograph'
+  },
+  Bart: {
+    text: `You drift into the kitchen. Tidy, but unlived-in — a thin layer of dust on the countertops, a dish rack with nothing in it. The fridge hums. As you glance at the door, something catches your eye: a yellowed index card held in place by a small magnet shaped like a bone. Someone's handwriting — hurried, but careful. <em>A recipe.</em>`,
+    button: 'Read the recipe card'
+  },
+  Melissa: {
+    text: `Near the front door, a wooden stand holds an old leather-bound book, left open to a particular page. A guest registry. Names and dates going back years, each entry in a different hand. You run your finger slowly down the list, and you slow at two of them — two names that feel <em>deliberate</em>, like they were meant to be found.`,
+    button: 'Study the registry'
+  },
+  Noah: {
+    text: `You find yourself drawn to the far wall, where afternoon light presses through a dusty window. Beside it hangs a paper calendar, still turned to the right month and year — as if someone expected to come back. Entries for every day that week. <em>Almost</em> every day. A sticky note clings to the corner, curling at the edges.`,
+    button: 'Read the calendar'
+  }
+};
+
+function showNarrative(name) {
+  const nav = NARRATIVES[name];
+  document.getElementById('narrative-text').innerHTML = nav.text;
+  document.getElementById('narrative-btn').textContent = nav.button;
+  // Ensure overlay is visible, clue is hidden
+  document.getElementById('narrative-overlay').classList.remove('hidden');
+  document.getElementById('clue-content').classList.add('hidden');
+  showScreen('clue');
+
+  document.getElementById('narrative-btn').onclick = () => {
+    document.getElementById('narrative-overlay').classList.add('hidden');
+    setTimeout(() => {
+      document.getElementById('clue-content').classList.remove('hidden');
+    }, 400);
+  };
+}
+
 // ─── CLUE CONTENT GENERATORS ───
 
 function buildLeahClue() {
@@ -894,8 +1017,8 @@ function buildLeahClue() {
             <br><br>
             She never liked having her picture taken. But this day was different — Calypso had just <strong>Done</strong> something remarkable. <strong>Outside</strong> in the meadow, she had led me straight to the old well that the property manager didn't even know existed. I think she was trying to tell me something.
             <br><br>
-            If you're reading this, remember one of my life maxims: <em>"be bold, and be the first."</em>
-            <br><br>
+            <span class="polaroid-back-maxim">"Be bold, and be the first."</span>
+            <br>
             — T
           </div>
         </div>
@@ -987,7 +1110,7 @@ function buildMelissaClue() {
         </tbody>
       </table>
       <div class="answer-section">
-        <span class="answer-label">🔒 Enter the answer (all four letters combined):</span>
+        <span class="answer-label">🔒 Enter the answer (all 8 letters combined):</span>
         <div class="answer-row">
           <input type="text" id="answer-input" placeholder="????????" maxlength="8" autocomplete="off" spellcheck="false">
           <button class="answer-btn" id="answer-btn">Unlock</button>
@@ -1164,9 +1287,9 @@ gameRef.on('value', snapshot => {
   // Only react if we're past the join/opening local screens
   if (currentLocalScreen === 'join' || currentLocalScreen === 'opening') return;
 
-  if (phase === 'celebrating' && currentLocalScreen === 'clue') {
+  if (phase === 'celebrating' && (currentLocalScreen === 'clue')) {
     runCelebration();
-  } else if (phase === 'puzzle2' && currentLocalScreen === 'clue') {
+  } else if (phase === 'puzzle2' && (currentLocalScreen === 'clue')) {
     // Door already running or just jump to puzzle2
     if (!document.getElementById('overlay-door').classList.contains('active')) {
       showPuzzle2();
@@ -1191,7 +1314,7 @@ function proceedFromOpening() {
   });
 
   renderClueForPlayer(playerName);
-  showScreen('clue');
+  showNarrative(playerName);
 }
 
 // ─── RESET ───
@@ -1231,25 +1354,29 @@ function attemptJoin() {
   playerName = match;
   error.textContent = '';
 
-  // Check current game state
+  // Check current game state, then ALWAYS show the opening note first
+  // (so every player reads it) — unless we're already at puzzle 2
   gameRef.once('value', snapshot => {
     const state = snapshot.val();
     lastResetVersion = state?.resetVersion || 0;
 
     if (state?.phase === 'puzzle2') {
+      // Game already finished puzzle 1 — jump straight in
       showPuzzle2();
-    } else if (state?.phase === 'celebrating') {
-      renderClueForPlayer(playerName);
-      showScreen('clue');
-      runCelebration();
-    } else if (state?.phase === 'puzzle1' && state?.timerStart) {
-      startTimer(state.timerStart);
-      renderClueForPlayer(playerName);
-      showScreen('clue');
-    } else {
-      // Show opening note
-      showScreen('opening');
+      return;
     }
+
+    // Everyone reads the opening note regardless of phase.
+    // If the timer is already running, start it locally so the
+    // countdown is correct when they proceed.
+    if (state?.timerStart) startTimer(state.timerStart);
+
+    // If puzzle1 is live, pre-render the clue so it's ready instantly
+    if (state?.phase === 'puzzle1' || state?.phase === 'celebrating') {
+      renderClueForPlayer(playerName);
+    }
+
+    showScreen('opening');
   });
 }
 
