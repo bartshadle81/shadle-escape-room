@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>What Calypso Knew</title>
+<title>What Happened at Ridgeline Cabin</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Special+Elite&family=Caveat:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -809,6 +809,158 @@ body::before {
 }
 .gm-reset-btn:hover { background: rgba(107,26,26,1); }
 
+/* ─── MINI PUZZLE A — LETTER ─── */
+#screen-miniA {
+  background: linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-dark) 100%);
+  padding: 20px;
+}
+
+.letter-wrap {
+  max-width: 580px; width: 100%;
+  display: flex; flex-direction: column; gap: 20px;
+}
+
+.letter-paper {
+  background: var(--parchment);
+  padding: 40px 44px 36px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.8), 0 2px 8px rgba(0,0,0,0.5),
+              inset 0 0 40px rgba(180,140,80,0.08);
+  position: relative;
+  border: 1px solid var(--parchment-d);
+  transform: rotate(-0.3deg);
+  max-height: 65vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.letter-paper::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, transparent 50%, rgba(150,110,60,0.04) 100%);
+  pointer-events: none;
+}
+
+/* Faint ruled lines */
+.letter-paper::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    transparent 0px, transparent 30px,
+    rgba(100,120,160,0.07) 30px, rgba(100,120,160,0.07) 31px
+  );
+  pointer-events: none;
+}
+
+.letter-header {
+  font-family: 'Special Elite', monospace;
+  font-size: 0.62rem; color: #888870;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  margin-bottom: 20px; text-align: center;
+  border-bottom: 1px solid rgba(100,80,40,0.2);
+  padding-bottom: 10px;
+}
+
+.letter-body {
+  font-family: 'Caveat', cursive;
+  font-size: 1.05rem; color: var(--ink);
+  line-height: 1.85; position: relative; z-index: 1;
+}
+
+.letter-body p { margin-bottom: 16px; }
+.letter-body p:last-child { margin-bottom: 0; }
+
+.letter-sign {
+  margin-top: 20px; text-align: right;
+  font-family: 'Caveat', cursive;
+  font-size: 1.1rem; color: var(--ink-mid);
+  font-style: italic;
+}
+
+/* Noah's answer box */
+.miniA-answer {
+  background: rgba(13,8,5,0.5);
+  border: 1px solid rgba(196,134,46,0.25);
+  padding: 18px 20px;
+}
+
+.miniA-label {
+  font-family: 'Special Elite', monospace;
+  font-size: 0.68rem; color: rgba(245,217,168,0.5);
+  letter-spacing: 0.15em; text-transform: uppercase;
+  margin-bottom: 12px; display: block;
+}
+
+.miniA-row { display: flex; gap: 10px; align-items: stretch; }
+
+#miniA-input {
+  flex: 1; padding: 11px 14px;
+  background: rgba(245,217,168,0.06);
+  border: 1px solid rgba(196,134,46,0.4);
+  border-radius: 1px; outline: none;
+  font-family: 'Special Elite', monospace;
+  font-size: 1.1rem; color: var(--parchment);
+  text-transform: uppercase; letter-spacing: 0.1em;
+  transition: border-color 0.2s, background 0.2s;
+}
+#miniA-input:focus { border-color: var(--amber); background: rgba(245,217,168,0.09); }
+
+.miniA-btn {
+  padding: 11px 22px;
+  background: var(--wood-dark); border: 1px solid var(--wood-mid);
+  cursor: pointer; border-radius: 1px;
+  font-family: 'Special Elite', monospace;
+  font-size: 0.75rem; color: var(--amber-pale);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  transition: background 0.2s;
+}
+.miniA-btn:hover { background: var(--wood-mid); }
+
+#miniA-result {
+  margin-top: 10px; min-height: 20px;
+  font-family: 'Special Elite', monospace;
+  font-size: 0.75rem; letter-spacing: 0.05em;
+}
+#miniA-result.wrong { color: #c07070; }
+#miniA-result.hint  { color: #9a7040; }
+
+.miniA-waiting {
+  font-family: 'Caveat', cursive;
+  font-size: 1rem; color: rgba(245,217,168,0.4);
+  font-style: italic; text-align: center;
+  padding: 10px 0;
+}
+
+/* ─── MINI PUZZLE B PLACEHOLDER ─── */
+#screen-miniB {
+  background: linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-dark) 100%);
+}
+
+.miniB-inner {
+  text-align: center; max-width: 500px; padding: 50px 40px;
+  background: rgba(13,8,5,0.6);
+  border: 1px solid rgba(196,134,46,0.25);
+}
+
+.miniB-badge {
+  font-family: 'Special Elite', monospace;
+  font-size: 0.65rem; color: rgba(245,217,168,0.4);
+  letter-spacing: 0.25em; text-transform: uppercase;
+  margin-bottom: 24px; display: block;
+}
+
+.miniB-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  font-weight: 700; font-style: italic;
+  color: var(--amber-light); margin-bottom: 16px;
+}
+
+.miniB-text {
+  font-family: 'Crimson Text', serif;
+  font-size: 1.05rem; color: rgba(245,217,168,0.65);
+  line-height: 1.7; font-style: italic;
+}
+
 /* ─── SCROLLBAR ─── */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: rgba(13,8,5,0.5); }
@@ -822,13 +974,13 @@ body::before {
 <div id="screen-join" class="screen active">
   <div class="join-inner">
     <span class="candle-flicker">🕯️</span>
-    <h1 class="join-title">What Calypso Knew</h1>
-    <p class="join-subtitle">An Escape Room · Summer 1987</p>
+    <h1 class="join-title">What Happened at Ridgeline Cabin</h1>
+    <p class="join-subtitle">A Mystery · Ridgeline Cabin #4</p>
     <p class="join-prompt">Enter your name to begin</p>
     <input type="text" id="name-input" placeholder="Bart, Melissa, Noah, or Leah" maxlength="20" autocomplete="off" spellcheck="false">
     <div id="name-error"></div>
     <button class="join-btn" id="join-btn">Enter the Cabin</button>
-    <p class="join-note">Ridgeline Cabin #4 · August 1987</p>
+    <p class="join-note">Ridgeline Cabin #4 · Present Day</p>
   </div>
 </div>
 
@@ -839,9 +991,9 @@ body::before {
     <div class="note-body">
       <p><em>To our guests —</em></p>
       <br>
-      <p>Please leave the box on the table undisturbed. The family who stayed here last August left without checking out. We found their dog sitting alone by the fireplace.</p>
+      <p>Please leave the box on the table undisturbed. The guest who stayed here three weeks ago left without checking out. We found her dog sitting alone by the fireplace.</p>
       <br>
-      <p>If you find anything that belonged to them, please let the front desk know. We are still trying to reach them.</p>
+      <p>If you find anything that belonged to her, please let the front desk know. We are still trying to reach her.</p>
       <br>
       <p>Please also don't <strong><u>MIND THE LETTERS</u></strong> in the mailbox — we will have those collected by end of week.</p>
       <br>
@@ -859,7 +1011,7 @@ body::before {
   <!-- Narrative overlay (shown first) -->
   <div class="narrative-overlay" id="narrative-overlay">
     <div class="narrative-inner">
-      <p class="narrative-eyebrow">Ridgeline Cabin #4 · August 1987</p>
+      <p class="narrative-eyebrow">Ridgeline Cabin #4</p>
       <p class="narrative-text" id="narrative-text"></p>
       <button class="narrative-btn" id="narrative-btn"></button>
     </div>
@@ -869,20 +1021,70 @@ body::before {
 </div>
 
 <div id="screen-puzzle2" class="screen">
-  <div class="player-badge">
-    <div class="badge-dot" style="background:#8a6a30"></div>
-    <span class="badge-name" id="puzzle2-player-badge"></span>
-  </div>
   <div class="puzzle2-inner">
-    <span class="puzzle2-badge">Puzzle II</span>
-    <h2 class="puzzle2-title">Deeper Into the Cabin</h2>
+    <span class="puzzle2-badge">The Investigation Begins</span>
+    <h2 class="puzzle2-title">What Was Left Behind</h2>
     <p class="puzzle2-text">
       The lockbox clicks open. Inside, wrapped in oilcloth, sits a small bundle — a folded letter, a key, and a photograph of a building you almost recognize.
     </p>
     <p class="puzzle2-text">
-      Calypso knew what was hidden. Now you must find out why she was guarding it.
+      Teena assembled this in a panic. She had to leave before she could finish. Now it falls to you.
     </p>
-    <p class="puzzle2-hint">🔓 Puzzle 2 Coming Soon</p>
+    <button class="note-proceed" id="cliffhanger-proceed-btn" style="margin-top:28px; width:100%;">Begin the Investigation</button>
+  </div>
+</div>
+
+<div id="screen-miniA" class="screen">
+  <div class="player-badge">
+    <div class="badge-dot"></div>
+    <span class="badge-name" id="miniA-player-badge"></span>
+  </div>
+  <div class="letter-wrap">
+    <div class="letter-paper">
+      <p class="letter-header">Found inside the lockbox — handwritten note</p>
+      <div class="letter-body">
+        <p>I am distraught. I hope I can remember everything I am seeing because this dog's life may depend on me. I need to write down what I'm seeing before I forget anything. Every detail matters. I have always believed that the truth lives in the details that others overlook.</p>
+        <p>Starting in the bedroom — I counted twenty dog hairs on the blanket where she slept last night. She was here this morning. I know she was. A dog's presence lingers in a room long after she has left it, and Calypso's presence is stronger than most.</p>
+        <p>I also found eighteen drops of blood near the front door. Not a lot. But enough to tell a story. Blood is never nothing. Blood is always something.</p>
+        <p>There are three scratch marks on the outside of the door. Low down. Her height exactly. She was trying to come back to me.</p>
+        <p>Nineteen pieces of kibble still in her bowl. Untouched. She never — and I mean never — leaves kibble. Something interrupted her.</p>
+        <p>I have been with this dog for eleven months. I know her habits better than I know my own. I know the way she breathes when she's anxious. I know the way she sits when she's watching something she doesn't trust.</p>
+        <p>One missing dog. My dog. Just gone.</p>
+        <p>Tony said this cabin was peaceful. Private. Nobody around for miles. I'm starting to wonder if that's exactly why he suggested it.</p>
+        <p>I keep coming back to the numbers. They have to mean something.</p>
+      </div>
+      <div class="letter-sign">— T</div>
+    </div>
+    <div class="miniA-answer">
+      <span class="miniA-label" id="miniA-label"></span>
+      <div id="miniA-noah-input">
+        <div class="miniA-row">
+          <input type="text" id="miniA-input" placeholder="??????" maxlength="6" autocomplete="off" spellcheck="false">
+          <button class="miniA-btn" id="miniA-btn">Submit</button>
+        </div>
+        <div id="miniA-result"></div>
+      </div>
+      <div id="miniA-waiting-msg" class="miniA-waiting" style="display:none;">
+        Waiting for Noah to crack the code...
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="screen-miniB" class="screen">
+  <div class="player-badge">
+    <div class="badge-dot" style="background:#8a6a30"></div>
+    <span class="badge-name" id="miniB-player-badge"></span>
+  </div>
+  <div class="miniB-inner">
+    <span class="miniB-badge">Mini Puzzle B</span>
+    <h2 class="miniB-title">Someone Was Watching</h2>
+    <p class="miniB-text">
+      The trail leads outside. But you're not the first ones to follow it.
+    </p>
+    <p class="miniB-text" style="margin-top:16px; opacity:0.5; font-size:0.85rem;">
+      🐾 Coming Soon
+    </p>
   </div>
 </div>
 
@@ -890,9 +1092,9 @@ body::before {
 
 <div id="overlay-celebration">
   <div class="celebration-glow"></div>
-  <div class="celebration-icon">🕯️</div>
-  <h2 class="celebration-title">The Lockbox Stirs...</h2>
-  <p class="celebration-text">Somewhere deep in the cabin, a door creaks open.</p>
+  <div class="celebration-icon" id="celebration-icon">🕯️</div>
+  <h2 class="celebration-title" id="celebration-title">The Lockbox Stirs...</h2>
+  <p class="celebration-text" id="celebration-text">Somewhere deep in the cabin, a door creaks open.</p>
 </div>
 
 <div id="overlay-door">
@@ -1009,11 +1211,11 @@ function buildLeahClue() {
       <div class="polaroid" id="polaroid">
         <div class="polaroid-front">
           <img src="${CALYPSO_SRC}" alt="Calypso" id="calypso-photo">
-          <p class="polaroid-caption">Summer 1987</p>
+          <p class="polaroid-caption">Ridgeline Cabin #4</p>
         </div>
         <div class="polaroid-back">
           <div class="polaroid-back-text">
-            <em>Taken the summer of 1987 at Ridgeline Cabin #4.</em>
+            <em>Taken recently at Ridgeline Cabin #4.</em>
             <br><br>
             She never liked having her picture taken. But this day was different — Calypso had just <strong>Done</strong> something remarkable. <strong>Outside</strong> in the meadow, she had led me straight to the old well that the property manager didn't even know existed. I think she was trying to tell me something.
             <br><br>
@@ -1062,7 +1264,7 @@ function buildMelissaClue() {
   <div class="melissa-scene">
     <div class="registry-book">
       <div class="registry-title">Ridgeline Cabin #4 — Guest Registry</div>
-      <div class="registry-epigraph">"A dog's soul lives in the middle of the pack." — T. Patel, Aug 1987</div>
+      <div class="registry-epigraph">"A dog's soul lives in the middle of the pack." — T. Patel</div>
       <table class="registry-table">
         <thead>
           <tr>
@@ -1074,37 +1276,47 @@ function buildMelissaClue() {
         <tbody>
           <tr>
             <td>The Calloway Family</td>
-            <td>June 1984</td>
+            <td>June 2025</td>
             <td>Wonderful week. The fireplace smells like pine.</td>
           </tr>
           <tr class="highlight-row">
             <td><span class="registry-bold">Max</span> Ellison</td>
-            <td>March 1985</td>
+            <td>August 2025</td>
             <td>Solo trip. Quiet and perfect.</td>
           </tr>
           <tr>
             <td>Jazmine Gonzalez</td>
-            <td>July 1986</td>
+            <td>September 2025</td>
             <td>Brought my guitar. Left a piece of my heart here.</td>
           </tr>
           <tr>
             <td>The Hathaway Family — Courtney &amp; Michelle</td>
-            <td>September 1986</td>
+            <td>October 2025</td>
             <td>Best cabin we've ever stayed in. We'll be back.</td>
+          </tr>
+          <tr>
+            <td>The Wilson Family</td>
+            <td>November 2025</td>
+            <td>Carter loved the trails. We'll be back soon.</td>
           </tr>
           <tr class="highlight-row">
             <td><span class="registry-bold">Manny</span></td>
-            <td>April 1987</td>
+            <td>December 2025</td>
             <td>Fished every morning. Caught nothing. Worth it.</td>
           </tr>
           <tr>
+            <td>Tony Nguyen</td>
+            <td>January 2026</td>
+            <td>Incredible spot. Already recommended it to a friend.</td>
+          </tr>
+          <tr>
             <td>T. Patel</td>
-            <td>August 1987</td>
+            <td>February 2026</td>
             <td><em style="opacity:0.5">— no note —</em></td>
           </tr>
           <tr>
             <td>The Pemberton Family</td>
-            <td>October 1987</td>
+            <td>March 2026</td>
             <td>Found a dog biscuit behind the fridge. Odd.</td>
           </tr>
         </tbody>
@@ -1126,8 +1338,8 @@ function buildNoahClue() {
   <div class="noah-scene">
     <div class="calendar-page">
       <div class="calendar-header">
-        <div class="calendar-month">August</div>
-        <div class="calendar-year">1987</div>
+        <div class="calendar-month">February</div>
+        <div class="calendar-year">2026</div>
       </div>
       <div class="calendar-body">
         <table class="calendar-table">
@@ -1266,8 +1478,63 @@ function runDoorTransition() {
 }
 
 function showPuzzle2() {
-  document.getElementById('puzzle2-player-badge').textContent = playerName + ' — Puzzle II';
   showScreen('puzzle2');
+}
+
+function showMiniA() {
+  document.getElementById('miniA-player-badge').textContent = playerName;
+  document.getElementById('miniA-label').textContent =
+    playerName === 'Noah'
+      ? '🔍 You notice the numbers — what do they spell?'
+      : '🔍 The numbers in the letter mean something. Noah will figure it out.';
+  document.getElementById('miniA-noah-input').style.display  = playerName === 'Noah' ? 'block' : 'none';
+  document.getElementById('miniA-waiting-msg').style.display = playerName === 'Noah' ? 'none'  : 'block';
+  showScreen('miniA');
+  if (playerName === 'Noah') wireMiniAInput();
+}
+
+function showMiniB() {
+  document.getElementById('miniB-player-badge').textContent = playerName;
+  showScreen('miniB');
+}
+
+function wireMiniAInput() {
+  const input  = document.getElementById('miniA-input');
+  const btn    = document.getElementById('miniA-btn');
+  const result = document.getElementById('miniA-result');
+  if (!input || !btn) return;
+
+  btn.addEventListener('click', checkMiniA);
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') checkMiniA(); });
+
+  function checkMiniA() {
+    const val = input.value.trim().toUpperCase();
+    if (val === 'TRACKS') {
+      result.className = '';
+      result.textContent = '✓ Noah has found the trail...';
+      btn.disabled = true;
+      input.disabled = true;
+      gameRef.update({
+        phase: 'celebratingMiniA',
+        miniASolvedAt: firebase.database.ServerValue.TIMESTAMP
+      });
+    } else {
+      result.className = 'wrong';
+      result.textContent = '✗ Not quite.';
+    }
+  }
+}
+
+function runMiniACelebration() {
+  document.getElementById('celebration-icon').textContent  = '🐾';
+  document.getElementById('celebration-title').textContent = 'Noah Has Found the Trail...';
+  document.getElementById('celebration-text').textContent  = 'Something stirs outside the cabin.';
+  showOverlay('celebration');
+  setTimeout(() => {
+    hideOverlay('celebration');
+    gameRef.update({ phase: 'miniB' });
+    showMiniB();
+  }, 4000);
 }
 
 // ─── FIREBASE LISTENERS ───
@@ -1284,37 +1551,60 @@ gameRef.on('value', snapshot => {
     return;
   }
 
-  // Only react if we're past the join/opening local screens
+  // Only react if we're past the local-only screens
   if (currentLocalScreen === 'join' || currentLocalScreen === 'opening') return;
 
-  if (phase === 'celebrating' && (currentLocalScreen === 'clue')) {
+  if (phase === 'celebrating' && currentLocalScreen === 'clue') {
     runCelebration();
-  } else if (phase === 'puzzle2' && (currentLocalScreen === 'clue')) {
-    // Door already running or just jump to puzzle2
+  } else if (phase === 'puzzle2' && currentLocalScreen === 'clue') {
     if (!document.getElementById('overlay-door').classList.contains('active')) {
       showPuzzle2();
     }
+  } else if (phase === 'miniA' && currentLocalScreen === 'puzzle2') {
+    showMiniA();
+  } else if (phase === 'celebratingMiniA' && currentLocalScreen === 'miniA') {
+    runMiniACelebration();
+  } else if (phase === 'miniB' && currentLocalScreen === 'miniA') {
+    showMiniB();
   }
 });
 
 // ─── PROCEED FROM OPENING ───
 function proceedFromOpening() {
-  // Start timer if not already started
-  gameRef.transaction(current => {
-    if (!current) current = {};
-    if (!current.phase || current.phase === 'setup') current.phase = 'puzzle1';
-    if (!current.timerStart) current.timerStart = firebase.database.ServerValue.TIMESTAMP;
-    if (!current.resetVersion) current.resetVersion = 0;
-    return current;
-  }, (error, committed, snapshot) => {
-    if (!error && snapshot) {
-      const state = snapshot.val();
-      if (state && state.timerStart) startTimer(state.timerStart);
-    }
-  });
+  gameRef.once('value', snapshot => {
+    const state = snapshot.val();
+    const phase = state?.phase;
 
-  renderClueForPlayer(playerName);
-  showNarrative(playerName);
+    // Route late-joiners to wherever the game currently is
+    if (phase === 'miniB' || phase === 'celebratingMiniA') {
+      showMiniB(); return;
+    }
+    if (phase === 'miniA') {
+      showMiniA(); return;
+    }
+    if (phase === 'puzzle2') {
+      showPuzzle2(); return;
+    }
+
+    // Phase is puzzle1 or earlier — start/join normally
+    gameRef.transaction(current => {
+      if (!current) current = {};
+      if (!current.phase || current.phase === 'setup') current.phase = 'puzzle1';
+      if (!current.timerStart) current.timerStart = firebase.database.ServerValue.TIMESTAMP;
+      if (!current.resetVersion) current.resetVersion = 0;
+      return current;
+    }, (error, committed, snap) => {
+      if (!error && snap) {
+        const s = snap.val();
+        if (s?.timerStart) startTimer(s.timerStart);
+      }
+    });
+
+    if (!document.getElementById('clue-content').innerHTML) {
+      renderClueForPlayer(playerName);
+    }
+    showNarrative(playerName);
+  });
 }
 
 // ─── RESET ───
@@ -1343,7 +1633,7 @@ function resetGame() {
 function attemptJoin() {
   const input = document.getElementById('name-input');
   const error = document.getElementById('name-error');
-  const name = input.value.trim();
+  const name  = input.value.trim();
 
   const match = VALID_PLAYERS.find(p => p.toLowerCase() === name.toLowerCase());
   if (!match) {
@@ -1354,28 +1644,31 @@ function attemptJoin() {
   playerName = match;
   error.textContent = '';
 
-  // Check current game state, then ALWAYS show the opening note first
-  // (so every player reads it) — unless we're already at puzzle 2
   gameRef.once('value', snapshot => {
     const state = snapshot.val();
     lastResetVersion = state?.resetVersion || 0;
+    const phase = state?.phase;
 
-    if (state?.phase === 'puzzle2') {
-      // Game already finished puzzle 1 — jump straight in
-      showPuzzle2();
+    // For phases beyond puzzle1 show the opening note first (atmospheric),
+    // then route to the correct screen on proceed.
+    // miniB / celebratingMiniA / miniA / puzzle2 all get fast-tracked after note.
+    if (phase === 'miniB' || phase === 'celebratingMiniA') {
+      showScreen('opening'); // they'll land on miniB after proceeding
+      return;
+    }
+    if (phase === 'miniA') {
+      showScreen('opening');
+      return;
+    }
+    if (phase === 'puzzle2') {
+      showScreen('opening');
       return;
     }
 
-    // Everyone reads the opening note regardless of phase.
-    // If the timer is already running, start it locally so the
-    // countdown is correct when they proceed.
     if (state?.timerStart) startTimer(state.timerStart);
-
-    // If puzzle1 is live, pre-render the clue so it's ready instantly
-    if (state?.phase === 'puzzle1' || state?.phase === 'celebrating') {
+    if (phase === 'puzzle1' || phase === 'celebrating') {
       renderClueForPlayer(playerName);
     }
-
     showScreen('opening');
   });
 }
@@ -1390,6 +1683,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('opening-proceed-btn').addEventListener('click', () => {
     proceedFromOpening();
+  });
+
+  document.getElementById('cliffhanger-proceed-btn').addEventListener('click', () => {
+    // First tap advances everyone; subsequent taps are no-ops
+    gameRef.once('value', snap => {
+      if (snap.val()?.phase === 'puzzle2') {
+        gameRef.update({ phase: 'miniA' });
+      }
+    });
+    showMiniA();
   });
 
   // GM Panel
