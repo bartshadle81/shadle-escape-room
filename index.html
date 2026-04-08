@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Vanishing Professor — Escape Room</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #08080f;
+  --surface: #111120;
+  --surface2: #1a1a2e;
+  --gold: #c9a84c;
+  --gold-light: #e8c97a;
+  --text: #d4c5a9;
+  --text-dim: #7a6e5a;
+  --red: #c94c4c;
+  --green: #4caa6e;
+  --glow: rgba(201,168,76,0.15);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: Georgia, 'Times New Roman', serif;
+  min-height: 100vh;
+  background-image: radial-gradient(ellipse at 50% 0%, #16101e 0%, #08080f 65%);
+}
+
+/* ── JOIN SCREEN ── */
+#joinScreen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+  text-align: center;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.candle { font-size: 3.5rem; margin-bottom: 1.2rem; animation: flicker 2.5s infinite alternate; }
+@keyframes flicker {
+  0%   { opacity: 1;   transform: scale(1);    }
+  40%  { opacity: 0.8; transform: scale(0.97); }
+  100% { opacity: 0.9; transform: scale(1.02); }
+}
+
+.main-title {
+  font-size: 2rem;
+  color: var(--gold);
+  letter-spacing: 0.12em;
+  text-shadow: 0 0 30px rgba(201,168,76,0.45);
+  margin-bottom: 0.4rem;
+}
+.subtitle {
+  font-size: 1rem;
+  color: var(--text-dim);
+  font-style: italic;
+  margin-bottom: 1.8rem;
+  letter-spacing: 0.08em;
+}
+
+.story-box {
+  background: var(--surface);
+  border: 1px solid #2a2420;
+  border-radius: 10px;
+  padding: 1.2rem 1.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.98rem;
+  line-height: 1.75;
+  text-align: left;
+}
+.story-box strong { color: var(--gold); }
+
+input[type="text"] {
+  background: var(--surface2);
+  border: 1px solid #3a3020;
+  border-radius: 7px;
+  color: var(--text);
+  font-size: 1.05rem;
+  padding: 0.7rem 1rem;
+  width: 100%;
+  margin-bottom: 0.8rem;
+  outline: none;
+  font-family: Georgia, serif;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+input[type="text"]:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 14px var(--glow);
+}
+
+.btn {
+  background: linear-gradient(135deg, #7a5518, #c9a84c);
+  border: none;
+  border-radius: 7px;
+  color: #08080f;
+  font-size: 1.05rem;
+  font-weight: bold;
+  padding: 0.75rem 2rem;
+  cursor: pointer;
+  font-family: Georgia, serif;
+  letter-spacing: 0.06em;
+  transition: transform 0.15s, box-shadow 0.15s;
+  width: 100%;
+}
+.btn:hover { transform: translateY(-2px); box-shadow: 0 5px 22px rgba(201,168,76,0.3); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+.err { color: var(--red); font-size: 0.88rem; margin-top: 0.35rem; min-height: 1.1em; }
+
+/* ── GAME SCREEN ── */
+#gameScreen { display: none; max-width: 960px; margin: 0 auto; padding: 1rem; }
+
+.g-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid #2a2420;
+  border-radius: 9px;
+  padding: 0.75rem 1.2rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.g-title { color: var(--gold); font-size: 1.15rem; letter-spacing: 0.05em; }
+.timer { font-family: monospace; font-size: 1.35rem; color: var(--gold-light); letter-spacing: 0.05em; }
+
+.g-layout {
+  display: grid;
+  grid-template-columns: 1fr 270px;
+  gap: 1rem;
+  align-items: start;
+}
+@media (max-width: 720px) { .g-layout { grid-template-columns: 1fr; } }
+
+/* progress bar */
+.progress-bar { display: flex; gap: 0.5rem; margin-bottom: 0.75rem; }
+.p-step { flex: 1; height: 6px; background: var(--surface2); border-radius: 3px; transition: all 0.5s; }
+.p-step.done   { background: var(--green); box-shadow: 0 0 8px rgba(76,170,110,0.5); }
+.p-step.active { background: var(--gold);  box-shadow: 0 0 8px rgba(201,168,76,0.5); animation: pb-pulse 1.6s infinite; }
+@keyframes pb-pulse { 0%,100%{opacity:1} 50%{opacity:0.55} }
+
+/* puzzle cards */
+.puzzle-card {
+  background: var(--surface);
+  border: 1px solid #2a2420;
+  border-radius: 11px;
+  padding: 1.4rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.4s, box-shadow 0.4s, opacity 0.4s;
+}
+.puzzle-card.locked  { opacity: 0.35; pointer-events: none; }
+.puzzle-card.active  { border-color: var(--gold); box-shadow: 0 0 22px var(--glow); }
+.puzzle-card.solved  { border-color: var(--green); }
+
+.p-num   { font-size: 0.72rem; color: var(--text-dim); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.2rem; }
+.p-title { font-size: 1.25rem; color: var(--gold); margin-bottom: 0.9rem; }
+.p-text  { font-size: 0.98rem; line-height: 1.75; margin-bottom: 0.9rem; font-style: italic; }
+.p-hint  { font-size: 0.84rem; color: var(--text-dim); margin-bottom: 0.9rem; }
+
+.ans-row { display: flex; gap: 0.5rem; }
+.ans-row input { flex: 1; margin-bottom: 0; }
+.ans-row .btn  { width: auto; padding: 0.7rem 1.1rem; font-size: 0.95rem; }
+
+.solved-badge {
+  display: none;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(76,170,110,0.12);
+  border: 1px solid var(--green);
+  border-radius: 20px;
+  color: var(--green);
+  font-size: 0.88rem;
+  padding: 0.3rem 0.85rem;
+  margin-top: 0.6rem;
+  width: fit-content;
+}
+
+.lock-cover { text-align: center; font-size: 1.8rem; padding: 0.6rem; color: var(--text-dim); }
+
+/* sidebar */
+.sidebar { display: flex; flex-direction: column; gap: 1rem; }
+.s-card { background: var(--surface); border: 1px solid #2a2420; border-radius: 11px; padding: 1rem 1.1rem; }
+.s-title { font-size: 0.7rem; color: var(--text-dim); letter-spacing: 0.15em; text-transform: uppercase; border-bottom: 1px solid #2a2420; padding-bottom: 0.5rem; margin-bottom: 0.7rem; }
+
+.player-list { display: flex; flex-direction: column; gap: 0.45rem; }
+.player-row  { display: flex; align-items: center; gap: 0.5rem; font-size: 0.92rem; }
+.pdot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; flex-shrink: 0; box-shadow: 0 0 6px var(--green); }
+
+.feed { max-height: 220px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.35rem; }
+.f-item { font-size: 0.82rem; line-height: 1.4; padding: 0.28rem 0; border-bottom: 1px solid #1a1a28; color: var(--text-dim); }
+.f-item .actor { color: var(--gold); font-weight: bold; }
+.f-item.win .actor { color: var(--green); }
+
+/* shake */
+.shake { animation: shake 0.4s; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)}
+  20%{transform:translateX(-7px)}
+  40%{transform:translateX(7px)}
+  60%{transform:translateX(-5px)}
+  80%{transform:translateX(5px)}
+}
+
+/* ── WIN SCREEN ── */
+#winScreen {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+.win-emoji { font-size: 3.5rem; letter-spacing: 0.5rem; animation: bob 0.6s infinite alternate; margin-bottom: 1rem; }
+@keyframes bob { from{transform:translateY(0)} to{transform:translateY(-12px)} }
+.win-title { font-size: 2.8rem; color: var(--gold); margin-bottom: 0.7rem; animation: glow 2s infinite alternate; }
+@keyframes glow {
+  from { text-shadow: 0 0 20px rgba(201,168,76,0.4); }
+  to   { text-shadow: 0 0 60px rgba(201,168,76,0.9); }
+}
+.win-time    { font-size: 1.4rem; color: var(--text); margin-bottom: 0.5rem; }
+.win-players { font-size: 1rem; color: var(--text-dim); font-style: italic; margin-bottom: 1.8rem; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ JOIN SCREEN ═══════════════ -->
+<div id="joinScreen">
+  <div class="candle">🕯️</div>
+  <div class="main-title">THE VANISHING PROFESSOR</div>
+  <div class="subtitle">A Multiplayer Family Escape Room</div>
+
+  <div class="story-box">
+    <strong>The year is 1923.</strong> Eccentric Professor Archibald has vanished from his study, leaving nothing behind but locked drawers, cryptic notes, and the faint smell of pipe tobacco.<br><br>
+    You and your team have <strong>one hour</strong> to crack his puzzles and escape before his rivals arrive. Work together — each clue unlocks the next door for <em>everyone</em>.
+  </div>
+
+  <input type="text" id="nameInput" placeholder="Enter your name to join…" maxlength="20">
+  <button class="btn" id="joinBtn">🔐 Enter the Study</button>
+  <div class="err" id="joinErr"></div>
+</div>
+
+<!-- ═══════════════ GAME SCREEN ═══════════════ -->
+<div id="gameScreen">
+  <div class="g-header">
+    <div class="g-title">🕯️ The Professor's Study</div>
+    <div class="timer" id="timerDisplay">00:00</div>
+  </div>
+
+  <div class="g-layout">
+    <!-- PUZZLES -->
+    <div>
+      <div class="progress-bar">
+        <div class="p-step" id="ps1"></div>
+        <div class="p-step" id="ps2"></div>
+        <div class="p-step" id="ps3"></div>
+      </div>
+
+      <!-- PUZZLE 1 -->
+      <div class="puzzle-card active" id="card1">
+        <div class="p-num">Puzzle 1 of 3 — The Riddle Box</div>
+        <div class="p-title">🗝️ The Locked Drawer</div>
+        <div class="p-text">
+          A handwritten note is pinned to the drawer:<br><br>
+          <em>"I travel the world but stay in my corner.<br>
+          Kings and queens have been printed on me.<br>
+          I carry messages to distant lands, yet I cannot speak.<br>
+          What am I?"</em>
+        </div>
+        <div class="p-hint">💡 Hint: Think about what you lick and stick on an envelope.</div>
+        <div class="ans-row">
+          <input type="text" id="ans1" placeholder="Your answer…">
+          <button class="btn" id="sub1">Submit</button>
+        </div>
+        <div class="err" id="err1"></div>
+        <div class="solved-badge" id="badge1">✅ Solved by the team!</div>
+      </div>
+
+      <!-- PUZZLE 2 -->
+      <div class="puzzle-card locked" id="card2">
+        <div class="p-num">Puzzle 2 of 3 — The Number Safe</div>
+        <div class="p-title">🔢 Behind the Portrait</div>
+        <div class="p-text">
+          Behind the portrait of the Professor, a wall safe hums quietly. A sticky note is taped to the frame:<br><br>
+          <em>"Days in two weeks,<br>
+          plus hours in half a day,<br>
+          minus months in a year.<br><br>
+          That is your combination."</em>
+        </div>
+        <div class="p-hint">💡 Hint: Each line is a number. Add and subtract them.</div>
+        <div class="ans-row">
+          <input type="text" id="ans2" placeholder="The number…">
+          <button class="btn" id="sub2">Submit</button>
+        </div>
+        <div class="err" id="err2"></div>
+        <div class="solved-badge" id="badge2">✅ Solved by the team!</div>
+        <div class="lock-cover" id="lock2">🔒 Solve Puzzle 1 first</div>
+      </div>
+
+      <!-- PUZZLE 3 -->
+      <div class="puzzle-card locked" id="card3">
+        <div class="p-num">Puzzle 3 of 3 — The Final Door</div>
+        <div class="p-title">🚪 The Secret Passage</div>
+        <div class="p-text">
+          A hidden bookshelf swings open, revealing a door with an engraved plaque. The letters have been scrambled:<br><br>
+          <strong style="font-size:1.5rem; letter-spacing:0.35em; color:var(--gold-light)">
+            D &nbsp; E &nbsp; S &nbsp; A &nbsp; P &nbsp; C &nbsp; E
+          </strong><br><br>
+          <em>"Unscramble these letters. Speak the word aloud. The door will open."</em>
+        </div>
+        <div class="p-hint">💡 Hint: It's a past-tense verb. You're about to do this.</div>
+        <div class="ans-row">
+          <input type="text" id="ans3" placeholder="The magic word…">
+          <button class="btn" id="sub3">Submit</button>
+        </div>
+        <div class="err" id="err3"></div>
+        <div class="solved-badge" id="badge3">✅ Solved by the team!</div>
+        <div class="lock-cover" id="lock3">🔒 Solve Puzzle 2 first</div>
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="s-card">
+        <div class="s-title">🔦 Team Members</div>
+        <div class="player-list" id="playerList">
+          <div style="color:var(--text-dim);font-size:0.85rem">Waiting for players…</div>
+        </div>
+      </div>
+      <div class="s-card">
+        <div class="s-title">📜 Activity Log</div>
+        <div class="feed" id="actFeed"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ WIN SCREEN ═══════════════ -->
+<div id="winScreen">
+  <div class="win-emoji">🎉 🏆 🎉</div>
+  <div class="win-title">YOU ESCAPED!</div>
+  <div class="win-time"   id="winTime"></div>
+  <div class="win-players" id="winPlayers"></div>
+  <div class="story-box" style="margin-bottom:1.8rem; text-align:left">
+    As the final door swings open, a letter flutters to the floor:<br><br>
+    <em>"Congratulations, dear investigators. I was never truly missing — I was watching from the shadows to see if you were worthy. You have proven yourselves beyond all doubt. The study is yours."</em><br><br>
+    <strong style="color:var(--gold)">— Professor Archibald</strong>
+  </div>
+  <button class="btn" id="playAgainBtn">🔐 Play Again</button>
+</div>
+
+<!-- ═══════════════ FIREBASE ═══════════════ -->
+<script type="module">
+import { initializeApp }                          from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+import { getDatabase, ref, set, get,
+         onValue, push, onDisconnect, serverTimestamp }
+                                                  from "https://www.gstatic.com/firebasejs/12.11.0/firebase-database.js";
+
+// ── Config ────────────────────────────────────────────────
+const firebaseConfig = {
+  apiKey:            "AIzaSyDIM9Hxc6zkSFETM_CvCRXkC-U5iMBZG74",
+  authDomain:        "shadle-escape-room.firebaseapp.com",
+  databaseURL:       "https://shadle-escape-room-default-rtdb.firebaseio.com",
+  projectId:         "shadle-escape-room",
+  storageBucket:     "shadle-escape-room.firebasestorage.app",
+  messagingSenderId: "152488119573",
+  appId:             "1:152488119573:web:5b09e70923396141b96d1c"
+};
+
+// ── Answers (all lowercase) ───────────────────────────────
+// Puzzle 1: What has kings/queens printed on it and travels the world?  → stamp
+// Puzzle 2: 14 (days in 2 weeks) + 12 (hours in half a day) − 12 (months) = 14
+// Puzzle 3: Unscramble D-E-S-A-P-C-E → escaped
+const ANSWERS = { 1: "stamp", 2: "14", 3: "escaped" };
+
+// ── State ─────────────────────────────────────────────────
+const app = initializeApp(firebaseConfig);
+const db  = getDatabase(app);
+const myId = "p_" + Math.random().toString(36).slice(2, 9);
+
+let myName      = "";
+let timerInterval = null;
+let startTime   = null;
+let alreadyWon  = false;
+
+// ── Wire up all event listeners ───────────────────────────
+document.getElementById("joinBtn").addEventListener("click", joinGame);
+document.getElementById("nameInput").addEventListener("keydown", e => { if (e.key === "Enter") joinGame(); });
+document.getElementById("sub1").addEventListener("click", () => checkAnswer(1));
+document.getElementById("sub2").addEventListener("click", () => checkAnswer(2));
+document.getElementById("sub3").addEventListener("click", () => checkAnswer(3));
+document.getElementById("ans1").addEventListener("keydown", e => { if (e.key === "Enter") checkAnswer(1); });
+document.getElementById("ans2").addEventListener("keydown", e => { if (e.key === "Enter") checkAnswer(2); });
+document.getElementById("ans3").addEventListener("keydown", e => { if (e.key === "Enter") checkAnswer(3); });
+document.getElementById("playAgainBtn").addEventListener("click", () => location.reload());
+
+// ── Join ──────────────────────────────────────────────────
+function joinGame() {
+  const name = document.getElementById("nameInput").value.trim();
+  if (!name) { document.getElementById("joinErr").textContent = "Please enter your name!"; return; }
+  myName = name;
+
+  const pRef = ref(db, `players/${myId}`);
+  set(pRef, { name: myName, joined: Date.now() });
+  onDisconnect(pRef).remove();          // auto-remove on close
+
+  logActivity(`${myName} entered the study.`, false, myName);
+
+  document.getElementById("joinScreen").style.display = "none";
+  document.getElementById("gameScreen").style.display = "block";
+
+  initTimer();
+  listenPuzzles();
+  listenPlayers();
+  listenActivity();
+}
+
+// ── Timer ─────────────────────────────────────────────────
+function initTimer() {
+  const sRef = ref(db, "startTime");
+  get(sRef).then(snap => {
+    if (!snap.exists()) { set(sRef, Date.now()); }
+    startTime = snap.exists() ? snap.val() : Date.now();
+    timerInterval = setInterval(() => {
+      if (!startTime) return;
+      const e = Date.now() - startTime;
+      const m = Math.floor(e / 60000);
+      const s = Math.floor((e % 60000) / 1000);
+      document.getElementById("timerDisplay").textContent =
+        String(m).padStart(2,"0") + ":" + String(s).padStart(2,"0");
+    }, 500);
+  });
+}
+
+// ── Puzzle listener ───────────────────────────────────────
+function listenPuzzles() {
+  onValue(ref(db, "puzzles"), snap => {
+    const d = snap.val() || {};
+    updateUI(!!d[1], !!d[2], !!d[3]);
+    if (d[1] && d[2] && d[3] && !alreadyWon) {
+      alreadyWon = true;
+      showWin();
+    }
+  });
+}
+
+// ── Players listener ──────────────────────────────────────
+function listenPlayers() {
+  onValue(ref(db, "players"), snap => {
+    const players = snap.val() || {};
+    const list = document.getElementById("playerList");
+    list.innerHTML = "";
+    Object.values(players).forEach(p => {
+      const d = document.createElement("div");
+      d.className = "player-row";
+      d.innerHTML = `<div class="pdot"></div><span>${esc(p.name)}</span>` +
+        (p.name === myName ? `<span style="color:var(--text-dim);font-size:0.78rem">&nbsp;(you)</span>` : "");
+      list.appendChild(d);
+    });
+    if (!list.childNodes.length)
+      list.innerHTML = `<div style="color:var(--text-dim);font-size:0.85rem">Waiting…</div>`;
+  });
+}
+
+// ── Activity listener ─────────────────────────────────────
+function listenActivity() {
+  onValue(ref(db, "activity"), snap => {
+    const items = snap.val() || {};
+    const feed  = document.getElementById("actFeed");
+    feed.innerHTML = "";
+    Object.values(items)
+      .sort((a, b) => (b.ts || 0) - (a.ts || 0))
+      .slice(0, 25)
+      .forEach(item => {
+        const d = document.createElement("div");
+        d.className = "f-item" + (item.win ? " win" : "");
+        d.innerHTML = `<span class="actor">${esc(item.name)}</span> ${esc(item.msg)}`;
+        feed.appendChild(d);
+      });
+  });
+}
+
+function logActivity(msg, win, name) {
+  push(ref(db, "activity"), { name: name || myName, msg, win: !!win, ts: Date.now() });
+}
+
+// ── Submit answer ─────────────────────────────────────────
+function checkAnswer(n) {
+  const inp  = document.getElementById("ans" + n);
+  const errEl = document.getElementById("err" + n);
+  const val  = inp.value.trim().toLowerCase();
+  if (!val) return;
+
+  if (val === ANSWERS[n]) {
+    errEl.textContent = "";
+    set(ref(db, `puzzles/${n}`), true);
+    logActivity(`solved Puzzle ${n}! 🗝️`, true);
+    inp.value = "";
+  } else {
+    errEl.textContent = "✗ Not quite — keep thinking!";
+    inp.classList.remove("shake");
+    void inp.offsetWidth;            // reflow to restart animation
+    inp.classList.add("shake");
+    logActivity(`tried an answer for Puzzle ${n}…`, false);
+  }
+}
+
+// ── Update UI from shared state ───────────────────────────
+function updateUI(p1, p2, p3) {
+  // Progress bar
+  setStep("ps1", p1, !p1);
+  setStep("ps2", p2, p1 && !p2);
+  setStep("ps3", p3, p2 && !p3);
+
+  // Cards
+  applyCard("card1", "badge1", "ans1", null,  p1, true);
+  applyCard("card2", "badge2", "ans2", "lock2", p2, p1);
+  applyCard("card3", "badge3", "ans3", "lock3", p3, p2);
+}
+
+function setStep(id, done, active) {
+  const el = document.getElementById(id);
+  el.className = "p-step" + (done ? " done" : active ? " active" : "");
+}
+
+function applyCard(cardId, badgeId, inputId, lockId, solved, unlocked) {
+  const card  = document.getElementById(cardId);
+  const badge = document.getElementById(badgeId);
+  const input = document.getElementById(inputId);
+  const lock  = lockId ? document.getElementById(lockId) : null;
+
+  if (!unlocked) {
+    card.className = "puzzle-card locked";
+  } else if (solved) {
+    card.className = "puzzle-card solved";
+    badge.style.display = "flex";
+    input.disabled = true;
+    if (lock) lock.style.display = "none";
+  } else {
+    card.className = "puzzle-card active";
+    if (lock) lock.style.display = "none";
+  }
+}
+
+// ── Win screen ────────────────────────────────────────────
+function showWin() {
+  clearInterval(timerInterval);
+  logActivity("🏆 The team has ESCAPED!", true, "🎉 Team");
+
+  get(ref(db, "startTime")).then(snap => {
+    const elapsed = snap.exists() ? Date.now() - snap.val() : 0;
+    const m = Math.floor(elapsed / 60000);
+    const s = Math.floor((elapsed % 60000) / 1000);
+    const timeStr = `${m} minute${m !== 1 ? "s" : ""} and ${s} second${s !== 1 ? "s" : ""}`;
+
+    get(ref(db, "players")).then(pSnap => {
+      const names = Object.values(pSnap.val() || {}).map(p => p.name).join(", ");
+      document.getElementById("gameScreen").style.display = "none";
+      const ws = document.getElementById("winScreen");
+      ws.style.display = "flex";
+      document.getElementById("winTime").textContent    = `Escaped in ${timeStr}!`;
+      document.getElementById("winPlayers").textContent = `Team: ${names}`;
+    });
+  });
+}
+
+// ── Helpers ───────────────────────────────────────────────
+function esc(str) {
+  return String(str)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
+window.addEventListener("beforeunload", () => {
+  set(ref(db, `players/${myId}`), null);
+});
+</script>
+</body>
+</html>
