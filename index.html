@@ -1120,32 +1120,299 @@ body::before {
   padding: 8px 0;
 }
 
-/* ─── PUZZLE 2 PLACEHOLDER ─── */
+/* ─── PUZZLE 2 — JOURNAL PAGES ─── */
 #screen-p2 {
   background: linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-dark) 100%);
+  padding: 16px;
 }
 
-.p2-inner {
+.journal-scene {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 16px;
+  max-width: 520px; width: 100%;
+}
+
+.journal-page {
+  background: var(--parchment);
+  padding: 32px 30px 28px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.8), 0 2px 8px rgba(0,0,0,0.4),
+              inset 0 0 30px rgba(180,140,80,0.07);
+  position: relative;
+  width: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  max-height: 68vh;
+}
+
+.journal-page::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    transparent 0px, transparent 32px,
+    rgba(100,120,180,0.06) 32px, rgba(100,120,180,0.06) 33px
+  );
+  pointer-events: none;
+}
+
+.journal-page::after {
+  content: '';
+  position: absolute; top: 0; bottom: 0; left: 38px;
+  width: 1px; background: rgba(200,80,80,0.2);
+  pointer-events: none;
+}
+
+.journal-page.tear-leah {
+  clip-path: polygon(0 0, 100% 0, 100% 97%, 96% 100%, 90% 98%, 83% 100%, 74% 97%, 65% 100%, 54% 98%, 44% 100%, 33% 97%, 22% 100%, 12% 98%, 4% 100%, 0 98%);
+}
+.journal-page.tear-bart {
+  clip-path: polygon(0 2%, 5% 0, 12% 3%, 21% 0, 31% 2%, 42% 0, 53% 2%, 63% 0, 74% 2%, 85% 0, 93% 2%, 100% 0, 100% 100%, 0 100%);
+}
+.journal-page.tear-melissa {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 97% 97%, 91% 100%, 84% 97%, 76% 100%, 67% 97%, 57% 100%, 46% 97%, 36% 100%, 26% 97%, 15% 100%, 6% 97%, 0 100%);
+}
+.journal-page.tear-noah {
+  clip-path: polygon(0 3%, 6% 0, 14% 3%, 24% 0, 35% 3%, 46% 0, 57% 3%, 68% 0, 78% 3%, 88% 0, 95% 3%, 100% 1%, 100% 97%, 94% 100%, 86% 98%, 76% 100%, 65% 97%, 54% 100%, 42% 97%, 31% 100%, 20% 97%, 9% 100%, 0 97%);
+}
+
+.journal-eyebrow {
+  font-family: 'Special Elite', monospace;
+  font-size: 0.58rem; color: #a09070;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  margin-bottom: 16px; position: relative; z-index: 1;
+}
+
+.journal-body {
+  font-family: 'Caveat', cursive;
+  font-size: 1.05rem; color: var(--ink);
+  line-height: 1.8; position: relative; z-index: 1;
+}
+.journal-body p { margin-bottom: 16px; }
+.journal-body p:last-child { margin-bottom: 0; }
+
+.journal-sign {
+  margin-top: 20px; text-align: right;
+  font-family: 'Caveat', cursive;
+  font-size: 1.1rem; color: var(--ink-mid);
+  font-style: italic; position: relative; z-index: 1;
+}
+
+.journal-morse {
+  margin-top: 24px; padding-top: 14px;
+  border-top: 1px solid rgba(100,80,40,0.2);
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.7rem; color: #5a4020;
+  letter-spacing: 0.25em; text-align: center;
+  position: relative; z-index: 1;
+  opacity: 0.85;
+}
+
+.p2-answer {
+  width: 100%;
+  background: rgba(13,8,5,0.5);
+  border: 1px solid rgba(196,134,46,0.25);
+  padding: 16px 18px;
+}
+.p2-answer-label {
+  font-family: 'Special Elite', monospace;
+  font-size: 0.68rem; color: rgba(245,217,168,0.5);
+  letter-spacing: 0.15em; text-transform: uppercase;
+  margin-bottom: 12px; display: block;
+}
+.p2-answer-row { display: flex; gap: 10px; align-items: stretch; }
+#p2-input {
+  flex: 1; padding: 11px 14px;
+  background: rgba(245,217,168,0.06);
+  border: 1px solid rgba(196,134,46,0.4);
+  border-radius: 1px; outline: none;
+  font-family: 'Special Elite', monospace;
+  font-size: 1rem; color: var(--parchment);
+  text-transform: uppercase; letter-spacing: 0.1em;
+  transition: border-color 0.2s, background 0.2s;
+}
+#p2-input:focus { border-color: var(--amber); background: rgba(245,217,168,0.09); }
+.p2-submit-btn {
+  padding: 11px 22px;
+  background: var(--wood-dark); border: 1px solid var(--wood-mid);
+  cursor: pointer; border-radius: 1px;
+  font-family: 'Special Elite', monospace;
+  font-size: 0.75rem; color: var(--amber-pale);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  transition: background 0.2s;
+}
+.p2-submit-btn:hover { background: var(--wood-mid); }
+#p2-result {
+  margin-top: 10px; min-height: 20px;
+  font-family: 'Special Elite', monospace;
+  font-size: 0.75rem; letter-spacing: 0.05em;
+}
+#p2-result.wrong { color: #c07070; }
+.p2-waiting {
+  font-family: 'Caveat', cursive;
+  font-size: 1rem; color: rgba(245,217,168,0.4);
+  font-style: italic; text-align: center; padding: 8px 0;
+}
+
+/* ─── BRIDGE SCREENS ─── */
+#screen-bridgeA,
+#screen-bridgeC {
+  background: linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-dark) 100%);
+  padding: 16px;
+}
+
+#screen-bridgeB {
+  background: linear-gradient(180deg, var(--bg-deep) 0%, #1a0d12 100%);
+  padding: 16px;
+}
+
+/* Shared journal continue button */
+.journal-continue-btn {
+  width: 100%; margin-top: 4px;
+  padding: 13px;
+  background: var(--wood-dark);
+  border: 1px solid var(--wood-mid);
+  cursor: pointer; border-radius: 1px;
+  font-family: 'Special Elite', monospace;
+  font-size: 0.8rem; color: var(--amber-pale);
+  letter-spacing: 0.12em; text-transform: uppercase;
+  transition: background 0.2s;
+}
+.journal-continue-btn:hover { background: var(--wood-mid); }
+
+/* ─── REMASHA LETTER ─── */
+.love-letter-scene {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 16px;
+  max-width: 480px; width: 100%;
+}
+
+.love-letter-paper {
+  background: #fff0f5;
+  padding: 36px 32px 30px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.7), 0 2px 8px rgba(0,0,0,0.3);
+  border: 1px solid #f0c0d0;
+  position: relative;
+  width: 100%;
+  max-height: 65vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  transform: rotate(0.4deg);
+}
+
+/* Subtle crumple texture via box-shadow layers */
+.love-letter-paper::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 30% at 20% 15%, rgba(255,200,210,0.15) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 20% at 80% 70%, rgba(255,180,200,0.1) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.love-letter-header {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem; font-style: italic;
+  color: #8a3050; text-align: center;
+  margin-bottom: 20px;
+  position: relative; z-index: 1;
+}
+
+.love-letter-body {
+  font-family: 'Caveat', cursive;
+  font-size: 1.05rem; color: #3a1020;
+  line-height: 1.85; position: relative; z-index: 1;
+}
+.love-letter-body p { margin-bottom: 16px; }
+
+/* The smudged date — tiny and low opacity, readable only when zoomed */
+.love-letter-smudge {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.45rem;
+  color: rgba(80,20,40,0.28);
+  letter-spacing: 0.05em;
+  position: absolute;
+  top: 14px; right: 16px;
+  line-height: 1.4;
+  transform: rotate(-2deg);
+  pointer-events: none;
+  z-index: 2;
+  user-select: text;
+}
+
+.love-letter-sign {
+  margin-top: 20px; font-family: 'Caveat', cursive;
+  font-size: 1.1rem; color: #8a3050;
+  font-style: italic; position: relative; z-index: 1;
+}
+
+/* Bart's answer box for bridge B */
+.bridgeB-answer {
+  width: 100%;
+  background: rgba(13,8,5,0.5);
+  border: 1px solid rgba(196,134,46,0.25);
+  padding: 16px 18px;
+}
+.bridgeB-label {
+  font-family: 'Special Elite', monospace;
+  font-size: 0.68rem; color: rgba(245,217,168,0.5);
+  letter-spacing: 0.15em; text-transform: uppercase;
+  margin-bottom: 12px; display: block;
+}
+.bridgeB-row { display: flex; gap: 10px; align-items: stretch; }
+#bridgeB-input {
+  flex: 1; padding: 11px 14px;
+  background: rgba(245,217,168,0.06);
+  border: 1px solid rgba(196,134,46,0.4);
+  border-radius: 1px; outline: none;
+  font-family: 'Special Elite', monospace;
+  font-size: 0.9rem; color: var(--parchment);
+  text-transform: uppercase; letter-spacing: 0.08em;
+  transition: border-color 0.2s, background 0.2s;
+}
+#bridgeB-input:focus { border-color: var(--amber); background: rgba(245,217,168,0.09); }
+.bridgeB-btn {
+  padding: 11px 20px;
+  background: var(--wood-dark); border: 1px solid var(--wood-mid);
+  cursor: pointer; border-radius: 1px;
+  font-family: 'Special Elite', monospace;
+  font-size: 0.75rem; color: var(--amber-pale);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  transition: background 0.2s;
+}
+.bridgeB-btn:hover { background: var(--wood-mid); }
+#bridgeB-result {
+  margin-top: 10px; min-height: 20px;
+  font-family: 'Special Elite', monospace;
+  font-size: 0.75rem; letter-spacing: 0.05em;
+}
+#bridgeB-result.wrong { color: #c07070; }
+.bridgeB-waiting {
+  font-family: 'Caveat', cursive;
+  font-size: 1rem; color: rgba(245,217,168,0.4);
+  font-style: italic; text-align: center; padding: 8px 0;
+}
+
+/* ─── PUZZLE 3 PLACEHOLDER ─── */
+#screen-p3 {
+  background: linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-dark) 100%);
+}
+.p3-inner {
   text-align: center; max-width: 500px; padding: 50px 40px;
   background: rgba(13,8,5,0.6);
   border: 1px solid rgba(196,134,46,0.25);
 }
-
-.p2-badge {
+.p3-badge {
   font-family: 'Special Elite', monospace;
   font-size: 0.65rem; color: rgba(245,217,168,0.4);
   letter-spacing: 0.25em; text-transform: uppercase;
   margin-bottom: 24px; display: block;
 }
-
-.p2-title {
+.p3-title {
   font-family: 'Playfair Display', serif;
   font-size: clamp(1.4rem, 4vw, 2rem);
   font-weight: 700; font-style: italic;
   color: var(--amber-light); margin-bottom: 16px;
 }
-
-.p2-text {
+.p3-text {
   font-family: 'Crimson Text', serif;
   font-size: 1.05rem; color: rgba(245,217,168,0.65);
   line-height: 1.7; font-style: italic;
@@ -1370,7 +1637,7 @@ body::before {
           <div class="receipt-scrawl-container">
             <div class="receipt-scrawl">
               talked to some fella on the trail this mornin —<br>
-              <span class="scrawl-name">MURRAY</span>
+              <span class="scrawl-name">SKINNER</span>
               — said he was just passin through. seemed shifty to Bill.
             </div>
           </div>
@@ -1400,16 +1667,128 @@ body::before {
 
 <div id="screen-p2" class="screen">
   <div class="player-badge">
-    <div class="badge-dot" style="background:#8a6a30"></div>
+    <div class="badge-dot"></div>
     <span class="badge-name" id="p2-player-badge"></span>
   </div>
-  <div class="p2-inner">
-    <span class="p2-badge">Puzzle 2</span>
-    <h2 class="p2-title">Four Pages. Four Stories.</h2>
-    <p class="p2-text">
-      Teena's journal was torn apart. Each of you finds a page. The truth is scattered — but together, it comes back together.
+  <div class="journal-scene">
+    <div class="journal-page" id="p2-journal-page">
+      <p class="journal-eyebrow">Found in the cabin — torn journal page</p>
+      <div class="journal-body" id="p2-journal-body"></div>
+      <div class="journal-sign">— T</div>
+      <div class="journal-morse" id="p2-morse"></div>
+    </div>
+    <div class="p2-answer">
+      <span class="p2-answer-label" id="p2-label"></span>
+      <div id="p2-bart-input">
+        <div class="p2-answer-row">
+          <input type="text" id="p2-input" placeholder="????????" maxlength="9" autocomplete="off" spellcheck="false">
+          <button class="p2-submit-btn" id="p2-btn">Submit</button>
+        </div>
+        <div id="p2-result"></div>
+      </div>
+      <div id="p2-waiting-msg" class="p2-waiting" style="display:none;">
+        Waiting for Bart...
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BRIDGE A — Teena's bridging journal entry -->
+<div id="screen-bridgeA" class="screen">
+  <div class="player-badge">
+    <div class="badge-dot"></div>
+    <span class="badge-name" id="bridgeA-player-badge"></span>
+  </div>
+  <div class="journal-scene">
+    <div class="journal-page tear-leah">
+      <p class="journal-eyebrow">Found in the lockbox — journal entry</p>
+      <div class="journal-body">
+        <p>I have called the police and shared all of my findings thus far. Officer Daniels was kind enough but I could tell he thought I was hysterical. Maybe I am. I showed him everything — Carter's journal, the receipt, the tire tracks, all of it. He took notes and told me they would look into the Wilson family and get back to me as soon as they had something.</p>
+        <p>I should feel relieved. I've done everything right. I've handed over everything I found and now it's in the hands of people who are trained for exactly this.</p>
+        <p>Yet something is troubling me.</p>
+        <p>I can't name it. Not yet. It's the feeling you get when you've been looking so hard at one thing that you've stopped seeing everything else around it. Like Calypso pulling left at the fork every single morning while I kept bringing her back to the trail.</p>
+        <p>I wasn't seeing it then either.</p>
+        <p>There is something I am not seeing right now. I can feel it the way she used to feel things — in my chest, low and certain, before my brain has caught up.</p>
+        <p>I need to keep looking.</p>
+      </div>
+      <div class="journal-sign">— T</div>
+    </div>
+    <button class="journal-continue-btn" id="bridgeA-continue-btn">Continue</button>
+  </div>
+</div>
+
+<!-- BRIDGE B — Remasha's love letter -->
+<div id="screen-bridgeB" class="screen">
+  <div class="player-badge">
+    <div class="badge-dot"></div>
+    <span class="badge-name" id="bridgeB-player-badge"></span>
+  </div>
+  <div class="love-letter-scene">
+    <div class="love-letter-paper">
+      <!-- Smudged date — tiny, low opacity, only readable when zoomed -->
+      <div class="love-letter-smudge">Feb 14 — 2:00 PM</div>
+      <div class="love-letter-header">💕</div>
+      <div class="love-letter-body">
+        <p>My Dearest Carter,</p>
+        <p>I have been trying to find the words to express what my heart has been carrying since the moment I first saw you across the hallway at Timber Creek. You are unlike anyone I have ever known. Your strength, your kindness, your absolutely dreamy eyes — I think about them constantly and I cannot make myself stop and honestly I don't want to.</p>
+        <p>I know that today is your big day. I will be thinking of every single moment of your match, cheering for you from the very depths of my soul even though I cannot be there in person for reasons that are frankly ridiculous and completely unfair.</p>
+        <p>Go show them what you're made of, my love. Win it for me.</p>
+      </div>
+      <div class="love-letter-sign">Yours completely and without reservation forever and always,<br>Remasha 💕</div>
+    </div>
+    <div class="bridgeB-answer">
+      <span class="bridgeB-label" id="bridgeB-label"></span>
+      <div id="bridgeB-bart-input">
+        <div class="bridgeB-row">
+          <input type="text" id="bridgeB-input" placeholder="???" maxlength="16" autocomplete="off" spellcheck="false">
+          <button class="bridgeB-btn" id="bridgeB-btn">Submit</button>
+        </div>
+        <div id="bridgeB-result"></div>
+      </div>
+      <div id="bridgeB-waiting-msg" class="bridgeB-waiting" style="display:none;">
+        Waiting for Bart...
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BRIDGE C — Teena's gutted journal entry -->
+<div id="screen-bridgeC" class="screen">
+  <div class="player-badge">
+    <div class="badge-dot"></div>
+    <span class="badge-name" id="bridgeC-player-badge"></span>
+  </div>
+  <div class="journal-scene">
+    <div class="journal-page tear-noah">
+      <p class="journal-eyebrow">Found in the lockbox — journal entry</p>
+      <div class="journal-body">
+        <p>Officer Daniels just called. Carter Wilson was at a wrestling meet at the time Calypso was taken. Confirmed by coaches, teammates, and recorded on video. The Wilsons have been cleared.</p>
+        <p>I sat on the floor for a while after he hung up.</p>
+        <p>I am back at zero. Everything I found, everything I handed over, everything I was so certain about — none of it was the right thread.</p>
+        <p>On a personal note — I spoke to Nim this evening. I told him about the Wilsons being cleared. I told him I was scared and exhausted and no closer to finding her.</p>
+        <p>He told me to come home.</p>
+        <p>Not "we'll find her." Not "don't give up." Just... come home.</p>
+        <p>I don't know what to do with that.</p>
+      </div>
+      <div class="journal-sign">— T</div>
+    </div>
+    <button class="journal-continue-btn" id="bridgeC-continue-btn">Continue into Puzzle 3</button>
+  </div>
+</div>
+
+<!-- PUZZLE 3 PLACEHOLDER -->
+<div id="screen-p3" class="screen">
+  <div class="player-badge">
+    <div class="badge-dot" style="background:#8a6a30"></div>
+    <span class="badge-name" id="p3-player-badge"></span>
+  </div>
+  <div class="p3-inner">
+    <span class="p3-badge">Puzzle 3</span>
+    <h2 class="p3-title">A Familiar Name</h2>
+    <p class="p3-text">
+      The pieces are falling into place. Someone you trusted is at the center of all of this.
     </p>
-    <p class="p2-text" style="margin-top:16px; opacity:0.5; font-size:0.85rem;">
+    <p class="p3-text" style="margin-top:16px; opacity:0.5; font-size:0.85rem;">
       📓 Coming Soon
     </p>
   </div>
@@ -1849,7 +2228,7 @@ function wireMiniB() {
 
   function checkMiniB() {
     const val = input.value.trim().toUpperCase();
-    if (val === 'MURRAY') {
+    if (val === 'SKINNER') {
       result.className = '';
       result.textContent = '✓ A name emerges from the shadows...';
       btn.disabled = true;
@@ -1877,9 +2256,189 @@ function runMiniBCelebration() {
   }, 4000);
 }
 
+// ─── PUZZLE 2 JOURNAL CONTENT ───
+const P2_PAGES = {
+  Leah: {
+    tearClass: 'tear-leah',
+    morse: '-.. ---',
+    paragraphs: [
+      `I feel terrible writing this. I found a journal in the nightstand drawer of the second bedroom — left behind by the boy from the family who checked out that morning. Carter, I think his name was. Seventeen, maybe eighteen. I should have put it straight into the lost and found box by the door and called the property manager.`,
+      `I did not do that.`,
+      `I told myself I was looking for clues. Maybe I was. Maybe I was just desperate and scared and willing to do anything to find her. Either way I read it. Most of it was perfectly ordinary — a teenage boy writing about his friends, his school, his life. Nothing alarming. He seems bright. Caring even, in the way he wrote about the people close to it.`,
+      `But there was one entry that made me set the journal down and stare at the wall for a long moment. Nothing explicit. Nothing I could point to and say — there. That's it. Just a feeling. A wrongness underneath the words that I couldn't shake.`,
+      `I keep telling myself I'm wrong. That I'm desperate and grasping at anything.`,
+      `I hope I'm wrong.`
+    ]
+  },
+  Bart: {
+    tearClass: 'tear-bart',
+    morse: '--. .-.-.',
+    paragraphs: [
+      `I should have stopped reading. I know that. But I couldn't put it down.`,
+      `There was an entry from about six weeks ago. Carter wrote about a trip he took with his father and some of his father's friends. A night event, he called it. Out in the country somewhere. He wrote about it almost clinically — the drive, the darkness, the sounds. He mentioned dogs. Several of them. He mentioned money exchanging hands between men he didn't recognize.`,
+      `He wrote: "Dad said not to talk about it. I don't really want to."`,
+      `That was all.`,
+      `Four sentences. And yet I have read them eleven times now and each time my stomach drops a little further. A night event. In the country. Dogs. Money. Don't talk about it.`,
+      `I want to be wrong about what I think those four sentences mean. Carter seems like a good kid. A really good kid. And maybe his father kept him in the dark about the details. Maybe he truly didn't know.`,
+      `But he was there. And his father organized it. And their truck was still in the area the morning Calypso disappeared.`
+    ]
+  },
+  Melissa: {
+    tearClass: 'tear-melissa',
+    morse: '.. --.',
+    paragraphs: [
+      `I remember now. I don't know how I forgot.`,
+      `Two years ago at a rescue conference in Asheville, a woman named Patricia pulled me aside during the lunch break. She was soft spoken and serious and she held my arm a little too tightly when she talked. She told me there were whispers in the mountain rescue community about a family operating a fighting ring somewhere in the Blue Ridge. She didn't have a name. Just a description. A father and son. A property somewhere off a rural road. Trucks coming and going at night.`,
+      `I thanked her and I moved on. I told myself it was rumor. Gossip. The rescue community is full of well meaning people who sometimes let fear and passion outrun the facts.`,
+      `I am such a fool.`,
+      `The father organized it. Carter wrote that himself without knowing what he was writing. And now I am sitting in this cabin surrounded by Calypso's absence and Patricia's words are ringing in my ears like a bell I cannot un-ring.`,
+      `The eldest Wilson. I keep coming back to that. A father who would take his own son to something like that. What else would he be capable of?`,
+      `I cannot breathe.`
+    ]
+  },
+  Noah: {
+    tearClass: 'tear-noah',
+    morse: '.... -',
+    paragraphs: [
+      `I know what happened to her.`,
+      `I don't want to know. I would give anything to unknow it. But I know.`,
+      `The Wilson family did not leave that morning. I saw their truck on the trail when I came back. I told myself I was mistaken. I was not mistaken. I know what I saw and I know what Carter's journal means and I know what Patricia warned me about and I know what those men do to dogs like Calypso and I cannot —`,
+      `I cannot.`,
+      `This is so reprehensible and disgusting to me that I can't even write it out.`,
+      `If you are reading this and you have gotten this far then you are braver than I am right now. You finish it. You say what I cannot say.`
+    ]
+  }
+};
+
 function showP2() {
+  const page = P2_PAGES[playerName];
   document.getElementById('p2-player-badge').textContent = playerName;
+
+  // Set tear class
+  const pageEl = document.getElementById('p2-journal-page');
+  pageEl.classList.add(page.tearClass);
+
+  // Inject paragraphs
+  const body = document.getElementById('p2-journal-body');
+  body.innerHTML = page.paragraphs.map(p => `<p>${p}</p>`).join('');
+
+  // Morse code
+  document.getElementById('p2-morse').textContent = page.morse;
+
+  // Answer input — Bart only
+  document.getElementById('p2-label').textContent =
+    playerName === 'Bart'
+      ? '— awaiting input —'
+      : 'Bart is working it out...';
+  document.getElementById('p2-bart-input').style.display  = playerName === 'Bart' ? 'block' : 'none';
+  document.getElementById('p2-waiting-msg').style.display = playerName === 'Bart' ? 'none'  : 'block';
+
   showScreen('p2');
+  if (playerName === 'Bart') wireP2Input();
+}
+
+function wireP2Input() {
+  const input  = document.getElementById('p2-input');
+  const btn    = document.getElementById('p2-btn');
+  const result = document.getElementById('p2-result');
+  if (!input || !btn) return;
+
+  btn.addEventListener('click', checkP2);
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') checkP2(); });
+
+  function checkP2() {
+    const val = input.value.trim().toUpperCase().replace(/\s+/g, '');
+    if (val === 'DOGFIGHT') {
+      result.className = '';
+      result.textContent = '✓ The truth claws its way to the surface...';
+      btn.disabled = true; input.disabled = true;
+      gameRef.update({
+        phase: 'celebratingP2',
+        p2SolvedAt: firebase.database.ServerValue.TIMESTAMP
+      });
+    } else {
+      result.className = 'wrong';
+      result.textContent = '✗ Not quite.';
+    }
+  }
+}
+
+function runP2Celebration() {
+  document.getElementById('celebration-icon').textContent  = '🐾';
+  document.getElementById('celebration-title').textContent = 'The Truth Claws Its Way to the Surface...';
+  document.getElementById('celebration-text').textContent  = 'Carter Wilson has questions to answer.';
+  showOverlay('celebration');
+  setTimeout(() => {
+    hideOverlay('celebration');
+    gameRef.update({ phase: 'bridgeA' });
+    showBridgeA();
+  }, 4000);
+}
+
+// ─── BRIDGE SCREENS ───
+function showBridgeA() {
+  document.getElementById('bridgeA-player-badge').textContent = playerName;
+  showScreen('bridgeA');
+}
+
+function showBridgeB() {
+  document.getElementById('bridgeB-player-badge').textContent = playerName;
+  document.getElementById('bridgeB-label').textContent =
+    playerName === 'Bart' ? '— awaiting input —' : 'Waiting for Bart...';
+  document.getElementById('bridgeB-bart-input').style.display  = playerName === 'Bart' ? 'block' : 'none';
+  document.getElementById('bridgeB-waiting-msg').style.display = playerName === 'Bart' ? 'none'  : 'block';
+  showScreen('bridgeB');
+  if (playerName === 'Bart') wireBridgeB();
+}
+
+function wireBridgeB() {
+  const input  = document.getElementById('bridgeB-input');
+  const btn    = document.getElementById('bridgeB-btn');
+  const result = document.getElementById('bridgeB-result');
+  if (!input || !btn) return;
+
+  btn.addEventListener('click', checkBridgeB);
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') checkBridgeB(); });
+
+  function checkBridgeB() {
+    const raw = input.value.trim().toUpperCase();
+    // Accept: FEB 14 2PM, FEBRUARY 14 2PM, FEB142PM, FEB 14 2:00PM etc.
+    const norm = raw.replace(/\s+/g,'').replace('FEBRUARY','FEB').replace(':00','').replace('PM','PM');
+    if (norm === 'FEB142PM' || norm === 'FEB142:00PM') {
+      result.className = '';
+      result.textContent = '✓ Carter was on the mat...';
+      btn.disabled = true; input.disabled = true;
+      gameRef.update({
+        phase: 'celebratingBridgeB',
+        bridgeBSolvedAt: firebase.database.ServerValue.TIMESTAMP
+      });
+    } else {
+      result.className = 'wrong';
+      result.textContent = '✗ Not quite. Look closer.';
+    }
+  }
+}
+
+function runBridgeBCelebration() {
+  document.getElementById('celebration-icon').textContent  = '🤼';
+  document.getElementById('celebration-title').textContent = 'Carter Was on the Mat at 2:00 PM...';
+  document.getElementById('celebration-text').textContent  = 'He couldn\'t have taken Calypso. The investigation takes a devastating turn.';
+  showOverlay('celebration');
+  setTimeout(() => {
+    hideOverlay('celebration');
+    gameRef.update({ phase: 'bridgeC' });
+    showBridgeC();
+  }, 4500);
+}
+
+function showBridgeC() {
+  document.getElementById('bridgeC-player-badge').textContent = playerName;
+  showScreen('bridgeC');
+}
+
+function showP3() {
+  document.getElementById('p3-player-badge').textContent = playerName;
+  showScreen('p3');
 }
 
 function wireMiniAInput() {
@@ -1954,6 +2513,18 @@ gameRef.on('value', snapshot => {
     runMiniBCelebration();
   } else if (phase === 'p2' && currentLocalScreen === 'miniB') {
     showP2();
+  } else if (phase === 'celebratingP2' && currentLocalScreen === 'p2') {
+    runP2Celebration();
+  } else if (phase === 'bridgeA' && currentLocalScreen === 'p2') {
+    showBridgeA();
+  } else if (phase === 'bridgeB' && currentLocalScreen === 'bridgeA') {
+    showBridgeB();
+  } else if (phase === 'celebratingBridgeB' && currentLocalScreen === 'bridgeB') {
+    runBridgeBCelebration();
+  } else if (phase === 'bridgeC' && currentLocalScreen === 'bridgeB') {
+    showBridgeC();
+  } else if (phase === 'p3' && (currentLocalScreen === 'bridgeC' || currentLocalScreen === 'p2')) {
+    showP3();
   }
 });
 
@@ -1964,6 +2535,24 @@ function proceedFromOpening() {
     const phase = state?.phase;
 
     // Route late-joiners to wherever the game currently is
+    if (phase === 'p3' || phase === 'bridgeC' || phase === 'celebratingBridgeB') {
+      showP3(); return;
+    }
+    if (phase === 'bridgeC') {
+      showBridgeC(); return;
+    }
+    if (phase === 'bridgeB' || phase === 'celebratingBridgeB') {
+      showBridgeB(); return;
+    }
+    if (phase === 'bridgeA') {
+      showBridgeA(); return;
+    }
+    if (phase === 'celebratingP2') {
+      showBridgeA(); return;
+    }
+    if (phase === 'p3' || phase === 'celebratingP2') {
+      showP3(); return;
+    }
     if (phase === 'p2' || phase === 'celebratingMiniB') {
       showP2(); return;
     }
@@ -2043,6 +2632,18 @@ function attemptJoin() {
     // For phases beyond puzzle1 show the opening note first (atmospheric),
     // then route to the correct screen on proceed.
     // miniB / celebratingMiniA / miniA / puzzle2 all get fast-tracked after note.
+    if (phase === 'p3' || phase === 'celebratingBridgeB' || phase === 'bridgeC') {
+      showScreen('opening'); return;
+    }
+    if (phase === 'bridgeB' || phase === 'bridgeA') {
+      showScreen('opening'); return;
+    }
+    if (phase === 'p3' || phase === 'celebratingP2') {
+      showScreen('opening'); return;
+    }
+    if (phase === 'p2' || phase === 'p3') {
+      showScreen('opening'); return;
+    }
     if (phase === 'p2' || phase === 'celebratingMiniB') {
       showScreen('opening'); return;
     }
@@ -2079,13 +2680,32 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.getElementById('cliffhanger-proceed-btn').addEventListener('click', () => {
-    // First tap advances everyone; subsequent taps are no-ops
     gameRef.once('value', snap => {
       if (snap.val()?.phase === 'puzzle2') {
         gameRef.update({ phase: 'miniA' });
       }
     });
     showMiniA();
+  });
+
+  // Bridge A — any player presses Continue, all advance
+  document.getElementById('bridgeA-continue-btn').addEventListener('click', () => {
+    gameRef.once('value', snap => {
+      if (snap.val()?.phase === 'bridgeA') {
+        gameRef.update({ phase: 'bridgeB' });
+      }
+    });
+    showBridgeB();
+  });
+
+  // Bridge C — any player presses Continue, all advance into p3
+  document.getElementById('bridgeC-continue-btn').addEventListener('click', () => {
+    gameRef.once('value', snap => {
+      if (snap.val()?.phase === 'bridgeC') {
+        gameRef.update({ phase: 'p3' });
+      }
+    });
+    showP3();
   });
 
   // GM Panel
