@@ -1391,28 +1391,169 @@ body::before {
   font-style: italic; text-align: center; padding: 8px 0;
 }
 
-/* ─── PUZZLE 3 PLACEHOLDER ─── */
+/* ─── PUZZLE 3 — HAND-DRAWN MAP ─── */
 #screen-p3 {
   background: linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-dark) 100%);
+  padding: 12px;
 }
-.p3-inner {
+
+.map-scene {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 12px;
+  max-width: 560px; width: 100%;
+}
+
+/* Map flip container */
+.map-flip-wrap {
+  perspective: 1200px; cursor: pointer; width: 100%;
+}
+
+.map-flip-card {
+  width: 100%; position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.85s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+
+.map-flip-card.flipped { transform: rotateY(180deg); }
+
+.map-front, .map-back {
+  width: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* MAP FRONT */
+.map-front {
+  background: #f0e6cc;
+  border: 1px solid #c8a870;
+  box-shadow: 0 6px 32px rgba(0,0,0,0.7), 0 2px 8px rgba(0,0,0,0.4);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Zoom/pan container */
+.map-zoom-container {
+  width: 100%;
+  overflow: hidden;
+  touch-action: none;
+  cursor: grab;
+  position: relative;
+}
+.map-zoom-container:active { cursor: grabbing; }
+
+.map-svg-inner {
+  transform-origin: 0 0;
+  will-change: transform;
+  display: block;
+}
+
+.map-zoom-hint {
+  position: absolute; bottom: 6px; right: 8px;
+  font-family: 'Special Elite', monospace;
+  font-size: 0.55rem; color: rgba(80,50,20,0.5);
+  letter-spacing: 0.08em; pointer-events: none;
+}
+
+/* MAP BACK */
+.map-back {
+  position: absolute; inset: 0;
+  background: #f0e6cc;
+  border: 1px solid #c8a870;
+  box-shadow: 0 6px 32px rgba(0,0,0,0.7);
+  transform: rotateY(180deg);
+  display: flex; align-items: center; justify-content: center;
+  padding: 36px 32px;
+}
+
+.map-back-text {
+  font-family: 'Caveat', cursive;
+  font-size: 1.05rem; color: var(--ink);
+  line-height: 1.8; text-align: center;
+}
+
+.map-back-sign {
+  margin-top: 20px;
+  font-family: 'Caveat', cursive;
+  font-size: 1rem; color: var(--ink-mid);
+  font-style: italic;
+}
+
+.map-tap-hint {
+  font-family: 'Special Elite', monospace;
+  font-size: 0.7rem; color: rgba(245,217,168,0.4);
+  letter-spacing: 0.1em; text-align: center;
+  animation: pulse-hint 2s ease-in-out infinite;
+}
+
+/* Melissa's answer box */
+.p3-answer {
+  width: 100%;
+  background: rgba(13,8,5,0.5);
+  border: 1px solid rgba(196,134,46,0.25);
+  padding: 16px 18px;
+}
+.p3-answer-label {
+  font-family: 'Special Elite', monospace;
+  font-size: 0.68rem; color: rgba(245,217,168,0.5);
+  letter-spacing: 0.15em; text-transform: uppercase;
+  margin-bottom: 12px; display: block;
+}
+.p3-answer-row { display: flex; gap: 10px; align-items: stretch; }
+#p3-input {
+  flex: 1; padding: 11px 14px;
+  background: rgba(245,217,168,0.06);
+  border: 1px solid rgba(196,134,46,0.4);
+  border-radius: 1px; outline: none;
+  font-family: 'Special Elite', monospace;
+  font-size: 1.1rem; color: var(--parchment);
+  text-transform: uppercase; letter-spacing: 0.1em;
+  transition: border-color 0.2s, background 0.2s;
+}
+#p3-input:focus { border-color: var(--amber); background: rgba(245,217,168,0.09); }
+.p3-submit-btn {
+  padding: 11px 22px;
+  background: var(--wood-dark); border: 1px solid var(--wood-mid);
+  cursor: pointer; border-radius: 1px;
+  font-family: 'Special Elite', monospace;
+  font-size: 0.75rem; color: var(--amber-pale);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  transition: background 0.2s;
+}
+.p3-submit-btn:hover { background: var(--wood-mid); }
+#p3-result {
+  margin-top: 10px; min-height: 20px;
+  font-family: 'Special Elite', monospace;
+  font-size: 0.75rem; letter-spacing: 0.05em;
+}
+#p3-result.wrong { color: #c07070; }
+.p3-waiting {
+  font-family: 'Caveat', cursive;
+  font-size: 1rem; color: rgba(245,217,168,0.4);
+  font-style: italic; text-align: center; padding: 8px 0;
+}
+
+/* ─── PUZZLE 4 PLACEHOLDER ─── */
+#screen-p4 {
+  background: linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-dark) 100%);
+}
+.p4-inner {
   text-align: center; max-width: 500px; padding: 50px 40px;
   background: rgba(13,8,5,0.6);
   border: 1px solid rgba(196,134,46,0.25);
 }
-.p3-badge {
+.p4-badge {
   font-family: 'Special Elite', monospace;
   font-size: 0.65rem; color: rgba(245,217,168,0.4);
   letter-spacing: 0.25em; text-transform: uppercase;
   margin-bottom: 24px; display: block;
 }
-.p3-title {
+.p4-title {
   font-family: 'Playfair Display', serif;
   font-size: clamp(1.4rem, 4vw, 2rem);
   font-weight: 700; font-style: italic;
   color: var(--amber-light); margin-bottom: 16px;
 }
-.p3-text {
+.p4-text {
   font-family: 'Crimson Text', serif;
   font-size: 1.05rem; color: rgba(245,217,168,0.65);
   line-height: 1.7; font-style: italic;
@@ -1779,16 +1920,69 @@ body::before {
 <!-- PUZZLE 3 PLACEHOLDER -->
 <div id="screen-p3" class="screen">
   <div class="player-badge">
-    <div class="badge-dot" style="background:#8a6a30"></div>
+    <div class="badge-dot"></div>
     <span class="badge-name" id="p3-player-badge"></span>
   </div>
-  <div class="p3-inner">
-    <span class="p3-badge">Puzzle 3</span>
-    <h2 class="p3-title">A Familiar Name</h2>
-    <p class="p3-text">
-      The pieces are falling into place. Someone you trusted is at the center of all of this.
+  <div class="map-scene">
+
+    <div class="map-flip-wrap" id="map-flip-wrap">
+      <div class="map-flip-card" id="map-flip-card">
+
+        <!-- FRONT: hand-drawn SVG map -->
+        <div class="map-front">
+          <div class="map-zoom-container" id="map-zoom-container">
+            <div class="map-svg-inner" id="map-svg-inner">
+              <!-- SVG injected by JS -->
+            </div>
+          </div>
+          <div class="map-zoom-hint">pinch or scroll to zoom · drag to pan</div>
+        </div>
+
+        <!-- BACK: Teena's note — identical for all players -->
+        <div class="map-back">
+          <div>
+            <div class="map-back-text">
+              "I've roughly drawn four maps of the area on purpose, but I cannot stomach the conclusion I'm coming to..."
+            </div>
+            <div class="map-back-sign">— T</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <p class="map-tap-hint">tap to flip</p>
+
+    <div class="p3-answer">
+      <span class="p3-answer-label" id="p3-label"></span>
+      <div id="p3-melissa-input">
+        <div class="p3-answer-row">
+          <input type="text" id="p3-input" placeholder="????" maxlength="5" autocomplete="off" spellcheck="false">
+          <button class="p3-submit-btn" id="p3-btn">Submit</button>
+        </div>
+        <div id="p3-result"></div>
+      </div>
+      <div id="p3-waiting-msg" class="p3-waiting" style="display:none;">
+        Waiting for Melissa...
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PUZZLE 4 PLACEHOLDER -->
+<div id="screen-p4" class="screen">
+  <div class="player-badge">
+    <div class="badge-dot" style="background:#8a6a30"></div>
+    <span class="badge-name" id="p4-player-badge"></span>
+  </div>
+  <div class="p4-inner">
+    <span class="p4-badge">Puzzle 4</span>
+    <h2 class="p4-title">The Last Witness</h2>
+    <p class="p4-text">
+      Nim has been cleared. Ray and Bill have been cleared. The name on the receipt is all that remains.
     </p>
-    <p class="p3-text" style="margin-top:16px; opacity:0.5; font-size:0.85rem;">
+    <p class="p4-text" style="margin-top:16px; opacity:0.5; font-size:0.85rem;">
       📓 Coming Soon
     </p>
   </div>
@@ -2436,9 +2630,335 @@ function showBridgeC() {
   showScreen('bridgeC');
 }
 
+// ─── PUZZLE 3 MAP ───
+function buildMapSVG(player) {
+  // Per-player differences:
+  // Leah   → compass missing N
+  // Bart   → "Rdgeline Cabin #4" (no I)
+  // Melissa→ "Blue Ridge ountain" (no M)
+  // Noah   → extra "?" near Baynes Mountain Road
+
+  const cabinLabel  = player === 'Bart'    ? 'Rdgeline Cabin #4' : 'Ridgeline Cabin #4';
+  const ridgeLabel  = player === 'Melissa' ? 'Blue Ridge ountain' : 'Blue Ridge Mountain';
+  const compassN    = player === 'Leah'    ? '' : '<text x="32" y="196" font-size="7" fill="#5a3a10" text-anchor="middle" font-family="Georgia,serif" font-weight="bold">N</text>';
+  const noahQ       = player === 'Noah'    ? '<text x="248" y="30" font-size="11" fill="#7a3a10" font-family="Georgia,serif" font-style="italic" transform="rotate(-8,248,30)">?</text>' : '';
+
+  return `<svg viewBox="0 0 380 280" xmlns="http://www.w3.org/2000/svg" width="100%" style="display:block;">
+  <defs>
+    <filter id="roughen">
+      <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="4" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="0.7" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="paper" patternUnits="userSpaceOnUse" width="4" height="4">
+      <rect width="4" height="4" fill="#ede0c4"/>
+      <circle cx="2" cy="2" r="0.4" fill="rgba(160,120,60,0.08)"/>
+    </pattern>
+  </defs>
+
+  <!-- Paper background -->
+  <rect width="380" height="280" fill="url(#paper)"/>
+  <rect width="380" height="280" fill="rgba(180,140,70,0.06)"/>
+
+  <!-- ── ROADS ── -->
+  <!-- Baynes Mountain Road — top edge -->
+  <path d="M0,28 Q95,22 190,25 Q285,28 380,24" stroke="#8a6030" stroke-width="3.5" fill="none" stroke-linecap="round" filter="url(#roughen)"/>
+  <text x="130" y="19" font-size="6.5" fill="#5a3a10" font-family="Georgia,serif" font-style="italic" text-anchor="middle">Baynes Mountain Road</text>
+  ${noahQ}
+
+  <!-- Dirt driveway to cabin -->
+  <path d="M190,25 L190,105" stroke="#a07840" stroke-width="2" fill="none" stroke-dasharray="4,2" filter="url(#roughen)"/>
+
+  <!-- Hiking trail -->
+  <path d="M190,105 Q220,140 240,175 Q255,200 250,245" stroke="#7a5830" stroke-width="1.5" fill="none" stroke-dasharray="3,4" filter="url(#roughen)"/>
+
+  <!-- Path to Ray and Bill -->
+  <path d="M190,105 Q140,110 100,118 Q75,124 62,135" stroke="#a07840" stroke-width="1.5" fill="none" stroke-dasharray="3,3" filter="url(#roughen)"/>
+
+  <!-- Teena's walking trail — dotted -->
+  <path d="M190,105 Q195,130 185,155 Q178,170 172,200 Q168,220 175,245" stroke="#c08040" stroke-width="1.2" fill="none" stroke-dasharray="2,5" opacity="0.7" filter="url(#roughen)"/>
+
+  <!-- Creek -->
+  <path d="M310,0 Q305,40 290,70 Q275,100 280,140 Q285,175 270,210 Q260,235 255,280" stroke="#6090b0" stroke-width="2.5" fill="none" opacity="0.65" filter="url(#roughen)"/>
+  <text x="302" y="95" font-size="5.5" fill="#407090" font-family="Georgia,serif" font-style="italic" transform="rotate(75,302,95)">creek</text>
+
+  <!-- ── RIDGE LINE ── -->
+  <path d="M0,55 Q40,45 70,50 Q90,54 100,48 Q115,42 130,50 Q150,58 165,48 Q175,42 185,50" stroke="#7a5830" stroke-width="1.8" fill="none" opacity="0.5" filter="url(#roughen)"/>
+  <path d="M0,62 Q40,52 70,57 Q90,61 100,55 Q115,49 130,57 Q150,65 165,55 Q175,49 185,57" stroke="#7a5830" stroke-width="1.2" fill="none" opacity="0.3" filter="url(#roughen)"/>
+  <text x="88" y="72" font-size="6" fill="#5a3a10" font-family="Georgia,serif" font-style="italic" text-anchor="middle">${ridgeLabel}</text>
+
+  <!-- ── TREE LINE ── -->
+  <g opacity="0.55" filter="url(#roughen)">
+    ${[10,30,55,80,105,130,155,180,205,230,255,280,305,330,355].map((x,i) =>
+      `<path d="M${x},${262+Math.sin(i)*4} L${x+8},${248+Math.cos(i*1.3)*3} L${x+16},${262+Math.sin(i+1)*4}" stroke="#4a6830" stroke-width="1.5" fill="none"/>`
+    ).join('')}
+  </g>
+  <text x="190" y="275" font-size="6" fill="#4a5a30" font-family="Georgia,serif" font-style="italic" text-anchor="middle">— tree line —</text>
+
+  <!-- ── BUILDINGS ── -->
+  <!-- Main cabin -->
+  <g filter="url(#roughen)">
+    <rect x="173" y="105" width="34" height="26" fill="#e8d4a8" stroke="#7a5030" stroke-width="1.8" rx="1"/>
+    <path d="M170,107 L190,94 L210,107" fill="#c8a870" stroke="#7a5030" stroke-width="1.5"/>
+    <!-- chimney -->
+    <rect x="200" y="95" width="5" height="8" fill="#b09060" stroke="#7a5030" stroke-width="1"/>
+    <!-- door -->
+    <rect x="185" y="118" width="7" height="13" fill="#8a6030" rx="1"/>
+    <!-- window -->
+    <rect x="176" y="110" width="7" height="7" fill="#c0d8e8" stroke="#7a5030" stroke-width="0.8"/>
+  </g>
+  <text x="190" y="142" font-size="6.5" fill="#3a2010" font-family="Georgia,serif" font-weight="bold" text-anchor="middle">${cabinLabel}</text>
+
+  <!-- Shed -->
+  <g filter="url(#roughen)">
+    <rect x="218" y="115" width="16" height="12" fill="#ddc898" stroke="#7a5030" stroke-width="1.2" rx="1"/>
+    <path d="M216,116 L226,109 L236,116" fill="#c09860" stroke="#7a5030" stroke-width="1"/>
+  </g>
+  <text x="226" y="135" font-size="5" fill="#5a3a10" font-family="Georgia,serif" text-anchor="middle">shed</text>
+
+  <!-- Ray and Bill's cabin — ramshackle -->
+  <g filter="url(#roughen)">
+    <rect x="45" y="133" width="28" height="20" fill="#ddc898" stroke="#7a5030" stroke-width="1.5" rx="1"/>
+    <path d="M42,135 L59,124 L76,135" fill="#b89060" stroke="#7a5030" stroke-width="1.4"/>
+    <rect x="65" y="126" width="4" height="7" fill="#a07840" stroke="#7a5030" stroke-width="0.8"/>
+    <rect x="48" y="137" width="5" height="7" fill="#8a6030" rx="1"/>
+    <!-- extra crooked line for ramshackle feel -->
+    <path d="M42,153 L48,151 L54,154 L60,151 L73,153" stroke="#7a5030" stroke-width="0.8" fill="none"/>
+  </g>
+  <text x="59" y="162" font-size="5.5" fill="#5a3a10" font-family="Georgia,serif" text-anchor="middle">R&amp;B's cabin</text>
+
+  <!-- Old well -->
+  <g filter="url(#roughen)">
+    <circle cx="295" cy="148" r="7" fill="none" stroke="#7a5030" stroke-width="1.8"/>
+    <circle cx="295" cy="148" r="3" fill="#8090a0" opacity="0.4"/>
+    <line x1="289" y1="142" x2="301" y2="154" stroke="#7a5030" stroke-width="1"/>
+    <line x1="301" y1="142" x2="289" y2="154" stroke="#7a5030" stroke-width="1"/>
+  </g>
+  <text x="295" y="163" font-size="5" fill="#5a3a10" font-family="Georgia,serif" text-anchor="middle">old well</text>
+
+  <!-- ── MEADOW ── -->
+  <ellipse cx="295" cy="150" rx="55" ry="35" fill="rgba(180,200,140,0.12)" stroke="rgba(100,130,60,0.25)" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="325" y="175" font-size="5.5" fill="#5a6a30" font-family="Georgia,serif" font-style="italic" text-anchor="middle">East Meadow</text>
+
+  <!-- ── ANNOTATIONS ── -->
+  <!-- Calypso always pulls here -->
+  <path d="M230,200 L248,235" stroke="#a05020" stroke-width="1" marker-end="url(#arrow)"/>
+  <text x="225" y="198" font-size="5.5" fill="#8a3a10" font-family="Georgia,serif" font-style="italic" text-anchor="middle">"Calypso always</text>
+  <text x="225" y="205" font-size="5.5" fill="#8a3a10" font-family="Georgia,serif" font-style="italic" text-anchor="middle">pulls here"</text>
+
+  <!-- tire tracks found here -->
+  <text x="255" y="38" font-size="5" fill="#7a3a10" font-family="Georgia,serif" font-style="italic" text-anchor="start">✕ tire tracks found here</text>
+
+  <!-- last seen? -->
+  <text x="213" y="110" font-size="5" fill="#7a3a10" font-family="Georgia,serif" font-style="italic">"last seen?"</text>
+
+  <!-- R&B annotation -->
+  <text x="59" y="172" font-size="5" fill="#7a3a10" font-family="Georgia,serif" font-style="italic" text-anchor="middle">"R&amp;B — spoke to them?"</text>
+
+  <!-- Paw print near well -->
+  <g transform="translate(278,132)" fill="#7a5030" opacity="0.7">
+    <circle cx="0" cy="0" r="2.5"/>
+    <circle cx="-4" cy="-3.5" r="1.5"/>
+    <circle cx="-1.5" cy="-5" r="1.5"/>
+    <circle cx="2" cy="-5" r="1.5"/>
+    <circle cx="4" cy="-3.5" r="1.5"/>
+  </g>
+
+  <!-- Arrow marker -->
+  <defs>
+    <marker id="arrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#a05020"/>
+    </marker>
+  </defs>
+
+  <!-- ── COMPASS ROSE ── -->
+  <g transform="translate(22,185)">
+    <line x1="10" y1="0" x2="10" y2="28" stroke="#5a3a10" stroke-width="1.2"/>
+    <line x1="0" y1="14" x2="22" y2="14" stroke="#5a3a10" stroke-width="1.2"/>
+    <path d="M10,2 L7,10 L10,8 L13,10 Z" fill="#5a3a10"/>
+    <path d="M10,26 L7,18 L10,20 L13,18 Z" fill="#5a3a10" opacity="0.5"/>
+    <path d="M2,14 L10,11 L8,14 L10,17 Z" fill="#5a3a10" opacity="0.5"/>
+    <path d="M20,14 L12,11 L14,14 L12,17 Z" fill="#5a3a10" opacity="0.5"/>
+    ${compassN}
+    <text x="10" y="37" font-size="7" fill="#5a3a10" text-anchor="middle" font-family="Georgia,serif" font-weight="bold">S</text>
+    <text x="-4" y="17" font-size="7" fill="#5a3a10" text-anchor="middle" font-family="Georgia,serif" font-weight="bold">W</text>
+    <text x="26" y="17" font-size="7" fill="#5a3a10" text-anchor="middle" font-family="Georgia,serif" font-weight="bold">E</text>
+  </g>
+
+  <!-- ── BORDER ── -->
+  <rect x="4" y="4" width="372" height="272" fill="none" stroke="#a07840" stroke-width="1.5" rx="2" opacity="0.5"/>
+</svg>`;
+}
+
+function initMapZoomPan() {
+  const container = document.getElementById('map-zoom-container');
+  const inner     = document.getElementById('map-svg-inner');
+  if (!container || !inner) return;
+
+  let scale = 1, tx = 0, ty = 0;
+  let lastTouches = null, lastDist = null;
+  let dragging = false, lastX = 0, lastY = 0;
+
+  function applyTransform() {
+    inner.style.transform = `translate(${tx}px,${ty}px) scale(${scale})`;
+  }
+
+  function clamp() {
+    const cw = container.offsetWidth;
+    const ch = container.offsetHeight;
+    const sw = cw * scale, sh = ch * scale;
+    tx = Math.min(0, Math.max(tx, cw - sw));
+    ty = Math.min(0, Math.max(ty, ch - sh));
+  }
+
+  // Mouse wheel zoom
+  container.addEventListener('wheel', e => {
+    e.preventDefault();
+    const rect = container.getBoundingClientRect();
+    const ox = e.clientX - rect.left;
+    const oy = e.clientY - rect.top;
+    const delta = e.deltaY < 0 ? 1.15 : 0.87;
+    const newScale = Math.min(5, Math.max(1, scale * delta));
+    tx = ox - (ox - tx) * (newScale / scale);
+    ty = oy - (oy - ty) * (newScale / scale);
+    scale = newScale;
+    clamp(); applyTransform();
+  }, { passive: false });
+
+  // Mouse drag
+  container.addEventListener('mousedown', e => {
+    dragging = true; lastX = e.clientX; lastY = e.clientY;
+  });
+  window.addEventListener('mousemove', e => {
+    if (!dragging) return;
+    tx += e.clientX - lastX; ty += e.clientY - lastY;
+    lastX = e.clientX; lastY = e.clientY;
+    clamp(); applyTransform();
+  });
+  window.addEventListener('mouseup', () => { dragging = false; });
+
+  // Touch pinch-zoom + drag
+  container.addEventListener('touchstart', e => {
+    if (e.touches.length === 2) {
+      lastTouches = e.touches;
+      lastDist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+    } else if (e.touches.length === 1) {
+      dragging = true;
+      lastX = e.touches[0].clientX;
+      lastY = e.touches[0].clientY;
+    }
+  }, { passive: true });
+
+  container.addEventListener('touchmove', e => {
+    e.preventDefault();
+    if (e.touches.length === 2 && lastDist !== null) {
+      const dist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+      const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+      const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+      const rect  = container.getBoundingClientRect();
+      const ox = midX - rect.left, oy = midY - rect.top;
+      const newScale = Math.min(5, Math.max(1, scale * (dist / lastDist)));
+      tx = ox - (ox - tx) * (newScale / scale);
+      ty = oy - (oy - ty) * (newScale / scale);
+      scale = newScale; lastDist = dist;
+      clamp(); applyTransform();
+    } else if (e.touches.length === 1 && dragging) {
+      tx += e.touches[0].clientX - lastX;
+      ty += e.touches[0].clientY - lastY;
+      lastX = e.touches[0].clientX;
+      lastY = e.touches[0].clientY;
+      clamp(); applyTransform();
+    }
+  }, { passive: false });
+
+  container.addEventListener('touchend', e => {
+    if (e.touches.length < 2) lastDist = null;
+    if (e.touches.length === 0) dragging = false;
+  }, { passive: true });
+}
+
 function showP3() {
   document.getElementById('p3-player-badge').textContent = playerName;
+
+  // Inject SVG map
+  document.getElementById('map-svg-inner').innerHTML = buildMapSVG(playerName);
+
+  // Set container height to match SVG aspect ratio (~280/380)
+  const container = document.getElementById('map-zoom-container');
+  if (container) {
+    const w = container.offsetWidth || 340;
+    container.style.height = Math.round(w * 280 / 380) + 'px';
+  }
+
+  // Wire flip
+  const wrap = document.getElementById('map-flip-wrap');
+  if (wrap && !wrap.dataset.wired) {
+    wrap.addEventListener('click', e => {
+      // Don't flip if user is dragging/panning
+      if (Math.abs(e.movementX || 0) > 4 || Math.abs(e.movementY || 0) > 4) return;
+      document.getElementById('map-flip-card').classList.toggle('flipped');
+    });
+    wrap.dataset.wired = '1';
+  }
+
+  initMapZoomPan();
+
+  // Answer input
+  document.getElementById('p3-label').textContent =
+    playerName === 'Melissa' ? '— awaiting input —' : 'Waiting for Melissa...';
+  document.getElementById('p3-melissa-input').style.display  = playerName === 'Melissa' ? 'block' : 'none';
+  document.getElementById('p3-waiting-msg').style.display    = playerName === 'Melissa' ? 'none'  : 'block';
+
   showScreen('p3');
+  if (playerName === 'Melissa') wireP3Input();
+}
+
+function wireP3Input() {
+  const input  = document.getElementById('p3-input');
+  const btn    = document.getElementById('p3-btn');
+  const result = document.getElementById('p3-result');
+  if (!input || !btn) return;
+
+  btn.addEventListener('click', checkP3);
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') checkP3(); });
+
+  function checkP3() {
+    const val = input.value.trim().toUpperCase().replace(/\s/g,'');
+    if (val === 'NIM?' || val === 'NIM') {
+      result.className = '';
+      result.textContent = '✓ The candle flickers...';
+      btn.disabled = true; input.disabled = true;
+      gameRef.update({
+        phase: 'celebratingP3',
+        p3SolvedAt: firebase.database.ServerValue.TIMESTAMP
+      });
+    } else {
+      result.className = 'wrong';
+      result.textContent = '✗ Not quite.';
+    }
+  }
+}
+
+function runP3Celebration() {
+  document.getElementById('celebration-icon').textContent  = '🕯️';
+  document.getElementById('celebration-title').textContent = 'The Candle Flickers...';
+  document.getElementById('celebration-text').textContent  = 'Teena\'s worst fear has a name. But the truth has one more turn.';
+  showOverlay('celebration');
+  setTimeout(() => {
+    hideOverlay('celebration');
+    gameRef.update({ phase: 'p4' });
+    showP4();
+  }, 4500);
+}
+
+function showP4() {
+  document.getElementById('p4-player-badge').textContent = playerName;
+  showScreen('p4');
 }
 
 function wireMiniAInput() {
@@ -2525,6 +3045,10 @@ gameRef.on('value', snapshot => {
     showBridgeC();
   } else if (phase === 'p3' && (currentLocalScreen === 'bridgeC' || currentLocalScreen === 'p2')) {
     showP3();
+  } else if (phase === 'celebratingP3' && currentLocalScreen === 'p3') {
+    runP3Celebration();
+  } else if (phase === 'p4' && currentLocalScreen === 'p3') {
+    showP4();
   }
 });
 
@@ -2549,6 +3073,9 @@ function proceedFromOpening() {
     }
     if (phase === 'celebratingP2') {
       showBridgeA(); return;
+    }
+    if (phase === 'p4' || phase === 'celebratingP3') {
+      showP4(); return;
     }
     if (phase === 'p3' || phase === 'celebratingP2') {
       showP3(); return;
@@ -2632,6 +3159,9 @@ function attemptJoin() {
     // For phases beyond puzzle1 show the opening note first (atmospheric),
     // then route to the correct screen on proceed.
     // miniB / celebratingMiniA / miniA / puzzle2 all get fast-tracked after note.
+    if (phase === 'p4' || phase === 'celebratingP3') {
+      showScreen('opening'); return;
+    }
     if (phase === 'p3' || phase === 'celebratingBridgeB' || phase === 'bridgeC') {
       showScreen('opening'); return;
     }
