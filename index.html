@@ -3806,14 +3806,10 @@ function showBridgeP3B() {
   const continueBtn = document.getElementById('bridgeP3B-continue-btn');
   let started = false;
 
-  function afterSpeech() {
-    playBtn.textContent = '▶';
-    // Try end crackle, but show J.S. and battery dead regardless
-    try {
-      const ctx = getVmCtx();
-      playCrackle(ctx, 0.22, showEnding);
-    } catch(e) { showEnding(); }
-  }
+  // Estimate speech duration from text length and rate
+  // ~130 words per minute at rate 0.72 = ~93 wpm
+  const wordCount = SKINNER_TEXT.split(' ').length;
+  const estimatedMs = (wordCount / 93) * 60000;
 
   function showEnding() {
     sig.classList.add('visible');
@@ -3830,25 +3826,50 @@ function showBridgeP3B() {
     transcript.classList.add('speaking');
     transcript.textContent = SKINNER_TEXT;
 
-    // Try intro crackle, but always proceed to speech
-    function startSpeech() {
-      const go = () => speakVoicemail(SKINNER_TEXT,
-        { pitch: 0.7, rate: 0.72, lang: 'en-US' },
-        0.035,
-        pct => { progress.style.width = pct + '%'; },
-        afterSpeech
-      );
-      if (window.speechSynthesis.getVoices().length) go();
-      else window.speechSynthesis.onvoiceschanged = go;
+    // Progress bar animates over estimated duration regardless of speech API
+    const startTime = Date.now();
+    const progressInterval = setInterval(() => {
+      const pct = Math.min(100, ((Date.now() - startTime) / estimatedMs) * 100);
+      progress.style.width = pct + '%';
+      if (pct >= 100) clearInterval(progressInterval);
+    }, 200);
+
+    // Try speech — if it works, great. If it errors, we still show ending on timer.
+    function attemptSpeech() {
+      if (!window.speechSynthesis) return;
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(SKINNER_TEXT);
+      utter.pitch = 0.7;
+      utter.rate  = 0.72;
+      utter.lang  = 'en-US';
+      const voices = window.speechSynthesis.getVoices();
+      if (voices.length) {
+        const v = voices.find(v => v.lang.startsWith('en-US') && v.name.match(/male|man|daniel|alex|fred/i))
+               || voices.find(v => v.lang.startsWith('en-US'))
+               || voices.find(v => v.lang.startsWith('en'));
+        if (v) utter.voice = v;
+      }
+      // Don't hook onerror into the ending — let the timer handle it
+      utter.onerror = () => {};
+      window.speechSynthesis.speak(utter);
     }
 
+    // Try intro crackle then speech
     try {
       const ctx = getVmCtx();
-      playCrackle(ctx, 0.28, () => setTimeout(startSpeech, 400));
-    } catch(e) { startSpeech(); }
+      playCrackle(ctx, 0.28, () => setTimeout(attemptSpeech, 400));
+    } catch(e) { attemptSpeech(); }
+
+    // Battery dead fires on timer — minimum of estimated duration, not speech API
+    setTimeout(() => {
+      clearInterval(progressInterval);
+      progress.style.width = '100%';
+      playBtn.textContent = '▶';
+      // Try end crackle
+      try { playCrackle(getVmCtx(), 0.22, showEnding); } catch(e) { showEnding(); }
+    }, estimatedMs + 800);
   }
 
-  // NO auto-play — require tap so AudioContext has a user gesture
   playBtn.addEventListener('click', playSkinner);
 }
 
@@ -4396,7 +4417,7 @@ function showP4() {
     if (saved && saved.month) {
       p4State = saved;
     } else {
-      p4State = { month: 2, day: 14, hour: 2, minute: 0, ampm: 'PM' };
+      p4State = { month: 1, day: 1, hour: 12, minute: 0, ampm: 'AM' };
       p4Ref.set(p4State);
     }
     updateCtrlDisplays();
