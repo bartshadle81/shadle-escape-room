@@ -4021,47 +4021,83 @@ const CABIN_L = `
 // Full truck helper
 function truckSVG(x, y, showPlate, plateBlur) {
   const p = showPlate ? `
-    <rect x="158" y="68" width="58" height="22" fill="${G.plateW}" rx="2"
-      stroke="#888" stroke-width="1"/>
-    <text x="187" y="83" font-family="'Courier New',monospace" font-size="11"
-      fill="${G.plateB}" text-anchor="middle" font-weight="bold"
-      letter-spacing="1.5">${plateBlur ? '??-???' : 'SKN-R14'}</text>` : '';
+    <rect x="158" y="68" width="58" height="22" fill="${G.plateW}" rx="2" stroke="#888" stroke-width="1"/>
+    <text x="187" y="83" font-family="'Courier New',monospace" font-size="11" fill="${G.plateB}" text-anchor="middle" font-weight="bold" letter-spacing="1.5">${plateBlur ? '??-???' : 'SKN-R14'}</text>` : '';
   return `<g transform="translate(${x},${y})">
-    <!-- bed -->
     <rect x="90" y="24" width="148" height="72" fill="${G.truckB}" rx="2"/>
     <rect x="90" y="24" width="148" height="8" fill="${G.truckD}"/>
     <rect x="90" y="88" width="148" height="5" fill="${G.truckD}"/>
-    <rect x="225" y="30" width="12" height="58" fill="${G.truckD}" opacity="0.6"/>
-    <!-- cab -->
     <rect x="0" y="8" width="98" height="72" fill="url(#truckGrad)" rx="3"/>
-    <!-- windshield -->
-    <path d="M6,12 L92,12 L92,60 L6,60 Z" fill="${G.glass}" rx="2" opacity="0.9"/>
+    <path d="M6,12 L92,12 L92,60 L6,60 Z" fill="${G.glass}" opacity="0.9"/>
     <path d="M8,14 L36,14 L34,34 L8,34 Z" fill="${G.glassH}" opacity="0.35"/>
-    <!-- rear cab window -->
     <rect x="90" y="30" width="22" height="26" fill="${G.glass}" opacity="0.6" rx="1"/>
-    <!-- door seam -->
     <line x1="70" y1="12" x2="70" y2="78" stroke="${G.truckD}" stroke-width="1" opacity="0.5"/>
-    <!-- door handle -->
     <rect x="62" y="44" width="8" height="3" fill="${G.chromE}" rx="1"/>
-    <!-- headlight -->
     <rect x="4" y="62" width="14" height="8" fill="#d0e0f0" rx="1" opacity="0.8"/>
-    <!-- grille -->
     <rect x="0" y="56" width="98" height="12" fill="${G.truckD}"/>
-    <line x1="16" y1="60" x2="82" y2="60" stroke="${G.chromE}" stroke-width="1" opacity="0.5"/>
-    <!-- wheels -->
     <ellipse cx="34"  cy="96" rx="26" ry="12" fill="${G.wheelD}"/>
     <ellipse cx="34"  cy="96" rx="18" ry="8"  fill="${G.wheelM}"/>
     <ellipse cx="34"  cy="96" rx="8"  ry="4"  fill="${G.hubC}"/>
     <ellipse cx="182" cy="96" rx="26" ry="12" fill="${G.wheelD}"/>
     <ellipse cx="182" cy="96" rx="18" ry="8"  fill="${G.wheelM}"/>
     <ellipse cx="182" cy="96" rx="8"  ry="4"  fill="${G.hubC}"/>
-    <!-- shadow under truck -->
     <ellipse cx="110" cy="108" rx="110" ry="8" fill="${G.shadow}" opacity="0.4"/>
     ${p}
   </g>`;
 }
 
-// Skinner silhouette (average male)
+// Rear-view truck — plate mounted naturally on bumper
+function rearTruckSVG(x, y, plateBlur) {
+  return `<g transform="translate(${x},${y})">
+    <!-- cab roof above bed -->
+    <path d="M28,-48 L192,-48 L212,-12 L8,-12 Z" fill="${G.truckW}" opacity="0.9"/>
+    <path d="M44,-44 L176,-44 L194,-14 L26,-14 Z" fill="${G.glass}" opacity="0.85"/>
+    <path d="M48,-42 L82,-42 L96,-16 L32,-16 Z"  fill="${G.glassH}" opacity="0.2"/>
+    <rect x="8" y="-12" width="204" height="14" fill="${G.truckD}"/>
+    <!-- bed sides -->
+    <path d="M0,8 L16,-2 L204,-2 L220,8 L220,82 L0,82 Z" fill="${G.truckB}"/>
+    <path d="M0,8 L16,-2 L204,-2 L220,8" fill="${G.truckD}" opacity="0.8"/>
+    <line x1="0"   y1="8"  x2="0"   y2="82" stroke="${G.chromE}" stroke-width="1.5" opacity="0.4"/>
+    <line x1="220" y1="8"  x2="220" y2="82" stroke="${G.chromE}" stroke-width="1.5" opacity="0.4"/>
+    <!-- tailgate -->
+    <rect x="6" y="82" width="208" height="64" fill="${G.truckB}" rx="1"/>
+    <rect x="12" y="88" width="196" height="52" fill="${G.truckW}" rx="1" opacity="0.1"/>
+    <!-- tailgate handle -->
+    <rect x="72" y="120" width="76" height="7" fill="${G.chromE}" rx="3" opacity="0.6"/>
+    <!-- TAILLIGHTS -->
+    <rect x="6"   y="82" width="40" height="34" fill="#b02818" rx="1"/>
+    <rect x="8"   y="84" width="36" height="30" fill="#e03828" rx="1" opacity="0.9"/>
+    <rect x="10"  y="86" width="14" height="13" fill="#ff5545" rx="1" opacity="0.75"/>
+    <rect x="174" y="82" width="40" height="34" fill="#b02818" rx="1"/>
+    <rect x="176" y="84" width="36" height="30" fill="#e03828" rx="1" opacity="0.9"/>
+    <rect x="196" y="86" width="14" height="13" fill="#ff5545" rx="1" opacity="0.75"/>
+    <!-- BUMPER -->
+    <rect x="0" y="146" width="220" height="16" fill="${G.truckD}" rx="2"/>
+    <rect x="3" y="147" width="214" height="12" fill="${G.chromE}" rx="1" opacity="0.45"/>
+    <rect x="100" y="160" width="20" height="8" fill="${G.wheelM}" rx="1"/>
+    <circle cx="110" cy="168" r="5" fill="${G.hubC}"/>
+    <!-- LICENSE PLATE — center of bumper, completely natural -->
+    <rect x="76" y="108" width="68" height="36" fill="${G.plateW}" rx="3" stroke="#bbb" stroke-width="1.5"/>
+    <rect x="78" y="110" width="64" height="32" fill="#f8f8f0" rx="2"/>
+    ${plateBlur
+      ? `<text x="110" y="130" font-family="'Courier New',monospace" font-size="11" fill="rgba(26,26,40,0.25)" text-anchor="middle" font-weight="bold" letter-spacing="2">??? ???</text>`
+      : `<text x="110" y="131" font-family="'Courier New',monospace" font-size="13" fill="${G.plateB}" text-anchor="middle" font-weight="bold" letter-spacing="2">SKN-R14</text>`}
+    <circle cx="82"  cy="113" r="2" fill="#bbb"/>
+    <circle cx="138" cy="113" r="2" fill="#bbb"/>
+    <circle cx="82"  cy="141" r="2" fill="#bbb"/>
+    <circle cx="138" cy="141" r="2" fill="#bbb"/>
+    <!-- wheels -->
+    <ellipse cx="22"  cy="178" rx="22" ry="10" fill="${G.wheelD}"/>
+    <ellipse cx="22"  cy="178" rx="14" ry="7"  fill="${G.wheelM}"/>
+    <ellipse cx="22"  cy="178" rx="6"  ry="3"  fill="${G.hubC}"/>
+    <ellipse cx="198" cy="178" rx="22" ry="10" fill="${G.wheelD}"/>
+    <ellipse cx="198" cy="178" rx="14" ry="7"  fill="${G.wheelM}"/>
+    <ellipse cx="198" cy="178" rx="6"  ry="3"  fill="${G.hubC}"/>
+    <ellipse cx="110" cy="188" rx="115" ry="8" fill="${G.shadow}" opacity="0.5"/>
+  </g>`;
+}
+
+
 function skinnerSVG(x, y, pose) {
   if (pose === 'standing') return `<g transform="translate(${x},${y})">
     <circle cx="0" cy="0" r="12" fill="${G.silM}"/>
@@ -4212,30 +4248,30 @@ function buildSVGFrame2() {
 }
 
 function buildSVGFrame3() {
-  // 2:17 PM — Truck parked, Skinner standing looking at cabin
+  // 2:17 PM — Truck parked from behind, Skinner standing looking at cabin
   return `
     ${SKY_BG}
     ${TREELINE}
     ${DRIVEWAY}
     ${GROUND}
     ${CABIN_L}
-    ${truckSVG(162, 112, true, true)}
+    ${rearTruckSVG(90, 62, true)}
     ${skinnerSVG(152, 108, 'standing')}
     <rect x="0" y="0" width="400" height="32" fill="rgba(0,0,0,0.35)"/>`;
 }
 
 function buildSVGFrame4() {
-  // 2:31 PM KEY FRAME — carrying Calypso, plate fully readable
+  // 2:31 PM KEY FRAME — rear of truck, plate fully readable, Skinner carrying Calypso
   return `
     ${SKY_BG}
     ${TREELINE}
     ${DRIVEWAY}
     ${GROUND}
     ${CABIN_L}
-    ${truckSVG(162, 112, true, false)}
-    ${skinnerSVG(146, 102, 'carrying')}
-    <!-- warm highlight around key subject -->
-    <ellipse cx="148" cy="155" rx="55" ry="40" fill="rgba(255,200,100,0.05)"/>
+    ${rearTruckSVG(90, 62, false)}
+    ${skinnerSVG(310, 102, 'carrying')}
+    <!-- warm highlight around Skinner + Calypso -->
+    <ellipse cx="312" cy="148" rx="50" ry="38" fill="rgba(255,200,100,0.05)"/>
     <rect x="0" y="0" width="400" height="32" fill="rgba(0,0,0,0.35)"/>`;
 }
 
