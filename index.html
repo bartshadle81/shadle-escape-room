@@ -801,8 +801,9 @@ body::before {
 #gm-panel {
   position: fixed; bottom: 16px; right: 16px;
   z-index: 30; display: none;
+  display: none; flex-direction: column; gap: 6px; align-items: flex-end;
 }
-#gm-panel.visible { display: block; }
+#gm-panel.visible { display: flex; }
 .gm-reset-btn {
   padding: 8px 14px;
   background: rgba(107,26,26,0.8);
@@ -813,6 +814,23 @@ body::before {
   transition: background 0.2s;
 }
 .gm-reset-btn:hover { background: rgba(107,26,26,1); }
+.gm-jump-btn {
+  padding: 6px 12px;
+  background: rgba(20,50,20,0.85);
+  border: 1px solid rgba(80,180,80,0.5); cursor: pointer; border-radius: 2px;
+  font-family: 'Special Elite', monospace;
+  font-size: 0.65rem; color: rgba(80,220,80,0.85);
+  letter-spacing: 0.08em; text-transform: uppercase;
+  transition: background 0.2s;
+  width: 100%;
+}
+.gm-jump-btn:hover { background: rgba(20,70,20,0.95); }
+.gm-label {
+  font-family: 'Special Elite', monospace;
+  font-size: 0.55rem; color: rgba(245,217,168,0.3);
+  letter-spacing: 0.15em; text-align: right;
+  text-transform: uppercase;
+}
 
 /* ─── MINI PUZZLE A — LETTER ─── */
 #screen-miniA {
@@ -2651,6 +2669,11 @@ body::before {
 
 <!-- GM Panel -->
 <div id="gm-panel">
+  <span class="gm-label">Game Master</span>
+  <button class="gm-jump-btn" id="gm-jump-p3">⏩ Jump to Puzzle 3</button>
+  <button class="gm-jump-btn" id="gm-jump-bridgeP3A">⏩ Jump to Nim Voicemail</button>
+  <button class="gm-jump-btn" id="gm-jump-p4">⏩ Jump to Puzzle 4</button>
+  <button class="gm-jump-btn" id="gm-jump-finale">⏩ Jump to Finale</button>
   <button class="gm-reset-btn" id="gm-reset-btn">⚠ Reset Game</button>
 </div>
 
@@ -3867,207 +3890,200 @@ function getFrameForState(s) {
   return 'empty';
 }
 
-// Green monochrome palette
+// Green monochrome palette — bright security cam aesthetic
 const G = {
-  bg:     '#020a02',
-  dark:   '#041504',
-  mid:    '#0a2a0a',
-  light:  '#1a4a1a',
-  bright: '#2a6a2a',
-  sil:    '#061006',  // silhouette fill
-  silS:   '#0d1a0d',  // silhouette stroke
-  gnd:    '#051205',
-  sky:    '#040e04',
-  tree:   '#0d200d',
-  cabin:  '#0a1a0a',
-  truck:  '#051005',
-  plate:  '#1a3a1a',
-  plateT: '#50ff50',
+  bg:      '#0a1a0a',
+  dark:    '#0d240d',
+  mid:     '#1a3a1a',
+  light:   '#2a5a2a',
+  bright:  '#3a7a3a',
+  sky:     '#0a160a',
+  skyGrad: '#0f200f',
+  gnd:     '#0d1e0d',
+  tree:    '#1a3a1a',
+  treeDark:'#0f280f',
+  cabin:   '#1e3e1e',
+  cabinD:  '#162a16',
+  steps:   '#2a4a2a',
+  driveway:'#162a16',
+  sil:     '#c0e8c0',
+  silDark: '#90c890',
+  truck:   '#b0d8b0',
+  truckD:  '#7ab07a',
+  wheel:   '#3a6a3a',
+  plate:   '#e0f8e0',
+  plateT:  '#003300',
+  plateBg: '#d0f0d0',
+  glow:    'rgba(80,255,80,0.12)',
+  window:  '#4a8a4a',
+  leash:   '#60b060',
 };
 
-// Common elements
-const TREELINE = `<path d="M0,180 Q50,155 100,165 Q130,158 160,170 Q200,155 240,168 Q280,155 320,165 Q360,158 400,162 L400,300 L0,300 Z" fill="${G.tree}" opacity="0.85"/>`;
-const GROUND   = `<rect x="0" y="200" width="400" height="100" fill="${G.gnd}"/>`;
-const DRIVEWAY = `<path d="M120,300 L140,200 L260,200 L280,300 Z" fill="${G.mid}" opacity="0.5"/>`;
-const CABIN_STEPS = `<rect x="30" y="185" width="55" height="15" fill="${G.cabin}"/><rect x="35" y="180" width="45" height="8" fill="${G.light}" opacity="0.4"/>`;
-const SKY = `<rect x="0" y="0" width="400" height="200" fill="${G.sky}"/>`;
+const TREELINE = `
+  <path d="M0,175 Q30,158 60,165 Q90,155 120,162 Q150,152 180,160 Q210,153 240,161 Q270,153 300,160 Q330,153 360,159 Q380,155 400,158 L400,300 L0,300 Z" fill="${G.tree}"/>
+  <path d="M0,182 Q40,170 80,174 Q120,167 160,172 Q200,166 240,171 Q280,165 320,170 Q360,165 400,167 L400,300 L0,300 Z" fill="${G.treeDark}" opacity="0.5"/>`;
+
+const GROUND = `
+  <rect x="0" y="198" width="400" height="102" fill="${G.gnd}"/>
+  <path d="M0,198 Q100,195 200,197 Q300,194 400,196" stroke="${G.light}" stroke-width="0.5" fill="none" opacity="0.4"/>`;
+
+const DRIVEWAY = `
+  <path d="M118,300 L138,198 L262,198 L282,300 Z" fill="${G.driveway}"/>
+  <path d="M190,198 L190,300" stroke="${G.mid}" stroke-width="0.5" stroke-dasharray="6,4" opacity="0.4"/>`;
+
+const CABIN_L = `
+  <rect x="0" y="160" width="90" height="40" fill="${G.cabin}" rx="1"/>
+  <path d="M-4,162 L45,140 L94,162" fill="${G.cabinD}"/>
+  <rect x="15" y="168" width="20" height="16" fill="${G.window}" opacity="0.6" rx="1"/>
+  <rect x="50" y="168" width="20" height="16" fill="${G.window}" opacity="0.4" rx="1"/>
+  <rect x="30" y="178" width="18" height="22" fill="${G.mid}" rx="1"/>
+  <rect x="2" y="198" width="86" height="4" fill="${G.steps}"/>`;
+
+const SKY_BG = `
+  <defs>
+    <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="${G.sky}"/>
+      <stop offset="100%" stop-color="${G.skyGrad}"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="400" height="200" fill="url(#skyGrad)"/>
+  <ellipse cx="200" cy="200" rx="300" ry="40" fill="rgba(60,120,60,0.08)"/>`;
 
 function buildSVGEmpty() {
   return `
-    ${SKY}
-    ${TREELINE}
-    ${DRIVEWAY}
-    ${GROUND}
-    ${CABIN_STEPS}
-    <rect x="0" y="198" width="400" height="2" fill="${G.bright}" opacity="0.15"/>`;
+    ${SKY_BG}${TREELINE}${DRIVEWAY}${GROUND}${CABIN_L}
+    <rect x="0" y="196" width="400" height="2" fill="${G.light}" opacity="0.3"/>`;
 }
 
 function buildSVGFrame1() {
-  // 2:00 PM — Teena walks out with leash
   return `
-    ${SKY}
-    <!-- afternoon light -->
-    <ellipse cx="340" cy="0" rx="80" ry="60" fill="rgba(80,200,80,0.04)"/>
-    ${TREELINE}
-    ${DRIVEWAY}
-    ${GROUND}
-    ${CABIN_STEPS}
-    <!-- Teena silhouette walking left, small frame, dog on leash -->
-    <g transform="translate(68,145)">
-      <!-- body -->
-      <ellipse cx="0" cy="18" rx="7" ry="14" fill="${G.sil}"/>
-      <!-- head -->
-      <circle cx="0" cy="1" r="6" fill="${G.sil}"/>
-      <!-- arm with leash -->
-      <line x1="-6" y1="14" x2="-18" y2="22" stroke="${G.sil}" stroke-width="2.5"/>
-      <!-- leash -->
-      <path d="M-18,22 Q-28,30 -30,34" stroke="${G.bright}" stroke-width="1" fill="none" opacity="0.6"/>
-      <!-- Calypso (dog) -->
-      <ellipse cx="-32" cy="36" rx="8" ry="5" fill="${G.sil}"/>
-      <circle cx="-26" cy="33" r="4" fill="${G.sil}"/>
-      <!-- Calypso's big ears -->
-      <path d="M-24,30 Q-19,24 -22,36" fill="${G.sil}" opacity="0.9"/>
-      <path d="M-28,30 Q-34,24 -30,36" fill="${G.sil}" opacity="0.9"/>
-      <!-- legs walking -->
-      <line x1="-4" y1="30" x2="-7" y2="45" stroke="${G.sil}" stroke-width="2.5"/>
-      <line x1="4" y1="30" x2="2" y2="45" stroke="${G.sil}" stroke-width="2.5"/>
+    ${SKY_BG}
+    <ellipse cx="360" cy="30" rx="90" ry="60" fill="rgba(80,160,80,0.06)"/>
+    ${TREELINE}${DRIVEWAY}${GROUND}${CABIN_L}
+    <g transform="translate(72,138)">
+      <line x1="-4" y1="36" x2="-9" y2="57" stroke="${G.sil}" stroke-width="3.5" stroke-linecap="round"/>
+      <line x1="4"  y1="36" x2="3"  y2="58" stroke="${G.sil}" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M-10,10 Q-12,24 -10,36 Q0,40 10,36 Q12,24 10,10 Z" fill="${G.sil}"/>
+      <circle cx="0" cy="3" r="8" fill="${G.sil}"/>
+      <line x1="-10" y1="18" x2="-26" y2="28" stroke="${G.sil}" stroke-width="3" stroke-linecap="round"/>
+      <path d="M-26,28 Q-36,34 -38,40" stroke="${G.leash}" stroke-width="1.8" fill="none"/>
     </g>
-    <!-- Shadow -->
-    <ellipse cx="68" cy="192" rx="12" ry="3" fill="rgba(0,0,0,0.3)"/>
-    <rect x="0" y="198" width="400" height="2" fill="${G.bright}" opacity="0.15"/>`;
+    <g transform="translate(108,172)">
+      <ellipse cx="0" cy="0" rx="11" ry="7" fill="${G.sil}"/>
+      <circle cx="-7" cy="-5" r="6" fill="${G.sil}"/>
+      <path d="M-11,-6 Q-20,-14 -13,2" fill="${G.sil}"/>
+      <path d="M-4,-7  Q2,-16  0,1"   fill="${G.sil}"/>
+      <line x1="-6" y1="6"  x2="-8"  y2="18" stroke="${G.sil}" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="0"  y1="6"  x2="-1"  y2="18" stroke="${G.sil}" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="5"  y1="5"  x2="6"   y2="18" stroke="${G.sil}" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M10,-2 Q18,-12 16,-4" stroke="${G.sil}" stroke-width="2" fill="none" stroke-linecap="round"/>
+    </g>
+    <ellipse cx="72"  cy="196" rx="14" ry="3" fill="rgba(0,0,0,0.4)"/>
+    <ellipse cx="112" cy="196" rx="10" ry="2.5" fill="rgba(0,0,0,0.3)"/>
+    <rect x="0" y="196" width="400" height="2" fill="${G.light}" opacity="0.3"/>`;
 }
 
 function buildSVGFrame2() {
-  // 2:08 PM — truck nosing in from right
   return `
-    ${SKY}
-    ${TREELINE}
-    ${DRIVEWAY}
-    ${GROUND}
-    ${CABIN_STEPS}
-    <!-- Truck front corner entering from right -->
-    <g transform="translate(290,140)">
-      <rect x="0" y="0" width="115" height="55" fill="${G.truck}" rx="3"/>
-      <rect x="0" y="0" width="115" height="30" fill="${G.dark}"/>
-      <!-- headlight -->
-      <rect x="5" y="35" width="14" height="8" fill="${G.light}" opacity="0.4"/>
-      <!-- windshield glare -->
-      <path d="M0,5 L20,0 L20,28 L0,28 Z" fill="${G.mid}" opacity="0.5"/>
-      <!-- driver silhouette barely visible -->
-      <ellipse cx="12" cy="14" rx="7" ry="9" fill="${G.sil}" opacity="0.5"/>
+    ${SKY_BG}${TREELINE}${DRIVEWAY}${GROUND}${CABIN_L}
+    <g transform="translate(258,130)">
+      <rect x="0" y="20" width="145" height="68" fill="${G.truck}" rx="3"/>
+      <rect x="0" y="0" width="95" height="65" fill="${G.truckD}" rx="3"/>
+      <path d="M5,5 L90,5 L90,55 L5,55 Z" fill="${G.mid}" opacity="0.7"/>
+      <path d="M8,8 L30,8 L28,25 L8,25 Z" fill="${G.window}" opacity="0.3"/>
+      <rect x="0" y="48" width="95" height="8" fill="${G.truckD}"/>
+      <rect x="5" y="52" width="16" height="8" fill="${G.window}" opacity="0.5" rx="1"/>
+      <ellipse cx="30" cy="22" rx="10" ry="12" fill="${G.sil}" opacity="0.45"/>
     </g>
-    <!-- wheel -->
-    <ellipse cx="312" cy="197" rx="18" ry="8" fill="${G.dark}"/>
-    <rect x="0" y="198" width="400" height="2" fill="${G.bright}" opacity="0.15"/>`;
+    <ellipse cx="278" cy="198" rx="20" ry="9" fill="${G.wheel}"/>
+    <ellipse cx="278" cy="198" rx="10" ry="5" fill="${G.dark}"/>
+    <rect x="0" y="196" width="400" height="2" fill="${G.light}" opacity="0.3"/>`;
 }
 
 function buildSVGFrame3() {
-  // 2:17 PM — truck parked, male silhouette standing, looking at cabin
   return `
-    ${SKY}
-    ${TREELINE}
-    ${DRIVEWAY}
-    ${GROUND}
-    ${CABIN_STEPS}
-    <!-- Full truck parked -->
-    <g transform="translate(195,130)">
-      <rect x="0" y="15" width="195" height="65" fill="${G.truck}" rx="2"/>
-      <!-- cab -->
-      <rect x="0" y="0" width="90" height="60" fill="${G.dark}" rx="2"/>
-      <rect x="5" y="5" width="80" height="40" fill="${G.mid}" opacity="0.4"/>
-      <!-- wheels -->
-      <ellipse cx="35" cy="80" rx="22" ry="10" fill="${G.sil}"/>
-      <ellipse cx="35" cy="80" rx="12" ry="6" fill="${G.dark}"/>
-      <ellipse cx="155" cy="80" rx="22" ry="10" fill="${G.sil}"/>
-      <ellipse cx="155" cy="80" rx="12" ry="6" fill="${G.dark}"/>
-      <!-- plate wrong angle, unreadable -->
-      <rect x="155" y="58" width="30" height="14" fill="${G.light}" opacity="0.3"/>
+    ${SKY_BG}${TREELINE}${DRIVEWAY}${GROUND}${CABIN_L}
+    <g transform="translate(170,120)">
+      <rect x="88" y="22" width="140" height="70" fill="${G.truck}" rx="2"/>
+      <rect x="88" y="22" width="140" height="6" fill="${G.truckD}"/>
+      <rect x="88" y="82" width="140" height="4" fill="${G.truckD}"/>
+      <rect x="0" y="6" width="96" height="68" fill="${G.truckD}" rx="3"/>
+      <path d="M5,10 L91,10 L91,56 L5,56 Z" fill="${G.mid}" opacity="0.65"/>
+      <path d="M8,12 L35,12 L33,30 L8,30 Z" fill="${G.window}" opacity="0.25"/>
+      <rect x="88" y="28" width="20" height="24" fill="${G.mid}" opacity="0.5" rx="1"/>
+      <ellipse cx="32"  cy="92" rx="24" ry="11" fill="${G.wheel}"/>
+      <ellipse cx="32"  cy="92" rx="13" ry="6"  fill="${G.dark}"/>
+      <ellipse cx="176" cy="92" rx="24" ry="11" fill="${G.wheel}"/>
+      <ellipse cx="176" cy="92" rx="13" ry="6"  fill="${G.dark}"/>
+      <rect x="162" y="68" width="32" height="14" fill="${G.mid}" rx="1" opacity="0.6"/>
+      <text x="178" y="78" font-family="Courier New,monospace" font-size="5" fill="${G.light}" text-anchor="middle" opacity="0.4">SKN-R14</text>
     </g>
-    <!-- Male silhouette standing -->
-    <g transform="translate(182,120)">
-      <circle cx="0" cy="0" r="9" fill="${G.sil}"/>
-      <rect x="-11" y="8" width="22" height="36" fill="${G.sil}" rx="2"/>
-      <line x1="-11" y1="16" x2="-22" y2="32" stroke="${G.sil}" stroke-width="4"/>
-      <line x1="11" y1="16" x2="15" y2="34" stroke="${G.sil}" stroke-width="4"/>
-      <line x1="-5" y1="44" x2="-6" y2="65" stroke="${G.sil}" stroke-width="4"/>
-      <line x1="5" y1="44" x2="7" y2="65" stroke="${G.sil}" stroke-width="4"/>
+    <g transform="translate(160,112)">
+      <circle cx="0" cy="0" r="11" fill="${G.sil}"/>
+      <path d="M-12,10 Q-14,30 -11,46 Q0,50 11,46 Q14,30 12,10 Z" fill="${G.sil}"/>
+      <line x1="-12" y1="18" x2="-24" y2="28" stroke="${G.sil}" stroke-width="4.5" stroke-linecap="round"/>
+      <line x1="-24"  y1="28" x2="-20" y2="20" stroke="${G.sil}" stroke-width="3.5" stroke-linecap="round"/>
+      <line x1="12"  y1="18" x2="18"  y2="36" stroke="${G.sil}" stroke-width="4.5" stroke-linecap="round"/>
+      <line x1="-6"  y1="46" x2="-8"  y2="68" stroke="${G.sil}" stroke-width="4.5" stroke-linecap="round"/>
+      <line x1="6"   y1="46" x2="9"   y2="68" stroke="${G.sil}" stroke-width="4.5" stroke-linecap="round"/>
     </g>
-    <ellipse cx="182" cy="192" rx="14" ry="3" fill="rgba(0,0,0,0.35)"/>
-    <rect x="0" y="198" width="400" height="2" fill="${G.bright}" opacity="0.15"/>`;
+    <ellipse cx="160" cy="197" rx="16" ry="4" fill="rgba(0,0,0,0.45)"/>
+    <rect x="0" y="196" width="400" height="2" fill="${G.light}" opacity="0.3"/>`;
 }
 
 function buildSVGFrame4() {
-  // 2:31 PM — KEY FRAME — carrying Calypso, plate visible
   return `
-    ${SKY}
-    ${TREELINE}
-    ${DRIVEWAY}
-    ${GROUND}
-    ${CABIN_STEPS}
-    <!-- Full truck -->
-    <g transform="translate(175,128)">
-      <rect x="0" y="17" width="200" height="67" fill="${G.truck}" rx="2"/>
-      <rect x="0" y="0" width="92" height="62" fill="${G.dark}" rx="2"/>
-      <rect x="5" y="5" width="82" height="42" fill="${G.mid}" opacity="0.4"/>
-      <ellipse cx="36" cy="84" rx="22" ry="10" fill="${G.sil}"/>
-      <ellipse cx="36" cy="84" rx="12" ry="6" fill="${G.dark}"/>
-      <ellipse cx="158" cy="84" rx="22" ry="10" fill="${G.sil}"/>
-      <ellipse cx="158" cy="84" rx="12" ry="6" fill="${G.dark}"/>
-      <!-- LICENSE PLATE — FULLY READABLE -->
-      <rect x="148" y="60" width="42" height="18" fill="${G.plate}" rx="1" stroke="${G.bright}" stroke-width="0.8"/>
-      <text x="169" y="72" font-family="Courier New,monospace" font-size="7.5" fill="${G.plateT}" text-anchor="middle" font-weight="bold" letter-spacing="0.5">SKN-R14</text>
+    ${SKY_BG}${TREELINE}${DRIVEWAY}${GROUND}${CABIN_L}
+    <g transform="translate(168,120)">
+      <rect x="88" y="22" width="142" height="70" fill="${G.truck}" rx="2"/>
+      <rect x="88" y="22" width="142" height="6" fill="${G.truckD}"/>
+      <rect x="88" y="86" width="142" height="4" fill="${G.truckD}"/>
+      <rect x="0" y="6" width="96" height="68" fill="${G.truckD}" rx="3"/>
+      <path d="M5,10 L91,10 L91,56 L5,56 Z" fill="${G.mid}" opacity="0.65"/>
+      <path d="M8,12 L35,12 L33,30 L8,30 Z" fill="${G.window}" opacity="0.25"/>
+      <rect x="88" y="28" width="20" height="24" fill="${G.mid}" opacity="0.5" rx="1"/>
+      <ellipse cx="32"  cy="92" rx="24" ry="11" fill="${G.wheel}"/>
+      <ellipse cx="32"  cy="92" rx="13" ry="6"  fill="${G.dark}"/>
+      <ellipse cx="176" cy="92" rx="24" ry="11" fill="${G.wheel}"/>
+      <ellipse cx="176" cy="92" rx="13" ry="6"  fill="${G.dark}"/>
+      <rect x="158" y="66" width="58" height="22" fill="${G.plate}" rx="2" stroke="${G.bright}" stroke-width="1.5"/>
+      <rect x="160" y="68" width="54" height="18" fill="${G.plateBg}" rx="1"/>
+      <text x="187" y="80" font-family="Courier New,monospace" font-size="10" fill="${G.plateT}" text-anchor="middle" font-weight="bold" letter-spacing="1">SKN-R14</text>
     </g>
-    <!-- Male silhouette carrying dog, walking toward truck -->
-    <g transform="translate(168,108)">
-      <!-- head -->
-      <circle cx="0" cy="0" r="9" fill="${G.sil}"/>
-      <!-- body -->
-      <rect x="-12" y="8" width="24" height="34" fill="${G.sil}" rx="2"/>
-      <!-- arms cradling Calypso -->
-      <path d="M-12,16 Q-26,22 -24,32 Q-22,38 -12,36" fill="${G.sil}" stroke="${G.sil}" stroke-width="1"/>
-      <path d="M12,16 Q18,22 16,32 L-12,36" fill="${G.sil}"/>
-      <!-- Calypso pressed against chest — sandy/light colored ears visible -->
-      <ellipse cx="-8" cy="24" rx="13" ry="9" fill="${G.bright}" opacity="0.55"/>
-      <!-- Big ears — distinctively visible -->
-      <path d="M-16,18 Q-24,10 -18,22" fill="${G.bright}" opacity="0.7" stroke="${G.bright}" stroke-width="0.5"/>
-      <path d="M-2,17 Q6,10 2,22"  fill="${G.bright}" opacity="0.7" stroke="${G.bright}" stroke-width="0.5"/>
-      <!-- head (Calypso) -->
-      <circle cx="-8" cy="18" r="6" fill="${G.bright}" opacity="0.6"/>
-      <!-- legs -->
-      <line x1="-6" y1="42" x2="-8" y2="62" stroke="${G.sil}" stroke-width="4"/>
-      <line x1="6" y1="42" x2="10" y2="60" stroke="${G.sil}" stroke-width="4"/>
+    <g transform="translate(155,105)">
+      <circle cx="0" cy="0" r="11" fill="${G.sil}"/>
+      <path d="M-13,10 Q-15,28 -12,44 Q0,48 12,44 Q15,28 13,10 Z" fill="${G.sil}"/>
+      <path d="M-13,16 Q-30,20 -28,34 Q-26,40 -14,38" fill="${G.sil}"/>
+      <path d="M13,16 Q22,20 20,34 L-14,38" fill="${G.sil}"/>
+      <ellipse cx="-3" cy="26" rx="16" ry="11" fill="${G.silDark}" opacity="0.9"/>
+      <circle cx="-6" cy="18" r="8" fill="${G.silDark}"/>
+      <path d="M-13,14 Q-26,4  -18,22" fill="${G.sil}" stroke="${G.bright}" stroke-width="0.8"/>
+      <path d="M1,13  Q12,3   6,22"    fill="${G.sil}" stroke="${G.bright}" stroke-width="0.8"/>
+      <line x1="-6"  y1="44" x2="-9"  y2="66" stroke="${G.sil}" stroke-width="4.5" stroke-linecap="round"/>
+      <line x1="6"   y1="44" x2="10"  y2="64" stroke="${G.sil}" stroke-width="4.5" stroke-linecap="round"/>
     </g>
-    <ellipse cx="168" cy="192" rx="14" ry="3" fill="rgba(0,0,0,0.4)"/>
-    <rect x="0" y="198" width="400" height="2" fill="${G.bright}" opacity="0.15"/>`;
+    <ellipse cx="155" cy="197" rx="16" ry="4" fill="rgba(0,0,0,0.5)"/>
+    <ellipse cx="340" cy="170" rx="50" ry="30" fill="${G.glow}"/>
+    <rect x="0" y="196" width="400" height="2" fill="${G.bright}" opacity="0.5"/>`;
 }
 
 function buildSVGFrame5() {
-  // 2:45 PM — Empty driveway, Teena entering, realizing
   return `
-    ${SKY}
-    ${TREELINE}
-    ${DRIVEWAY}
-    ${GROUND}
-    ${CABIN_STEPS}
-    <!-- Teena entering from left, stopped, hands to face -->
-    <g transform="translate(155,128)">
-      <!-- head -->
-      <circle cx="0" cy="0" r="8" fill="${G.sil}"/>
-      <!-- body — slight feminine silhouette -->
-      <path d="M-9,8 Q-12,28 -9,42 Q0,46 9,42 Q12,28 9,8 Z" fill="${G.sil}"/>
-      <!-- both hands raised to face -->
-      <line x1="-9" y1="16" x2="-16" y2="4" stroke="${G.sil}" stroke-width="4"/>
-      <line x1="9"  y1="16" x2="16" y2="4" stroke="${G.sil}" stroke-width="4"/>
-      <!-- hands at face -->
-      <circle cx="-16" cy="3" r="4" fill="${G.sil}"/>
-      <circle cx="16"  cy="3" r="4" fill="${G.sil}"/>
-      <!-- legs still -->
-      <line x1="-4" y1="42" x2="-5" y2="62" stroke="${G.sil}" stroke-width="4"/>
-      <line x1="4"  y1="42" x2="6"  y2="62" stroke="${G.sil}" stroke-width="4"/>
+    ${SKY_BG}
+    <rect x="0" y="0" width="400" height="200" fill="rgba(0,0,0,0.1)"/>
+    ${TREELINE}${DRIVEWAY}${GROUND}${CABIN_L}
+    <g transform="translate(158,122)">
+      <circle cx="0" cy="0" r="9" fill="${G.sil}"/>
+      <path d="M-10,9 Q-12,26 -9,40 Q0,44 9,40 Q12,26 10,9 Z" fill="${G.sil}"/>
+      <line x1="-10" y1="16" x2="-18" y2="2"  stroke="${G.sil}" stroke-width="4.5" stroke-linecap="round"/>
+      <line x1="10"  y1="16" x2="18"  y2="2"  stroke="${G.sil}" stroke-width="4.5" stroke-linecap="round"/>
+      <circle cx="-18" cy="0" r="5" fill="${G.sil}"/>
+      <circle cx="18"  cy="0" r="5" fill="${G.sil}"/>
+      <line x1="-4"  y1="40" x2="-5" y2="62" stroke="${G.sil}" stroke-width="4.5" stroke-linecap="round"/>
+      <line x1="4"   y1="40" x2="6"  y2="62" stroke="${G.sil}" stroke-width="4.5" stroke-linecap="round"/>
     </g>
-    <ellipse cx="155" cy="192" rx="11" ry="3" fill="rgba(0,0,0,0.3)"/>
-    <!-- No truck. No dog. Just stillness. -->
-    <rect x="0" y="198" width="400" height="2" fill="${G.bright}" opacity="0.15"/>`;
+    <ellipse cx="158" cy="197" rx="12" ry="3" fill="rgba(0,0,0,0.35)"/>
+    <rect x="0" y="196" width="400" height="2" fill="${G.light}" opacity="0.3"/>`;
 }
 
 function renderCamFrame(state) {
@@ -4089,14 +4105,12 @@ function renderCamFrame(state) {
   // Add green tint filter and noise to SVG
   svg.innerHTML = `
     <defs>
-      <filter id="cam-filter">
+      <filter id="cam-filter" color-interpolation-filters="sRGB">
         <feColorMatrix type="matrix" values="
-          0.1 0.4 0.05 0 0
-          0.1 0.6 0.05 0 0
-          0.05 0.2 0.05 0 0
-          0   0   0    1 0"/>
-        <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" result="noise" stitchTiles="stitch"/>
-        <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.2" xChannelSelector="R" yChannelSelector="G"/>
+          0.15 0.5  0.1  0 0.02
+          0.15 0.75 0.1  0 0.04
+          0.1  0.3  0.15 0 0.01
+          0    0    0    1 0"/>
       </filter>
     </defs>
     <g filter="url(#cam-filter)">${svgContent}</g>`;
@@ -4622,6 +4636,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('gm-reset-btn').addEventListener('click', () => {
     if (confirm('Reset the entire game for all players?')) resetGame();
+  });
+
+  // GM jump shortcuts — set Firebase phase and route locally
+  function gmJump(phase, localFn) {
+    if (!playerName) {
+      alert('Enter your name first, then use the jump button.');
+      return;
+    }
+    gameRef.set({
+      phase,
+      timerStart: Date.now(),
+      resetVersion: lastResetVersion
+    });
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+    localFn();
+  }
+
+  document.getElementById('gm-jump-p3').addEventListener('click', () => {
+    gmJump('p3', () => {
+      renderClueForPlayer(playerName); // ensure clue content exists
+      showP3();
+    });
+  });
+
+  document.getElementById('gm-jump-bridgeP3A').addEventListener('click', () => {
+    gmJump('bridgeP3A', () => showBridgeP3A());
+  });
+
+  document.getElementById('gm-jump-p4').addEventListener('click', () => {
+    gmJump('p4', () => showP4());
+  });
+
+  document.getElementById('gm-jump-finale').addEventListener('click', () => {
+    gmJump('finale', () => showFinale());
   });
 
   // GM keyboard shortcut: Ctrl+Shift+R
