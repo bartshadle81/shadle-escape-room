@@ -1718,31 +1718,273 @@ body::before {
   font-style: italic; font-weight: 600;
 }
 
-/* ─── PUZZLE 4 PLACEHOLDER ─── */
+/* ─── PUZZLE 4 — SECURITY CAMERA ─── */
 #screen-p4 {
-  background: linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-dark) 100%);
+  background: #050a05;
+  padding: 10px;
 }
-.p4-inner {
-  text-align: center; max-width: 500px; padding: 50px 40px;
-  background: rgba(13,8,5,0.6);
-  border: 1px solid rgba(196,134,46,0.25);
+
+.p4-scene {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 10px;
+  max-width: 560px; width: 100%;
 }
-.p4-badge {
+
+.p4-question {
   font-family: 'Special Elite', monospace;
-  font-size: 0.65rem; color: rgba(245,217,168,0.4);
-  letter-spacing: 0.25em; text-transform: uppercase;
-  margin-bottom: 24px; display: block;
+  font-size: 0.7rem; color: rgba(80,200,80,0.55);
+  letter-spacing: 0.15em; text-transform: uppercase;
+  text-align: center;
 }
-.p4-title {
+
+/* Camera monitor frame */
+.cam-monitor {
+  width: 100%; position: relative;
+  border: 2px solid #1a3a1a;
+  box-shadow: 0 0 0 1px #0a1a0a, 0 4px 24px rgba(0,0,0,0.9),
+              0 0 20px rgba(0,80,0,0.15);
+  background: #000;
+  overflow: hidden;
+}
+
+/* Camera viewport */
+.cam-viewport {
+  width: 100%; position: relative;
+  aspect-ratio: 4/3;
+  background: #020a02;
+  overflow: hidden;
+}
+
+/* Scanlines overlay */
+.cam-viewport::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    transparent 0px, transparent 3px,
+    rgba(0,0,0,0.18) 3px, rgba(0,0,0,0.18) 4px
+  );
+  pointer-events: none; z-index: 10;
+}
+
+/* Grain noise overlay */
+.cam-viewport::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 9; opacity: 0.5;
+}
+
+.cam-frame-svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+
+/* HUD overlays */
+.cam-hud {
+  position: absolute; inset: 0;
+  pointer-events: none; z-index: 11;
+  padding: 8px 10px;
+  display: flex; justify-content: space-between; align-items: flex-start;
+}
+
+.cam-timestamp {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: clamp(0.55rem, 1.8vw, 0.72rem);
+  color: rgba(80,255,80,0.9);
+  text-shadow: 0 0 6px rgba(0,200,0,0.6);
+  line-height: 1.4;
+  letter-spacing: 0.05em;
+}
+
+.cam-label {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: clamp(0.45rem, 1.5vw, 0.6rem);
+  color: rgba(80,255,80,0.7);
+  text-shadow: 0 0 4px rgba(0,200,0,0.4);
+  text-align: right;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+}
+
+.cam-rec {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.55rem; color: rgba(255,60,60,0.85);
+  letter-spacing: 0.08em; z-index: 11;
+  animation: rec-blink 1.2s step-end infinite;
+}
+@keyframes rec-blink { 0%,100% { opacity:1; } 50% { opacity:0; } }
+
+/* KEY FRAME glow — when at 2:31 */
+.cam-viewport.key-frame {
+  box-shadow: inset 0 0 30px rgba(0,180,0,0.15);
+}
+
+/* ─── TIMESTAMP CONTROLS ─── */
+.cam-controls {
+  width: 100%;
+  background: #060e06;
+  border: 1px solid #1a3a1a;
+  border-top: none;
+  padding: 10px 12px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.cam-ctrl {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 4px;
+}
+
+.cam-ctrl-label {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.5rem; color: rgba(80,180,80,0.55);
+  letter-spacing: 0.1em; text-transform: uppercase;
+}
+
+.cam-ctrl-label.active-ctrl { color: rgba(80,255,80,0.9); }
+
+.cam-ctrl-value {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: clamp(0.9rem, 3vw, 1.1rem);
+  color: rgba(80,255,80,0.9);
+  text-shadow: 0 0 8px rgba(0,200,0,0.5);
+  min-width: 36px; text-align: center;
+  line-height: 1;
+}
+
+.cam-ctrl-btn {
+  background: none; border: 1px solid rgba(80,180,80,0.3);
+  color: rgba(80,220,80,0.7); cursor: pointer;
+  width: 100%; padding: 3px 0;
+  font-size: 0.7rem; line-height: 1;
+  border-radius: 1px;
+  transition: background 0.15s, border-color 0.15s;
+}
+.cam-ctrl-btn:hover { background: rgba(0,80,0,0.3); border-color: rgba(80,255,80,0.6); }
+.cam-ctrl-btn:disabled { opacity: 0.2; cursor: default; }
+
+/* Answer section */
+.p4-answer {
+  width: 100%;
+  background: rgba(0,20,0,0.6);
+  border: 1px solid rgba(80,180,80,0.2);
+  padding: 14px 16px;
+}
+.p4-answer-label {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.62rem; color: rgba(80,180,80,0.6);
+  letter-spacing: 0.12em; text-transform: uppercase;
+  margin-bottom: 10px; display: block;
+}
+.p4-answer-row { display: flex; gap: 8px; align-items: stretch; }
+#p4-input {
+  flex: 1; padding: 10px 12px;
+  background: rgba(0,20,0,0.5);
+  border: 1px solid rgba(80,180,80,0.35);
+  border-radius: 1px; outline: none;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1rem; color: rgba(80,255,80,0.9);
+  text-transform: uppercase; letter-spacing: 0.15em;
+  transition: border-color 0.2s;
+}
+#p4-input:focus { border-color: rgba(80,255,80,0.7); }
+.p4-submit-btn {
+  padding: 10px 18px;
+  background: rgba(0,40,0,0.6); border: 1px solid rgba(80,180,80,0.4);
+  cursor: pointer; border-radius: 1px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.7rem; color: rgba(80,220,80,0.8);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  transition: background 0.2s;
+}
+.p4-submit-btn:hover { background: rgba(0,60,0,0.8); }
+#p4-result {
+  margin-top: 8px; min-height: 18px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.68rem; letter-spacing: 0.05em;
+}
+#p4-result.wrong { color: rgba(255,80,80,0.8); }
+.p4-waiting {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.65rem; color: rgba(80,180,80,0.4);
+  text-align: center; padding: 6px 0;
+  letter-spacing: 0.08em;
+}
+
+/* ─── FINALE SCREEN ─── */
+#screen-finale {
+  background: #fff;
+  transition: background 1s ease;
+}
+
+.finale-inner {
+  text-align: center; max-width: 520px; padding: 50px 36px;
+}
+
+.finale-paw {
+  font-size: 3rem; margin-bottom: 24px;
+  animation: paw-bounce 1.5s ease-in-out infinite alternate;
+}
+@keyframes paw-bounce {
+  from { transform: translateY(0) scale(1); }
+  to   { transform: translateY(-8px) scale(1.08); }
+}
+
+.finale-title {
   font-family: 'Playfair Display', serif;
-  font-size: clamp(1.4rem, 4vw, 2rem);
+  font-size: clamp(1.6rem, 5vw, 2.4rem);
   font-weight: 700; font-style: italic;
-  color: var(--amber-light); margin-bottom: 16px;
+  color: #2a4a20; margin-bottom: 16px;
+  line-height: 1.2;
 }
-.p4-text {
+
+.finale-subtitle {
+  font-family: 'Special Elite', monospace;
+  font-size: 0.75rem; color: #6a3a10;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  margin-bottom: 28px; opacity: 0.7;
+}
+
+.finale-text {
   font-family: 'Crimson Text', serif;
-  font-size: 1.05rem; color: rgba(245,217,168,0.65);
-  line-height: 1.7; font-style: italic;
+  font-size: 1.1rem; color: #3a2a10;
+  line-height: 1.8; font-style: italic;
+  margin-bottom: 20px;
+}
+
+.finale-report-btn {
+  margin-top: 12px; padding: 18px 36px;
+  background: #2a5a20; border: none; cursor: pointer;
+  border-radius: 2px;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem; font-weight: 700; font-style: italic;
+  color: #fff; letter-spacing: 0.03em;
+  box-shadow: 0 4px 16px rgba(0,80,0,0.3);
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+}
+.finale-report-btn:hover {
+  background: #3a7a2a; transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(0,100,0,0.4);
+}
+
+.finale-resolution {
+  display: none;
+  margin-top: 32px;
+  padding: 24px; background: rgba(40,90,30,0.08);
+  border: 1px solid rgba(40,90,30,0.2); border-radius: 2px;
+}
+.finale-resolution.visible { display: block; }
+
+.finale-resolution-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem; font-weight: 700;
+  color: #2a4a20; margin-bottom: 10px;
+}
+.finale-resolution-sub {
+  font-family: 'Crimson Text', serif;
+  font-size: 1rem; color: #4a5a30;
+  line-height: 1.6;
 }
 
 
@@ -1804,6 +2046,76 @@ body::before {
   /* Join screen */
   .join-inner { padding: 36px 24px; }
   .join-title { font-size: 1.8rem; }
+
+  /* ── Journal pages ── */
+  .journal-page { padding: 22px 18px 18px; max-height: 55vh; }
+  .journal-body { font-size: 0.95rem; line-height: 1.75; }
+  .journal-morse { font-size: 0.62rem; letter-spacing: 0.18em; }
+  .journal-continue-btn { font-size: 0.72rem; padding: 11px; }
+
+  /* ── Love letter ── */
+  .love-letter-paper { padding: 24px 20px 20px; max-height: 58vh; }
+  .love-letter-body { font-size: 0.95rem; }
+  .love-letter-header { font-size: 0.95rem; }
+
+  /* ── Bridge B answer ── */
+  .bridgeB-answer { padding: 12px 14px; }
+  #bridgeB-input { font-size: 0.85rem; }
+
+  /* ── Phone voicemail ── */
+  .phone-scene { gap: 14px; }
+  .phone-screen { border-radius: 14px; }
+  .phone-contact-name { font-size: 1.1rem; }
+  .phone-transcript { font-size: 0.78rem; }
+  .phone-note { font-size: 0.85rem; }
+
+  /* ── Receipt (Mini B) ── */
+  .miniB-scene { gap: 10px; }
+  .receipt-front { padding: 10px 10px; }
+  .receipt-header { font-size: 0.62rem; }
+  .receipt-items { font-size: 0.6rem; }
+  .receipt-totals { font-size: 0.6rem; }
+  .receipt-meta { font-size: 0.58rem; }
+  .receipt-footer { font-size: 0.58rem; }
+  .receipt-scrawl { font-size: 0.88rem; }
+  .scrawl-name { font-size: 1.3rem; }
+  .miniB-answer-box { padding: 12px 14px; }
+
+  /* ── Map (Puzzle 3) ── */
+  .map-scene { gap: 10px; }
+  .map-tap-hint { font-size: 0.62rem; }
+  .map-back-text { font-size: 0.92rem; }
+  .p3-answer { padding: 12px 14px; }
+  #p3-input { font-size: 0.95rem; }
+
+  /* ── Security camera (Puzzle 4) ── */
+  #screen-p4 { padding: 8px; }
+  .p4-scene { gap: 8px; }
+  .p4-question { font-size: 0.6rem; }
+  .cam-controls { padding: 8px; gap: 4px; }
+  .cam-ctrl-label { font-size: 0.44rem; }
+  .cam-ctrl-value { font-size: 0.85rem; }
+  .cam-ctrl-btn { font-size: 0.65rem; padding: 2px 0; }
+  .p4-answer { padding: 10px 12px; }
+  #p4-input { font-size: 0.88rem; letter-spacing: 0.12em; }
+  .p4-submit-btn { padding: 10px 14px; font-size: 0.65rem; }
+
+  /* ── Ray & Bill note ── */
+  .rb-note-scene { gap: 12px; }
+  .rb-note-paper { padding: 22px 18px 18px; }
+  .rb-note-text { font-size: 0.9rem; line-height: 1.75; }
+  .rb-note-label { font-size: 0.85rem; }
+
+  /* ── Bridge P2→P3 journal entries ── */
+  .bridge-scene { gap: 12px; }
+
+  /* ── Finale ── */
+  .finale-inner { padding: 36px 24px; }
+  .finale-title { font-size: 1.5rem; }
+  .finale-paw { font-size: 2.4rem; }
+  .finale-text { font-size: 1rem; }
+  .finale-report-btn { padding: 14px 28px; font-size: 1rem; }
+  .finale-resolution-text { font-size: 1.1rem; }
 }
 </style>
 </head>
@@ -2253,20 +2565,62 @@ body::before {
 </div>
 
 <!-- PUZZLE 4 PLACEHOLDER -->
+<!-- PUZZLE 4 — SECURITY CAMERA -->
 <div id="screen-p4" class="screen">
-  <div class="player-badge">
-    <div class="badge-dot" style="background:#8a6a30"></div>
-    <span class="badge-name" id="p4-player-badge"></span>
+  <div class="player-badge" style="z-index:20;">
+    <div class="badge-dot" style="background:#00aa00"></div>
+    <span class="badge-name" id="p4-player-badge" style="color:rgba(80,220,80,0.6)"></span>
   </div>
-  <div class="p4-inner">
-    <span class="p4-badge">Puzzle 4</span>
-    <h2 class="p4-title">The Last Witness</h2>
-    <p class="p4-text">
-      Route 9. Blue mailbox. You'll know it by the sound.
+  <div class="p4-scene">
+    <p class="p4-question">What information would clearly identify the culprit?</p>
+    <div class="cam-monitor">
+      <div class="cam-viewport" id="cam-viewport">
+        <svg class="cam-frame-svg" id="cam-frame-svg" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"></svg>
+        <div class="cam-hud">
+          <div class="cam-timestamp" id="cam-timestamp">02/14 14:31:07</div>
+          <div class="cam-label">RIDGELINE CABIN #4<br>FRONT DOOR CAM</div>
+        </div>
+        <div class="cam-rec">● REC</div>
+      </div>
+      <div class="cam-controls" id="cam-controls">
+        <!-- Controls injected by JS per player -->
+      </div>
+    </div>
+    <div class="p4-answer" id="p4-answer-box" style="display:none;">
+      <span class="p4-answer-label" id="p4-label"></span>
+      <div id="p4-noah-input">
+        <div class="p4-answer-row">
+          <input type="text" id="p4-input" placeholder="???-???" maxlength="7" autocomplete="off" spellcheck="false">
+          <button class="p4-submit-btn" id="p4-btn">Submit</button>
+        </div>
+        <div id="p4-result"></div>
+      </div>
+      <div id="p4-waiting-msg" class="p4-waiting" style="display:none;">
+        [ AWAITING INPUT FROM NOAH ]
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FINALE SCREEN -->
+<div id="screen-finale" class="screen">
+  <div class="finale-inner">
+    <div class="finale-paw">🐾</div>
+    <div class="finale-subtitle">Case Closed · Ridgeline Cabin #4</div>
+    <h2 class="finale-title">Calypso Has Been Found.</h2>
+    <p class="finale-text">
+      You found what Teena couldn't finish finding on her own. Every clue, every number, every name — you followed them all the way to the end.
     </p>
-    <p class="p4-text" style="margin-top:16px; opacity:0.5; font-size:0.85rem;">
-      📓 Coming Soon
+    <p class="finale-text">
+      Jason Skinner is in custody. Calypso is safe.
     </p>
+    <button class="finale-report-btn" id="finale-report-btn">Report to Authorities</button>
+    <div class="finale-resolution" id="finale-resolution">
+      <div class="finale-resolution-text">🐾 Calypso has been found. Jason Skinner has been arrested.</div>
+      <div class="finale-resolution-sub">
+        She is safe. She is home. And she knew all along.
+      </div>
+    </div>
   </div>
 </div>
 
@@ -2748,7 +3102,7 @@ const P2_PAGES = {
   },
   Bart: {
     tearClass: 'tear-bart',
-    morse: '--. .-.-.',
+    morse: '--. ..-.',
     paragraphs: [
       `I should have stopped reading. I know that. But I couldn't put it down.`,
       `There was an entry from about six weeks ago. Carter wrote about a trip he took with his father and some of his father's friends. A night event, he called it. Out in the country somewhere. He wrote about it almost clinically — the drive, the darkness, the sounds. He mentioned dogs. Several of them. He mentioned money exchanging hands between men he didn't recognize.`,
@@ -3238,37 +3592,135 @@ function runP3Celebration() {
   }, 4500);
 }
 
-// ─── SPEECH SYNTHESIS HELPER ───
-function speakVoicemail(text, settings, onProgress, onEnd) {
+// ─── VOICEMAIL AUDIO ENGINE ───
+// Shared AudioContext
+let vmAudioCtx = null;
+function getVmCtx() {
+  if (!vmAudioCtx || vmAudioCtx.state === 'closed') {
+    vmAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (vmAudioCtx.state === 'suspended') vmAudioCtx.resume();
+  return vmAudioCtx;
+}
+
+// White noise static generator — returns a source node + gain node
+function createStatic(ctx, gainLevel) {
+  const bufferSize = ctx.sampleRate * 2;
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1);
+
+  const source = ctx.createBufferSource();
+  source.buffer = buffer;
+  source.loop = true;
+
+  // Bandpass filter — simulates phone line frequency range (300–3400 Hz)
+  const bandpass = ctx.createBiquadFilter();
+  bandpass.type = 'bandpass';
+  bandpass.frequency.value = 1800;
+  bandpass.Q.value = 0.5;
+
+  const gain = ctx.createGain();
+  gain.gain.value = gainLevel;
+
+  source.connect(bandpass);
+  bandpass.connect(gain);
+  gain.connect(ctx.destination);
+  source.start();
+  return { source, gain };
+}
+
+// Voicemail system beep — classic "beeeeep" before a message
+function playVmBeep(ctx, onDone) {
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+
+  osc.type = 'sine';
+  osc.frequency.value = 950;
+  gain.gain.setValueAtTime(0, ctx.currentTime);
+  gain.gain.linearRampToValueAtTime(0.35, ctx.currentTime + 0.02);
+  gain.gain.setValueAtTime(0.35, ctx.currentTime + 0.7);
+  gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.75);
+
+  osc.start(ctx.currentTime);
+  osc.stop(ctx.currentTime + 0.75);
+  setTimeout(onDone, 900);
+}
+
+// Connection crackle burst — short burst of loud static
+function playCrackle(ctx, intensity, onDone) {
+  const bufferSize = ctx.sampleRate * 0.4;
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize); // fades out
+  }
+  const source = ctx.createBufferSource();
+  source.buffer = buffer;
+
+  const gain = ctx.createGain();
+  gain.gain.value = intensity;
+
+  const bandpass = ctx.createBiquadFilter();
+  bandpass.type = 'bandpass';
+  bandpass.frequency.value = 2200;
+  bandpass.Q.value = 0.8;
+
+  source.connect(bandpass);
+  bandpass.connect(gain);
+  gain.connect(ctx.destination);
+  source.start();
+  setTimeout(onDone, 450);
+}
+
+// Main voicemail speaker
+function speakVoicemail(text, settings, staticGain, onProgress, onEnd) {
   if (!window.speechSynthesis) { onEnd(); return; }
   window.speechSynthesis.cancel();
 
-  const utter = new SpeechSynthesisUtterance(text);
-  utter.pitch  = settings.pitch;
-  utter.rate   = settings.rate;
-  utter.lang   = settings.lang;
+  const ctx = getVmCtx();
 
-  // Try to match preferred voice
+  // Start quiet background static
+  const staticNode = createStatic(ctx, staticGain);
+
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.pitch = settings.pitch;
+  utter.rate  = settings.rate;
+  utter.lang  = settings.lang;
+
   const voices = window.speechSynthesis.getVoices();
   if (voices.length) {
     const preferred = voices.find(v =>
       v.lang.startsWith(settings.lang) &&
-      (settings.preferFemale ? v.name.match(/female|woman|zira|karen|victoria|samantha/i)
-                              : v.name.match(/male|man|daniel|george|alex|fred|junior/i))
+      v.name.match(/male|man|daniel|george|alex|fred|junior|moira|rishi/i)
     ) || voices.find(v => v.lang.startsWith(settings.lang))
       || voices.find(v => v.lang.startsWith('en'));
     if (preferred) utter.voice = preferred;
   }
 
-  const wordCount = text.split(' ').length;
   utter.onboundary = e => {
     if (e.name === 'word') {
-      const progress = Math.min(100, (e.charIndex / text.length) * 100);
-      onProgress(progress);
+      onProgress(Math.min(100, (e.charIndex / text.length) * 100));
     }
   };
-  utter.onend = () => { onProgress(100); onEnd(); };
-  utter.onerror = () => onEnd();
+
+  utter.onend = () => {
+    // Fade static out
+    staticNode.gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.6);
+    setTimeout(() => {
+      try { staticNode.source.stop(); } catch(e) {}
+    }, 700);
+    onProgress(100);
+    onEnd();
+  };
+
+  utter.onerror = () => {
+    try { staticNode.source.stop(); } catch(e) {}
+    onEnd();
+  };
+
   window.speechSynthesis.speak(utter);
 }
 
@@ -3279,8 +3731,8 @@ function showBridgeP3A() {
   document.getElementById('bridgeP3A-player-badge').textContent = playerName;
   showScreen('bridgeP3A');
 
-  const playBtn   = document.getElementById('nim-play-btn');
-  const progress  = document.getElementById('nim-progress');
+  const playBtn    = document.getElementById('nim-play-btn');
+  const progress   = document.getElementById('nim-progress');
   const transcript = document.getElementById('nim-transcript');
   const continueBtn = document.getElementById('bridgeP3A-continue-btn');
   let started = false;
@@ -3289,25 +3741,31 @@ function showBridgeP3A() {
     if (started) return;
     started = true;
     playBtn.textContent = '⏸';
-    transcript.classList.add('speaking');
-    transcript.textContent = NIM_TEXT;
 
-    // Ensure voices are loaded
-    const go = () => speakVoicemail(NIM_TEXT,
-      { pitch: 1.1, rate: 0.85, lang: 'en-IN', preferFemale: false },
-      pct => { progress.style.width = pct + '%'; },
-      () => {
-        playBtn.textContent = '▶';
-        continueBtn.style.display = 'block';
-      }
-    );
-    if (window.speechSynthesis.getVoices().length) go();
-    else window.speechSynthesis.onvoiceschanged = go;
+    function startSpeech() {
+      transcript.classList.add('speaking');
+      transcript.textContent = NIM_TEXT;
+      const go = () => speakVoicemail(NIM_TEXT,
+        { pitch: 1.05, rate: 0.82, lang: 'en-IN' },
+        0.018,
+        pct => { progress.style.width = pct + '%'; },
+        () => {
+          playBtn.textContent = '▶';
+          continueBtn.style.display = 'block';
+        }
+      );
+      if (window.speechSynthesis.getVoices().length) go();
+      else window.speechSynthesis.onvoiceschanged = go;
+    }
+
+    try {
+      const ctx = getVmCtx();
+      playCrackle(ctx, 0.12, () => playVmBeep(ctx, startSpeech));
+    } catch(e) { startSpeech(); }
   }
 
-  // Auto-play after brief delay
   setTimeout(playNim, 800);
-  playBtn.addEventListener('click', playNim);
+  playBtn.addEventListener('click', () => { getVmCtx(); playNim(); });
 }
 
 // ─── BRIDGE P3→B: SKINNER'S VOICEMAIL ───
@@ -3317,13 +3775,30 @@ function showBridgeP3B() {
   document.getElementById('bridgeP3B-player-badge').textContent = playerName;
   showScreen('bridgeP3B');
 
-  const playBtn    = document.getElementById('skinner-play-btn');
-  const progress   = document.getElementById('skinner-progress');
-  const transcript = document.getElementById('skinner-transcript');
-  const sig        = document.getElementById('skinner-sig');
+  const playBtn     = document.getElementById('skinner-play-btn');
+  const progress    = document.getElementById('skinner-progress');
+  const transcript  = document.getElementById('skinner-transcript');
+  const sig         = document.getElementById('skinner-sig');
   const batteryDead = document.getElementById('battery-dead');
   const continueBtn = document.getElementById('bridgeP3B-continue-btn');
   let started = false;
+
+  function afterSpeech() {
+    playBtn.textContent = '▶';
+    // Try end crackle, but show J.S. and battery dead regardless
+    try {
+      const ctx = getVmCtx();
+      playCrackle(ctx, 0.22, showEnding);
+    } catch(e) { showEnding(); }
+  }
+
+  function showEnding() {
+    sig.classList.add('visible');
+    setTimeout(() => {
+      batteryDead.classList.add('active');
+      setTimeout(() => { continueBtn.style.display = 'block'; }, 1200);
+    }, 1500);
+  }
 
   function playSkinner() {
     if (started) return;
@@ -3332,27 +3807,25 @@ function showBridgeP3B() {
     transcript.classList.add('speaking');
     transcript.textContent = SKINNER_TEXT;
 
-    const go = () => speakVoicemail(SKINNER_TEXT,
-      { pitch: 0.7, rate: 0.75, lang: 'en-US', preferFemale: false },
-      pct => { progress.style.width = pct + '%'; },
-      () => {
-        playBtn.textContent = '▶';
-        // Show J.S. sig
-        sig.classList.add('visible');
-        // Battery dead after 1.5s
-        setTimeout(() => {
-          batteryDead.classList.add('active');
-          setTimeout(() => {
-            continueBtn.style.display = 'block';
-          }, 1200);
-        }, 1500);
-      }
-    );
-    if (window.speechSynthesis.getVoices().length) go();
-    else window.speechSynthesis.onvoiceschanged = go;
+    // Try intro crackle, but always proceed to speech
+    function startSpeech() {
+      const go = () => speakVoicemail(SKINNER_TEXT,
+        { pitch: 0.7, rate: 0.72, lang: 'en-US' },
+        0.035,
+        pct => { progress.style.width = pct + '%'; },
+        afterSpeech
+      );
+      if (window.speechSynthesis.getVoices().length) go();
+      else window.speechSynthesis.onvoiceschanged = go;
+    }
+
+    try {
+      const ctx = getVmCtx();
+      playCrackle(ctx, 0.28, () => setTimeout(startSpeech, 400));
+    } catch(e) { startSpeech(); }
   }
 
-  setTimeout(playSkinner, 600);
+  // NO auto-play — require tap so AudioContext has a user gesture
   playBtn.addEventListener('click', playSkinner);
 }
 
@@ -3363,11 +3836,439 @@ function showBridgeP3C() {
 }
 
 // ─── PUZZLE 4 ───
+// ─── PUZZLE 4 — SECURITY CAMERA ───
+
+// Firebase timestamp ref
+const p4Ref = db.ref('whatcalypsoknew/p4timestamp');
+
+// Shared state
+let p4State = { month: 2, day: 14, hour: 2, minute: 0, ampm: 'PM' };
+let p4Listener = null;
+let keyFrameShown = false;
+
+// Which control each player owns
+const P4_CONTROLS = { Bart: 'month', Melissa: 'day', Noah: 'hour', Leah: 'minute' };
+
+// ── SVG FRAME BUILDER ──
+function isKeyFrame(s) {
+  return s.month === 2 && s.day === 14 && s.hour === 2 && s.minute === 31 && s.ampm === 'PM';
+}
+
+function getFrameForState(s) {
+  if (!s) return 'empty';
+  const isPM = s.ampm === 'PM';
+  const h24  = isPM ? (s.hour === 12 ? 12 : s.hour + 12) : (s.hour === 12 ? 0 : s.hour);
+  if (s.month !== 2 || s.day !== 14) return 'empty';
+  if (h24 === 14 && s.minute === 0)  return 'frame1';
+  if (h24 === 14 && s.minute === 8)  return 'frame2';
+  if (h24 === 14 && s.minute === 17) return 'frame3';
+  if (h24 === 14 && s.minute === 31) return 'frame4';
+  if (h24 === 14 && s.minute === 45) return 'frame5';
+  return 'empty';
+}
+
+// Green monochrome palette
+const G = {
+  bg:     '#020a02',
+  dark:   '#041504',
+  mid:    '#0a2a0a',
+  light:  '#1a4a1a',
+  bright: '#2a6a2a',
+  sil:    '#061006',  // silhouette fill
+  silS:   '#0d1a0d',  // silhouette stroke
+  gnd:    '#051205',
+  sky:    '#040e04',
+  tree:   '#0d200d',
+  cabin:  '#0a1a0a',
+  truck:  '#051005',
+  plate:  '#1a3a1a',
+  plateT: '#50ff50',
+};
+
+// Common elements
+const TREELINE = `<path d="M0,180 Q50,155 100,165 Q130,158 160,170 Q200,155 240,168 Q280,155 320,165 Q360,158 400,162 L400,300 L0,300 Z" fill="${G.tree}" opacity="0.85"/>`;
+const GROUND   = `<rect x="0" y="200" width="400" height="100" fill="${G.gnd}"/>`;
+const DRIVEWAY = `<path d="M120,300 L140,200 L260,200 L280,300 Z" fill="${G.mid}" opacity="0.5"/>`;
+const CABIN_STEPS = `<rect x="30" y="185" width="55" height="15" fill="${G.cabin}"/><rect x="35" y="180" width="45" height="8" fill="${G.light}" opacity="0.4"/>`;
+const SKY = `<rect x="0" y="0" width="400" height="200" fill="${G.sky}"/>`;
+
+function buildSVGEmpty() {
+  return `
+    ${SKY}
+    ${TREELINE}
+    ${DRIVEWAY}
+    ${GROUND}
+    ${CABIN_STEPS}
+    <rect x="0" y="198" width="400" height="2" fill="${G.bright}" opacity="0.15"/>`;
+}
+
+function buildSVGFrame1() {
+  // 2:00 PM — Teena walks out with leash
+  return `
+    ${SKY}
+    <!-- afternoon light -->
+    <ellipse cx="340" cy="0" rx="80" ry="60" fill="rgba(80,200,80,0.04)"/>
+    ${TREELINE}
+    ${DRIVEWAY}
+    ${GROUND}
+    ${CABIN_STEPS}
+    <!-- Teena silhouette walking left, small frame, dog on leash -->
+    <g transform="translate(68,145)">
+      <!-- body -->
+      <ellipse cx="0" cy="18" rx="7" ry="14" fill="${G.sil}"/>
+      <!-- head -->
+      <circle cx="0" cy="1" r="6" fill="${G.sil}"/>
+      <!-- arm with leash -->
+      <line x1="-6" y1="14" x2="-18" y2="22" stroke="${G.sil}" stroke-width="2.5"/>
+      <!-- leash -->
+      <path d="M-18,22 Q-28,30 -30,34" stroke="${G.bright}" stroke-width="1" fill="none" opacity="0.6"/>
+      <!-- Calypso (dog) -->
+      <ellipse cx="-32" cy="36" rx="8" ry="5" fill="${G.sil}"/>
+      <circle cx="-26" cy="33" r="4" fill="${G.sil}"/>
+      <!-- Calypso's big ears -->
+      <path d="M-24,30 Q-19,24 -22,36" fill="${G.sil}" opacity="0.9"/>
+      <path d="M-28,30 Q-34,24 -30,36" fill="${G.sil}" opacity="0.9"/>
+      <!-- legs walking -->
+      <line x1="-4" y1="30" x2="-7" y2="45" stroke="${G.sil}" stroke-width="2.5"/>
+      <line x1="4" y1="30" x2="2" y2="45" stroke="${G.sil}" stroke-width="2.5"/>
+    </g>
+    <!-- Shadow -->
+    <ellipse cx="68" cy="192" rx="12" ry="3" fill="rgba(0,0,0,0.3)"/>
+    <rect x="0" y="198" width="400" height="2" fill="${G.bright}" opacity="0.15"/>`;
+}
+
+function buildSVGFrame2() {
+  // 2:08 PM — truck nosing in from right
+  return `
+    ${SKY}
+    ${TREELINE}
+    ${DRIVEWAY}
+    ${GROUND}
+    ${CABIN_STEPS}
+    <!-- Truck front corner entering from right -->
+    <g transform="translate(290,140)">
+      <rect x="0" y="0" width="115" height="55" fill="${G.truck}" rx="3"/>
+      <rect x="0" y="0" width="115" height="30" fill="${G.dark}"/>
+      <!-- headlight -->
+      <rect x="5" y="35" width="14" height="8" fill="${G.light}" opacity="0.4"/>
+      <!-- windshield glare -->
+      <path d="M0,5 L20,0 L20,28 L0,28 Z" fill="${G.mid}" opacity="0.5"/>
+      <!-- driver silhouette barely visible -->
+      <ellipse cx="12" cy="14" rx="7" ry="9" fill="${G.sil}" opacity="0.5"/>
+    </g>
+    <!-- wheel -->
+    <ellipse cx="312" cy="197" rx="18" ry="8" fill="${G.dark}"/>
+    <rect x="0" y="198" width="400" height="2" fill="${G.bright}" opacity="0.15"/>`;
+}
+
+function buildSVGFrame3() {
+  // 2:17 PM — truck parked, male silhouette standing, looking at cabin
+  return `
+    ${SKY}
+    ${TREELINE}
+    ${DRIVEWAY}
+    ${GROUND}
+    ${CABIN_STEPS}
+    <!-- Full truck parked -->
+    <g transform="translate(195,130)">
+      <rect x="0" y="15" width="195" height="65" fill="${G.truck}" rx="2"/>
+      <!-- cab -->
+      <rect x="0" y="0" width="90" height="60" fill="${G.dark}" rx="2"/>
+      <rect x="5" y="5" width="80" height="40" fill="${G.mid}" opacity="0.4"/>
+      <!-- wheels -->
+      <ellipse cx="35" cy="80" rx="22" ry="10" fill="${G.sil}"/>
+      <ellipse cx="35" cy="80" rx="12" ry="6" fill="${G.dark}"/>
+      <ellipse cx="155" cy="80" rx="22" ry="10" fill="${G.sil}"/>
+      <ellipse cx="155" cy="80" rx="12" ry="6" fill="${G.dark}"/>
+      <!-- plate wrong angle, unreadable -->
+      <rect x="155" y="58" width="30" height="14" fill="${G.light}" opacity="0.3"/>
+    </g>
+    <!-- Male silhouette standing -->
+    <g transform="translate(182,120)">
+      <circle cx="0" cy="0" r="9" fill="${G.sil}"/>
+      <rect x="-11" y="8" width="22" height="36" fill="${G.sil}" rx="2"/>
+      <line x1="-11" y1="16" x2="-22" y2="32" stroke="${G.sil}" stroke-width="4"/>
+      <line x1="11" y1="16" x2="15" y2="34" stroke="${G.sil}" stroke-width="4"/>
+      <line x1="-5" y1="44" x2="-6" y2="65" stroke="${G.sil}" stroke-width="4"/>
+      <line x1="5" y1="44" x2="7" y2="65" stroke="${G.sil}" stroke-width="4"/>
+    </g>
+    <ellipse cx="182" cy="192" rx="14" ry="3" fill="rgba(0,0,0,0.35)"/>
+    <rect x="0" y="198" width="400" height="2" fill="${G.bright}" opacity="0.15"/>`;
+}
+
+function buildSVGFrame4() {
+  // 2:31 PM — KEY FRAME — carrying Calypso, plate visible
+  return `
+    ${SKY}
+    ${TREELINE}
+    ${DRIVEWAY}
+    ${GROUND}
+    ${CABIN_STEPS}
+    <!-- Full truck -->
+    <g transform="translate(175,128)">
+      <rect x="0" y="17" width="200" height="67" fill="${G.truck}" rx="2"/>
+      <rect x="0" y="0" width="92" height="62" fill="${G.dark}" rx="2"/>
+      <rect x="5" y="5" width="82" height="42" fill="${G.mid}" opacity="0.4"/>
+      <ellipse cx="36" cy="84" rx="22" ry="10" fill="${G.sil}"/>
+      <ellipse cx="36" cy="84" rx="12" ry="6" fill="${G.dark}"/>
+      <ellipse cx="158" cy="84" rx="22" ry="10" fill="${G.sil}"/>
+      <ellipse cx="158" cy="84" rx="12" ry="6" fill="${G.dark}"/>
+      <!-- LICENSE PLATE — FULLY READABLE -->
+      <rect x="148" y="60" width="42" height="18" fill="${G.plate}" rx="1" stroke="${G.bright}" stroke-width="0.8"/>
+      <text x="169" y="72" font-family="Courier New,monospace" font-size="7.5" fill="${G.plateT}" text-anchor="middle" font-weight="bold" letter-spacing="0.5">SKN-R14</text>
+    </g>
+    <!-- Male silhouette carrying dog, walking toward truck -->
+    <g transform="translate(168,108)">
+      <!-- head -->
+      <circle cx="0" cy="0" r="9" fill="${G.sil}"/>
+      <!-- body -->
+      <rect x="-12" y="8" width="24" height="34" fill="${G.sil}" rx="2"/>
+      <!-- arms cradling Calypso -->
+      <path d="M-12,16 Q-26,22 -24,32 Q-22,38 -12,36" fill="${G.sil}" stroke="${G.sil}" stroke-width="1"/>
+      <path d="M12,16 Q18,22 16,32 L-12,36" fill="${G.sil}"/>
+      <!-- Calypso pressed against chest — sandy/light colored ears visible -->
+      <ellipse cx="-8" cy="24" rx="13" ry="9" fill="${G.bright}" opacity="0.55"/>
+      <!-- Big ears — distinctively visible -->
+      <path d="M-16,18 Q-24,10 -18,22" fill="${G.bright}" opacity="0.7" stroke="${G.bright}" stroke-width="0.5"/>
+      <path d="M-2,17 Q6,10 2,22"  fill="${G.bright}" opacity="0.7" stroke="${G.bright}" stroke-width="0.5"/>
+      <!-- head (Calypso) -->
+      <circle cx="-8" cy="18" r="6" fill="${G.bright}" opacity="0.6"/>
+      <!-- legs -->
+      <line x1="-6" y1="42" x2="-8" y2="62" stroke="${G.sil}" stroke-width="4"/>
+      <line x1="6" y1="42" x2="10" y2="60" stroke="${G.sil}" stroke-width="4"/>
+    </g>
+    <ellipse cx="168" cy="192" rx="14" ry="3" fill="rgba(0,0,0,0.4)"/>
+    <rect x="0" y="198" width="400" height="2" fill="${G.bright}" opacity="0.15"/>`;
+}
+
+function buildSVGFrame5() {
+  // 2:45 PM — Empty driveway, Teena entering, realizing
+  return `
+    ${SKY}
+    ${TREELINE}
+    ${DRIVEWAY}
+    ${GROUND}
+    ${CABIN_STEPS}
+    <!-- Teena entering from left, stopped, hands to face -->
+    <g transform="translate(155,128)">
+      <!-- head -->
+      <circle cx="0" cy="0" r="8" fill="${G.sil}"/>
+      <!-- body — slight feminine silhouette -->
+      <path d="M-9,8 Q-12,28 -9,42 Q0,46 9,42 Q12,28 9,8 Z" fill="${G.sil}"/>
+      <!-- both hands raised to face -->
+      <line x1="-9" y1="16" x2="-16" y2="4" stroke="${G.sil}" stroke-width="4"/>
+      <line x1="9"  y1="16" x2="16" y2="4" stroke="${G.sil}" stroke-width="4"/>
+      <!-- hands at face -->
+      <circle cx="-16" cy="3" r="4" fill="${G.sil}"/>
+      <circle cx="16"  cy="3" r="4" fill="${G.sil}"/>
+      <!-- legs still -->
+      <line x1="-4" y1="42" x2="-5" y2="62" stroke="${G.sil}" stroke-width="4"/>
+      <line x1="4"  y1="42" x2="6"  y2="62" stroke="${G.sil}" stroke-width="4"/>
+    </g>
+    <ellipse cx="155" cy="192" rx="11" ry="3" fill="rgba(0,0,0,0.3)"/>
+    <!-- No truck. No dog. Just stillness. -->
+    <rect x="0" y="198" width="400" height="2" fill="${G.bright}" opacity="0.15"/>`;
+}
+
+function renderCamFrame(state) {
+  const svg    = document.getElementById('cam-frame-svg');
+  const vp     = document.getElementById('cam-viewport');
+  const ts     = document.getElementById('cam-timestamp');
+  if (!svg || !vp || !ts) return;
+
+  const frame = getFrameForState(state);
+  const svgContent = {
+    empty:  buildSVGEmpty(),
+    frame1: buildSVGFrame1(),
+    frame2: buildSVGFrame2(),
+    frame3: buildSVGFrame3(),
+    frame4: buildSVGFrame4(),
+    frame5: buildSVGFrame5(),
+  }[frame] || buildSVGEmpty();
+
+  // Add green tint filter and noise to SVG
+  svg.innerHTML = `
+    <defs>
+      <filter id="cam-filter">
+        <feColorMatrix type="matrix" values="
+          0.1 0.4 0.05 0 0
+          0.1 0.6 0.05 0 0
+          0.05 0.2 0.05 0 0
+          0   0   0    1 0"/>
+        <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" result="noise" stitchTiles="stitch"/>
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.2" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </defs>
+    <g filter="url(#cam-filter)">${svgContent}</g>`;
+
+  // Timestamp
+  const mm  = String(state.month).padStart(2,'0');
+  const dd  = String(state.day).padStart(2,'0');
+  const hh  = state.ampm === 'PM'
+    ? (state.hour === 12 ? 12 : state.hour + 12)
+    : (state.hour === 12 ? 0  : state.hour);
+  const mn  = String(state.minute).padStart(2,'0');
+  const ss  = String(Math.floor(Math.random() * 60)).padStart(2,'0');
+  ts.textContent = `${mm}/${dd} ${String(hh).padStart(2,'0')}:${mn}:${ss}`;
+
+  // Key frame glow + answer reveal
+  if (frame === 'frame4') {
+    vp.classList.add('key-frame');
+    if (!keyFrameShown) {
+      keyFrameShown = true;
+      // Delay showing answer box — let them sit with Frame 4 for a beat
+      setTimeout(() => {
+        const box = document.getElementById('p4-answer-box');
+        if (box) box.style.display = 'block';
+      }, 3000);
+    }
+  } else {
+    vp.classList.remove('key-frame');
+  }
+}
+
+// ── CONTROLS BUILDER ──
+function buildP4Controls() {
+  const container = document.getElementById('cam-controls');
+  if (!container) return;
+
+  const myCtrl = P4_CONTROLS[playerName];
+
+  const ctrlDefs = [
+    { key: 'month',  label: `MONTH (${playerName === 'Bart' ? '← BART' : ''})`,  ownedBy: 'Bart' },
+    { key: 'day',    label: `DAY (${playerName === 'Melissa' ? '← MELISSA' : ''})`, ownedBy: 'Melissa' },
+    { key: 'hour',   label: `HOUR (${playerName === 'Noah' ? '← NOAH' : ''})`,   ownedBy: 'Noah' },
+    { key: 'minute', label: `MIN (${playerName === 'Leah' ? '← LEAH' : ''})`,    ownedBy: 'Leah' },
+  ];
+
+  container.innerHTML = ctrlDefs.map(c => {
+    const isMine = c.key === myCtrl;
+    const val = getCtrlDisplay(c.key);
+    return `
+      <div class="cam-ctrl">
+        <div class="cam-ctrl-label ${isMine ? 'active-ctrl' : ''}">${c.label}</div>
+        <button class="cam-ctrl-btn" ${isMine ? '' : 'disabled'} data-ctrl="${c.key}" data-dir="-1">▲</button>
+        <div class="cam-ctrl-value" id="ctrl-val-${c.key}">${val}</div>
+        <button class="cam-ctrl-btn" ${isMine ? '' : 'disabled'} data-ctrl="${c.key}" data-dir="1">▼</button>
+      </div>`;
+  }).join('');
+
+  // Wire own buttons
+  container.querySelectorAll('.cam-ctrl-btn:not([disabled])').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const ctrl = btn.dataset.ctrl;
+      const dir  = parseInt(btn.dataset.dir);
+      stepCtrl(ctrl, dir);
+    });
+  });
+}
+
+function getCtrlDisplay(key) {
+  const s = p4State;
+  if (key === 'month')  return String(s.month).padStart(2,'0');
+  if (key === 'day')    return String(s.day).padStart(2,'0');
+  if (key === 'hour')   return `${String(s.hour).padStart(2,'0')} ${s.ampm}`;
+  if (key === 'minute') return String(s.minute).padStart(2,'0');
+  return '00';
+}
+
+function stepCtrl(key, dir) {
+  const s = { ...p4State };
+  if (key === 'month')  { s.month  = ((s.month  - 1 + dir + 12) % 12) + 1; }
+  if (key === 'day')    { s.day    = ((s.day    - 1 + dir + 31) % 31) + 1; }
+  if (key === 'minute') { s.minute = (s.minute  + dir + 60) % 60; }
+  if (key === 'hour') {
+    let h = s.hour + dir;
+    if (h > 12)       { h = 1; }
+    else if (h < 1)   { h = 12; }
+    // Toggle AM/PM when wrapping past 12
+    if (dir === 1  && s.hour === 12) s.ampm = s.ampm === 'AM' ? 'PM' : 'AM';
+    if (dir === -1 && s.hour === 1)  s.ampm = s.ampm === 'AM' ? 'PM' : 'AM';
+    s.hour = h;
+  }
+  p4Ref.set(s);
+}
+
+function updateCtrlDisplays() {
+  ['month','day','hour','minute'].forEach(k => {
+    const el = document.getElementById(`ctrl-val-${k}`);
+    if (el) el.textContent = getCtrlDisplay(k);
+  });
+}
+
+// ── ANSWER WIRING ──
+function wireP4Input() {
+  const input  = document.getElementById('p4-input');
+  const btn    = document.getElementById('p4-btn');
+  const result = document.getElementById('p4-result');
+  if (!input || !btn) return;
+
+  btn.addEventListener('click', checkP4);
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') checkP4(); });
+
+  function checkP4() {
+    const val = input.value.trim().toUpperCase().replace(/\s/g,'');
+    if (val === 'SKNR14' || val === 'SKN-R14') {
+      result.className = '';
+      result.textContent = '✓ Plate confirmed. Uploading to authorities...';
+      btn.disabled = true; input.disabled = true;
+      gameRef.update({
+        phase: 'finale',
+        p4SolvedAt: firebase.database.ServerValue.TIMESTAMP
+      });
+    } else {
+      result.className = 'wrong';
+      result.textContent = '✗ Check the plate again.';
+    }
+  }
+}
+
+// ── SHOW P4 ──
 function showP4() {
   document.getElementById('p4-player-badge').textContent = playerName;
-  // Cancel any lingering speech
   if (window.speechSynthesis) window.speechSynthesis.cancel();
+  keyFrameShown = false;
+
+  // Answer box setup
+  document.getElementById('p4-label').textContent =
+    playerName === 'Noah' ? '— enter identifying information —' : '[ NOAH SUBMITS THE ANSWER ]';
+  document.getElementById('p4-noah-input').style.display  = playerName === 'Noah' ? 'block' : 'none';
+  document.getElementById('p4-waiting-msg').style.display = playerName === 'Noah' ? 'none'  : 'block';
+
   showScreen('p4');
+  buildP4Controls();
+
+  // Load initial Firebase state or set default
+  p4Ref.once('value', snap => {
+    const saved = snap.val();
+    if (saved && saved.month) {
+      p4State = saved;
+    } else {
+      p4State = { month: 2, day: 14, hour: 2, minute: 0, ampm: 'PM' };
+      p4Ref.set(p4State);
+    }
+    updateCtrlDisplays();
+    renderCamFrame(p4State);
+  });
+
+  // Listen for any player changing timestamp
+  if (p4Listener) p4Ref.off('value', p4Listener);
+  p4Listener = p4Ref.on('value', snap => {
+    const s = snap.val();
+    if (!s) return;
+    p4State = s;
+    updateCtrlDisplays();
+    renderCamFrame(p4State);
+  });
+
+  if (playerName === 'Noah') wireP4Input();
+}
+
+// ── FINALE ──
+function showFinale() {
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  if (p4Listener) { p4Ref.off('value', p4Listener); p4Listener = null; }
+  showScreen('finale');
 }
 
 function wireMiniAInput() {
@@ -3464,6 +4365,15 @@ gameRef.on('value', snapshot => {
     showBridgeP3C();
   } else if (phase === 'p4' && currentLocalScreen === 'bridgeP3C') {
     showP4();
+  } else if (phase === 'finale' && currentLocalScreen === 'p4') {
+    // Fade to white then show finale
+    document.body.style.transition = 'background 2s ease';
+    document.body.style.background = '#fff';
+    setTimeout(() => {
+      document.body.style.transition = '';
+      document.body.style.background = '';
+      showFinale();
+    }, 2200);
   }
 });
 
@@ -3488,6 +4398,9 @@ function proceedFromOpening() {
     }
     if (phase === 'celebratingP2') {
       showBridgeA(); return;
+    }
+    if (phase === 'finale') {
+      showFinale(); return;
     }
     if (phase === 'p4' || phase === 'bridgeP3C') {
       showP4(); return;
@@ -3546,6 +4459,9 @@ function handleReset() {
   document.getElementById('door-panel').classList.remove('open');
   document.getElementById('door-light').classList.remove('glowing');
   document.getElementById('door-caption').classList.remove('visible');
+  // Clean up p4 Firebase listener
+  if (p4Listener) { p4Ref.off('value', p4Listener); p4Listener = null; }
+  keyFrameShown = false;
   playerName = null;
   document.getElementById('name-input').value = '';
   document.getElementById('name-error').textContent = '';
@@ -3583,6 +4499,9 @@ function attemptJoin() {
     // For phases beyond puzzle1 show the opening note first (atmospheric),
     // then route to the correct screen on proceed.
     // miniB / celebratingMiniA / miniA / puzzle2 all get fast-tracked after note.
+    if (phase === 'finale') {
+      showScreen('opening'); return;
+    }
     if (phase === 'p4' || phase === 'bridgeP3C' || phase === 'bridgeP3B' || phase === 'bridgeP3A' || phase === 'celebratingP3') {
       showScreen('opening'); return;
     }
@@ -3687,6 +4606,12 @@ document.addEventListener('DOMContentLoaded', () => {
       if (snap.val()?.phase === 'bridgeP3C') gameRef.update({ phase: 'p4' });
     });
     showP4();
+  });
+
+  // Finale — Report to Authorities button
+  document.getElementById('finale-report-btn').addEventListener('click', () => {
+    document.getElementById('finale-resolution').classList.add('visible');
+    document.getElementById('finale-report-btn').style.display = 'none';
   });
 
   // GM Panel
