@@ -1738,7 +1738,7 @@ body::before {
 
 /* ─── PUZZLE 4 — SECURITY CAMERA ─── */
 #screen-p4 {
-  background: #050a05;
+  background: #0a0a0f;
   padding: 10px;
 }
 
@@ -1750,7 +1750,7 @@ body::before {
 
 .p4-question {
   font-family: 'Special Elite', monospace;
-  font-size: 0.7rem; color: rgba(80,200,80,0.55);
+  font-size: 0.7rem; color: rgba(200,200,220,0.55);
   letter-spacing: 0.15em; text-transform: uppercase;
   text-align: center;
 }
@@ -1769,7 +1769,7 @@ body::before {
 .cam-viewport {
   width: 100%; position: relative;
   aspect-ratio: 4/3;
-  background: #020a02;
+  background: #111118;
   overflow: hidden;
 }
 
@@ -1807,8 +1807,8 @@ body::before {
 .cam-timestamp {
   font-family: 'Courier New', Courier, monospace;
   font-size: clamp(0.55rem, 1.8vw, 0.72rem);
-  color: rgba(80,255,80,0.9);
-  text-shadow: 0 0 6px rgba(0,200,0,0.6);
+  color: rgba(255,255,180,0.92);
+  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
   line-height: 1.4;
   letter-spacing: 0.05em;
 }
@@ -1816,8 +1816,8 @@ body::before {
 .cam-label {
   font-family: 'Courier New', Courier, monospace;
   font-size: clamp(0.45rem, 1.5vw, 0.6rem);
-  color: rgba(80,255,80,0.7);
-  text-shadow: 0 0 4px rgba(0,200,0,0.4);
+  color: rgba(255,255,180,0.7);
+  text-shadow: 0 1px 3px rgba(0,0,0,0.7);
   text-align: right;
   letter-spacing: 0.04em;
   line-height: 1.4;
@@ -1826,7 +1826,7 @@ body::before {
 .cam-rec {
   position: absolute; bottom: 8px; left: 10px;
   font-family: 'Courier New', Courier, monospace;
-  font-size: 0.55rem; color: rgba(255,60,60,0.85);
+  font-size: 0.55rem; color: rgba(255,80,80,0.9);
   letter-spacing: 0.08em; z-index: 11;
   animation: rec-blink 1.2s step-end infinite;
 }
@@ -1834,14 +1834,14 @@ body::before {
 
 /* KEY FRAME glow — when at 2:31 */
 .cam-viewport.key-frame {
-  box-shadow: inset 0 0 30px rgba(0,180,0,0.15);
+  box-shadow: inset 0 0 40px rgba(255,200,100,0.12), 0 0 20px rgba(255,200,100,0.08);
 }
 
 /* ─── TIMESTAMP CONTROLS ─── */
 .cam-controls {
   width: 100%;
-  background: #060e06;
-  border: 1px solid #1a3a1a;
+  background: #12121a;
+  border: 1px solid #2a2a3a;
   border-top: none;
   padding: 10px 12px;
   display: grid;
@@ -1856,24 +1856,24 @@ body::before {
 
 .cam-ctrl-label {
   font-family: 'Courier New', Courier, monospace;
-  font-size: 0.5rem; color: rgba(80,180,80,0.55);
+  font-size: 0.5rem; color: rgba(180,180,220,0.55);
   letter-spacing: 0.1em; text-transform: uppercase;
 }
 
-.cam-ctrl-label.active-ctrl { color: rgba(80,255,80,0.9); }
+.cam-ctrl-label.active-ctrl { color: rgba(255,255,160,0.95); }
 
 .cam-ctrl-value {
   font-family: 'Courier New', Courier, monospace;
   font-size: clamp(0.9rem, 3vw, 1.1rem);
-  color: rgba(80,255,80,0.9);
-  text-shadow: 0 0 8px rgba(0,200,0,0.5);
+  color: rgba(255,255,200,0.95);
+  text-shadow: 0 1px 4px rgba(0,0,0,0.6);
   min-width: 36px; text-align: center;
   line-height: 1;
 }
 
 .cam-ctrl-btn {
   background: none; border: 1px solid rgba(80,180,80,0.3);
-  color: rgba(80,220,80,0.7); cursor: pointer;
+  color: rgba(200,200,240,0.7); cursor: pointer;
   width: 100%; padding: 3px 0;
   font-size: 0.7rem; line-height: 1;
   border-radius: 1px;
@@ -1885,47 +1885,47 @@ body::before {
 /* Answer section */
 .p4-answer {
   width: 100%;
-  background: rgba(0,20,0,0.6);
-  border: 1px solid rgba(80,180,80,0.2);
+  background: rgba(10,10,20,0.8);
+  border: 1px solid rgba(180,180,255,0.2);
   padding: 14px 16px;
 }
 .p4-answer-label {
   font-family: 'Courier New', Courier, monospace;
-  font-size: 0.62rem; color: rgba(80,180,80,0.6);
+  font-size: 0.62rem; color: rgba(180,180,220,0.6);
   letter-spacing: 0.12em; text-transform: uppercase;
   margin-bottom: 10px; display: block;
 }
 .p4-answer-row { display: flex; gap: 8px; align-items: stretch; }
 #p4-input {
   flex: 1; padding: 10px 12px;
-  background: rgba(0,20,0,0.5);
-  border: 1px solid rgba(80,180,80,0.35);
+  background: rgba(10,10,25,0.6);
+  border: 1px solid rgba(180,180,255,0.3);
   border-radius: 1px; outline: none;
   font-family: 'Courier New', Courier, monospace;
-  font-size: 1rem; color: rgba(80,255,80,0.9);
+  font-size: 1rem; color: rgba(255,255,200,0.95);
   text-transform: uppercase; letter-spacing: 0.15em;
   transition: border-color 0.2s;
 }
-#p4-input:focus { border-color: rgba(80,255,80,0.7); }
+#p4-input:focus { border-color: rgba(220,220,255,0.7); }
 .p4-submit-btn {
   padding: 10px 18px;
-  background: rgba(0,40,0,0.6); border: 1px solid rgba(80,180,80,0.4);
+  background: rgba(20,20,40,0.7); border: 1px solid rgba(160,160,220,0.35);
   cursor: pointer; border-radius: 1px;
   font-family: 'Courier New', Courier, monospace;
-  font-size: 0.7rem; color: rgba(80,220,80,0.8);
+  font-size: 0.7rem; color: rgba(200,200,240,0.85);
   letter-spacing: 0.1em; text-transform: uppercase;
   transition: background 0.2s;
 }
-.p4-submit-btn:hover { background: rgba(0,60,0,0.8); }
+.p4-submit-btn:hover { background: rgba(30,30,60,0.9); }
 #p4-result {
   margin-top: 8px; min-height: 18px;
   font-family: 'Courier New', Courier, monospace;
   font-size: 0.68rem; letter-spacing: 0.05em;
 }
-#p4-result.wrong { color: rgba(255,80,80,0.8); }
+#p4-result.wrong { color: rgba(255,120,120,0.9); }
 .p4-waiting {
   font-family: 'Courier New', Courier, monospace;
-  font-size: 0.65rem; color: rgba(80,180,80,0.4);
+  font-size: 0.65rem; color: rgba(160,160,200,0.4);
   text-align: center; padding: 6px 0;
   letter-spacing: 0.08em;
 }
@@ -3890,200 +3890,348 @@ function getFrameForState(s) {
   return 'empty';
 }
 
-// Green monochrome palette — bright security cam aesthetic
+// Full color security camera palette
 const G = {
-  bg:      '#0a1a0a',
-  dark:    '#0d240d',
-  mid:     '#1a3a1a',
-  light:   '#2a5a2a',
-  bright:  '#3a7a3a',
-  sky:     '#0a160a',
-  skyGrad: '#0f200f',
-  gnd:     '#0d1e0d',
-  tree:    '#1a3a1a',
-  treeDark:'#0f280f',
-  cabin:   '#1e3e1e',
-  cabinD:  '#162a16',
-  steps:   '#2a4a2a',
-  driveway:'#162a16',
-  sil:     '#c0e8c0',
-  silDark: '#90c890',
-  truck:   '#b0d8b0',
-  truckD:  '#7ab07a',
-  wheel:   '#3a6a3a',
-  plate:   '#e0f8e0',
-  plateT:  '#003300',
-  plateBg: '#d0f0d0',
-  glow:    'rgba(80,255,80,0.12)',
-  window:  '#4a8a4a',
-  leash:   '#60b060',
+  // Sky
+  skyTop:   '#1a2a3a',   skyBot:  '#2a4a5a',
+  // Ground & surfaces
+  asphalt:  '#2a2820',   asphaltL:'#3a3830',
+  dirt:     '#4a3a28',   dirtL:   '#5a4a38',
+  grass:    '#2a4a1a',   grassL:  '#3a5a28',
+  // Trees
+  treeD:    '#1a2e14',   treeM:   '#254520',   treeL:   '#3a6030',
+  // Cabin
+  cabinW:   '#c8b89a',   cabinR:  '#8a4a30',   cabinD:  '#6a3a22',
+  windowC:  '#a8c8e0',   windowG: '#d0e8f0',
+  doorC:    '#5a3a20',   stepC:   '#a09080',
+  // Silhouettes
+  silD:     '#1a1410',   silM:    '#2a2018',   silL:    '#3a3028',
+  // Teena — slightly smaller, warmer tones
+  teeD:     '#221812',   teeM:    '#2e2018',
+  // Truck
+  truckB:   '#4a5060',   truckD:  '#2a3040',   truckW:  '#6a7080',
+  chromE:   '#90a0b0',   glass:   '#607080',   glassH:  '#90b0c0',
+  wheelD:   '#1a1a1a',   wheelM:  '#2a2a2a',   hubC:    '#606070',
+  // License plate
+  plateW:   '#f0f0e8',   plateB:  '#1a1a28',
+  // Leash
+  leashC:   '#c09060',
+  // Calypso
+  calBody:  '#d4b880',   calEar:  '#c8a860',   calDark: '#8a6a40',
+  // Lighting
+  sunGlow:  'rgba(255,200,100,0.06)',
+  amber:    'rgba(200,140,60,0.15)',
+  // Shadows
+  shadow:   'rgba(0,0,0,0.5)',   shadowL: 'rgba(0,0,0,0.3)',
 };
 
-const TREELINE = `
-  <path d="M0,175 Q30,158 60,165 Q90,155 120,162 Q150,152 180,160 Q210,153 240,161 Q270,153 300,160 Q330,153 360,159 Q380,155 400,158 L400,300 L0,300 Z" fill="${G.tree}"/>
-  <path d="M0,182 Q40,170 80,174 Q120,167 160,172 Q200,166 240,171 Q280,165 320,170 Q360,165 400,167 L400,300 L0,300 Z" fill="${G.treeDark}" opacity="0.5"/>`;
-
-const GROUND = `
-  <rect x="0" y="198" width="400" height="102" fill="${G.gnd}"/>
-  <path d="M0,198 Q100,195 200,197 Q300,194 400,196" stroke="${G.light}" stroke-width="0.5" fill="none" opacity="0.4"/>`;
-
-const DRIVEWAY = `
-  <path d="M118,300 L138,198 L262,198 L282,300 Z" fill="${G.driveway}"/>
-  <path d="M190,198 L190,300" stroke="${G.mid}" stroke-width="0.5" stroke-dasharray="6,4" opacity="0.4"/>`;
-
-const CABIN_L = `
-  <rect x="0" y="160" width="90" height="40" fill="${G.cabin}" rx="1"/>
-  <path d="M-4,162 L45,140 L94,162" fill="${G.cabinD}"/>
-  <rect x="15" y="168" width="20" height="16" fill="${G.window}" opacity="0.6" rx="1"/>
-  <rect x="50" y="168" width="20" height="16" fill="${G.window}" opacity="0.4" rx="1"/>
-  <rect x="30" y="178" width="18" height="22" fill="${G.mid}" rx="1"/>
-  <rect x="2" y="198" width="86" height="4" fill="${G.steps}"/>`;
+// ── SHARED ELEMENTS ──
 
 const SKY_BG = `
   <defs>
-    <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="${G.sky}"/>
-      <stop offset="100%" stop-color="${G.skyGrad}"/>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="${G.skyTop}"/>
+      <stop offset="100%" stop-color="${G.skyBot}"/>
+    </linearGradient>
+    <linearGradient id="truckGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="${G.truckW}"/>
+      <stop offset="100%" stop-color="${G.truckD}"/>
     </linearGradient>
   </defs>
-  <rect x="0" y="0" width="400" height="200" fill="url(#skyGrad)"/>
-  <ellipse cx="200" cy="200" rx="300" ry="40" fill="rgba(60,120,60,0.08)"/>`;
+  <rect width="400" height="300" fill="url(#sky)"/>
+  <!-- horizon haze -->
+  <rect x="0" y="155" width="400" height="50" fill="rgba(255,220,160,0.04)"/>`;
+
+// Treeline — layered depth
+const TREELINE = `
+  <!-- back trees -->
+  <path d="M0,168 Q50,148 100,155 Q150,142 200,150 Q250,140 300,148 Q350,140 400,145 L400,300 L0,300 Z"
+    fill="${G.treeD}"/>
+  <!-- mid trees -->
+  <path d="M0,176 Q40,160 80,166 Q120,158 160,163 Q200,156 240,162 Q280,155 320,162 Q360,156 400,160 L400,300 L0,300 Z"
+    fill="${G.treeM}"/>
+  <!-- front tree line edge -->
+  <path d="M0,181 Q60,173 120,177 Q180,170 240,175 Q300,169 360,174 Q390,171 400,172"
+    stroke="${G.treeL}" stroke-width="2" fill="none" opacity="0.6"/>`;
+
+// Ground with texture
+const GROUND = `
+  <rect x="0" y="178" width="400" height="122" fill="${G.asphalt}"/>
+  <rect x="0" y="178" width="400" height="4" fill="${G.asphaltL}" opacity="0.5"/>`;
+
+// Driveway — concrete lighter than asphalt
+const DRIVEWAY = `
+  <path d="M115,300 L136,180 L264,180 L285,300 Z" fill="${G.dirt}"/>
+  <!-- centre line -->
+  <path d="M200,185 L200,300" stroke="${G.asphaltL}" stroke-width="1"
+    stroke-dasharray="8,6" opacity="0.3"/>
+  <!-- edge lines -->
+  <path d="M136,180 L115,300" stroke="${G.dirtL}" stroke-width="1" opacity="0.4"/>
+  <path d="M264,180 L285,300" stroke="${G.dirtL}" stroke-width="1" opacity="0.4"/>`;
+
+// Cabin left side — warm, detailed
+const CABIN_L = `
+  <!-- wall -->
+  <rect x="0" y="148" width="110" height="34" fill="${G.cabinW}"/>
+  <!-- roof -->
+  <path d="M-6,150 L55,126 L116,150" fill="${G.cabinR}"/>
+  <path d="M-6,150 L55,126" stroke="${G.cabinD}" stroke-width="1.5"/>
+  <!-- chimney -->
+  <rect x="72" y="115" width="10" height="18" fill="${G.cabinD}"/>
+  <rect x="70" y="113" width="14" height="4" fill="${G.cabinD}"/>
+  <!-- window left -->
+  <rect x="8"  y="157" width="22" height="18" fill="${G.windowC}" rx="1"/>
+  <rect x="8"  y="157" width="22" height="18" fill="${G.windowG}" rx="1" opacity="0.4"/>
+  <line x1="19" y1="157" x2="19" y2="175" stroke="${G.cabinD}" stroke-width="0.8"/>
+  <line x1="8"  y1="166" x2="30" y2="166" stroke="${G.cabinD}" stroke-width="0.8"/>
+  <!-- window right -->
+  <rect x="48" y="157" width="22" height="18" fill="${G.windowC}" rx="1"/>
+  <line x1="59" y1="157" x2="59" y2="175" stroke="${G.cabinD}" stroke-width="0.8"/>
+  <line x1="48" y1="166" x2="70" y2="166" stroke="${G.cabinD}" stroke-width="0.8"/>
+  <!-- door -->
+  <rect x="80" y="160" width="18" height="22" fill="${G.doorC}" rx="1"/>
+  <circle cx="96" cy="171" r="1.5" fill="${G.chromE}"/>
+  <!-- porch step -->
+  <rect x="0"  y="180" width="118" height="4" fill="${G.stepC}"/>
+  <rect x="0"  y="176" width="118" height="4" fill="${G.asphaltL}" opacity="0.4"/>
+  <!-- shadow cast by roof -->
+  <rect x="0" y="148" width="118" height="5" fill="rgba(0,0,0,0.2)"/>`;
+
+// Full truck helper
+function truckSVG(x, y, showPlate, plateBlur) {
+  const p = showPlate ? `
+    <rect x="158" y="68" width="58" height="22" fill="${G.plateW}" rx="2"
+      stroke="#888" stroke-width="1"/>
+    <text x="187" y="83" font-family="'Courier New',monospace" font-size="11"
+      fill="${G.plateB}" text-anchor="middle" font-weight="bold"
+      letter-spacing="1.5">${plateBlur ? '??-???' : 'SKN-R14'}</text>` : '';
+  return `<g transform="translate(${x},${y})">
+    <!-- bed -->
+    <rect x="90" y="24" width="148" height="72" fill="${G.truckB}" rx="2"/>
+    <rect x="90" y="24" width="148" height="8" fill="${G.truckD}"/>
+    <rect x="90" y="88" width="148" height="5" fill="${G.truckD}"/>
+    <rect x="225" y="30" width="12" height="58" fill="${G.truckD}" opacity="0.6"/>
+    <!-- cab -->
+    <rect x="0" y="8" width="98" height="72" fill="url(#truckGrad)" rx="3"/>
+    <!-- windshield -->
+    <path d="M6,12 L92,12 L92,60 L6,60 Z" fill="${G.glass}" rx="2" opacity="0.9"/>
+    <path d="M8,14 L36,14 L34,34 L8,34 Z" fill="${G.glassH}" opacity="0.35"/>
+    <!-- rear cab window -->
+    <rect x="90" y="30" width="22" height="26" fill="${G.glass}" opacity="0.6" rx="1"/>
+    <!-- door seam -->
+    <line x1="70" y1="12" x2="70" y2="78" stroke="${G.truckD}" stroke-width="1" opacity="0.5"/>
+    <!-- door handle -->
+    <rect x="62" y="44" width="8" height="3" fill="${G.chromE}" rx="1"/>
+    <!-- headlight -->
+    <rect x="4" y="62" width="14" height="8" fill="#d0e0f0" rx="1" opacity="0.8"/>
+    <!-- grille -->
+    <rect x="0" y="56" width="98" height="12" fill="${G.truckD}"/>
+    <line x1="16" y1="60" x2="82" y2="60" stroke="${G.chromE}" stroke-width="1" opacity="0.5"/>
+    <!-- wheels -->
+    <ellipse cx="34"  cy="96" rx="26" ry="12" fill="${G.wheelD}"/>
+    <ellipse cx="34"  cy="96" rx="18" ry="8"  fill="${G.wheelM}"/>
+    <ellipse cx="34"  cy="96" rx="8"  ry="4"  fill="${G.hubC}"/>
+    <ellipse cx="182" cy="96" rx="26" ry="12" fill="${G.wheelD}"/>
+    <ellipse cx="182" cy="96" rx="18" ry="8"  fill="${G.wheelM}"/>
+    <ellipse cx="182" cy="96" rx="8"  ry="4"  fill="${G.hubC}"/>
+    <!-- shadow under truck -->
+    <ellipse cx="110" cy="108" rx="110" ry="8" fill="${G.shadow}" opacity="0.4"/>
+    ${p}
+  </g>`;
+}
+
+// Skinner silhouette (average male)
+function skinnerSVG(x, y, pose) {
+  if (pose === 'standing') return `<g transform="translate(${x},${y})">
+    <circle cx="0" cy="0" r="12" fill="${G.silM}"/>
+    <path d="M-14,11 Q-16,34 -13,50 Q0,55 13,50 Q16,34 14,11 Z" fill="${G.silM}"/>
+    <line x1="-14" y1="20" x2="-26" y2="36" stroke="${G.silM}" stroke-width="5" stroke-linecap="round"/>
+    <line x1="14"  y1="20" x2="20"  y2="40" stroke="${G.silM}" stroke-width="5" stroke-linecap="round"/>
+    <line x1="-7"  y1="50" x2="-9"  y2="74" stroke="${G.silM}" stroke-width="5" stroke-linecap="round"/>
+    <line x1="7"   y1="50" x2="10"  y2="74" stroke="${G.silM}" stroke-width="5" stroke-linecap="round"/>
+    <ellipse cx="0" cy="76" rx="14" ry="4" fill="${G.shadow}"/>
+  </g>`;
+  if (pose === 'carrying') return `<g transform="translate(${x},${y})">
+    <circle cx="0" cy="0" r="12" fill="${G.silM}"/>
+    <path d="M-14,11 Q-16,32 -13,48 Q0,52 13,48 Q16,32 14,11 Z" fill="${G.silM}"/>
+    <!-- arms cradling -->
+    <path d="M-14,18 Q-32,24 -30,38 Q-28,46 -14,42" fill="${G.silM}" stroke="${G.silM}" stroke-width="2"/>
+    <path d="M14,18 Q24,24 22,38 L-14,42" fill="${G.silM}"/>
+    <!-- Calypso — warm tan, big ears, unmistakable -->
+    <ellipse cx="-4" cy="28" rx="18" ry="13" fill="${G.calBody}"/>
+    <circle  cx="-7" cy="18" r="9"  fill="${G.calBody}"/>
+    <!-- Sandy big ears -->
+    <path d="M-15,13 Q-30,2  -20,25" fill="${G.calEar}" stroke="${G.calDark}" stroke-width="1"/>
+    <path d="M0,12   Q14,1   8,24"   fill="${G.calEar}" stroke="${G.calDark}" stroke-width="1"/>
+    <!-- eye glint -->
+    <circle cx="-9" cy="17" r="1.5" fill="${G.silD}" opacity="0.8"/>
+    <!-- Calypso legs dangling -->
+    <line x1="-12" y1="38" x2="-14" y2="50" stroke="${G.calDark}" stroke-width="3" stroke-linecap="round"/>
+    <line x1="-2"  y1="40" x2="-2"  y2="52" stroke="${G.calDark}" stroke-width="3" stroke-linecap="round"/>
+    <line x1="8"   y1="38" x2="10"  y2="50" stroke="${G.calDark}" stroke-width="3" stroke-linecap="round"/>
+    <!-- Skinner legs -->
+    <line x1="-7" y1="48" x2="-9" y2="72" stroke="${G.silM}" stroke-width="5" stroke-linecap="round"/>
+    <line x1="7"  y1="48" x2="10" y2="70" stroke="${G.silM}" stroke-width="5" stroke-linecap="round"/>
+    <ellipse cx="0" cy="74" rx="14" ry="4" fill="${G.shadow}"/>
+  </g>`;
+  return '';
+}
+
+// Teena silhouette (slight feminine build)
+function teenaSVG(x, y, pose) {
+  if (pose === 'walking') return `<g transform="translate(${x},${y})">
+    <!-- legs walking -->
+    <line x1="-4" y1="38" x2="-8"  y2="58" stroke="${G.teeM}" stroke-width="4" stroke-linecap="round"/>
+    <line x1="4"  y1="38" x2="2"   y2="60" stroke="${G.teeM}" stroke-width="4" stroke-linecap="round"/>
+    <!-- body — slight feminine shape -->
+    <path d="M-11,10 Q-13,26 -11,38 Q0,42 11,38 Q13,26 11,10 Z" fill="${G.teeM}"/>
+    <!-- head -->
+    <circle cx="0" cy="3" r="9" fill="${G.teeM}"/>
+    <!-- arm with leash -->
+    <line x1="-11" y1="20" x2="-28" y2="32" stroke="${G.teeM}" stroke-width="3.5" stroke-linecap="round"/>
+    <!-- leash -->
+    <path d="M-28,32 Q-38,38 -42,44" stroke="${G.leashC}" stroke-width="2" fill="none"/>
+    <ellipse cx="0" cy="62" rx="12" ry="3.5" fill="${G.shadowL}"/>
+  </g>`;
+  if (pose === 'hands-face') return `<g transform="translate(${x},${y})">
+    <circle cx="0" cy="0" r="9" fill="${G.teeM}"/>
+    <path d="M-10,9 Q-12,26 -10,40 Q0,44 10,40 Q12,26 10,9 Z" fill="${G.teeM}"/>
+    <!-- both arms raised to face — the moment of realisation -->
+    <line x1="-10" y1="17" x2="-20" y2="2"  stroke="${G.teeM}" stroke-width="4" stroke-linecap="round"/>
+    <line x1="10"  y1="17" x2="20"  y2="2"  stroke="${G.teeM}" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="-20" cy="0" r="5" fill="${G.teeM}"/>
+    <circle cx="20"  cy="0" r="5" fill="${G.teeM}"/>
+    <!-- still legs -->
+    <line x1="-4" y1="40" x2="-5" y2="64" stroke="${G.teeM}" stroke-width="4" stroke-linecap="round"/>
+    <line x1="4"  y1="40" x2="6"  y2="64" stroke="${G.teeM}" stroke-width="4" stroke-linecap="round"/>
+    <ellipse cx="0" cy="66" rx="11" ry="3" fill="${G.shadowL}"/>
+  </g>`;
+  return '';
+}
+
+// Calypso on leash
+function calypsoDogSVG(x, y) {
+  return `<g transform="translate(${x},${y})">
+    <!-- body -->
+    <ellipse cx="0" cy="0" rx="13" ry="8" fill="${G.calBody}"/>
+    <!-- head -->
+    <circle cx="-8" cy="-6" r="7" fill="${G.calBody}"/>
+    <!-- big sandy ears — the signature detail -->
+    <path d="M-13,-8 Q-24,-18 -16,2" fill="${G.calEar}" stroke="${G.calDark}" stroke-width="1"/>
+    <path d="M-3,-9  Q6,-20  2,2"    fill="${G.calEar}" stroke="${G.calDark}" stroke-width="1"/>
+    <!-- eye -->
+    <circle cx="-9" cy="-7" r="1.5" fill="${G.silD}"/>
+    <!-- nose -->
+    <ellipse cx="-14" cy="-4" rx="2" ry="1.5" fill="${G.calDark}"/>
+    <!-- tail up -->
+    <path d="M12,-2 Q22,-16 18,-5" stroke="${G.calEar}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <!-- legs -->
+    <line x1="-7" y1="7"  x2="-9"  y2="20" stroke="${G.calDark}" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="0"  y1="7"  x2="-1"  y2="20" stroke="${G.calDark}" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="7"  y1="6"  x2="8"   y2="20" stroke="${G.calDark}" stroke-width="2.5" stroke-linecap="round"/>
+    <ellipse cx="0" cy="21" rx="12" ry="3" fill="${G.shadowL}"/>
+  </g>`;
+}
+
+// ── FIVE FRAMES ──
 
 function buildSVGEmpty() {
   return `
-    ${SKY_BG}${TREELINE}${DRIVEWAY}${GROUND}${CABIN_L}
-    <rect x="0" y="196" width="400" height="2" fill="${G.light}" opacity="0.3"/>`;
+    ${SKY_BG}
+    <!-- Overcast empty afternoon -->
+    <ellipse cx="200" cy="0" rx="200" ry="80" fill="rgba(255,240,200,0.03)"/>
+    ${TREELINE}
+    ${DRIVEWAY}
+    ${GROUND}
+    ${CABIN_L}
+    <!-- timestamp area shadow -->
+    <rect x="0" y="0" width="400" height="32" fill="rgba(0,0,0,0.35)"/>`;
 }
 
 function buildSVGFrame1() {
+  // 2:00 PM — Teena leaves with Calypso
   return `
     ${SKY_BG}
-    <ellipse cx="360" cy="30" rx="90" ry="60" fill="rgba(80,160,80,0.06)"/>
-    ${TREELINE}${DRIVEWAY}${GROUND}${CABIN_L}
-    <g transform="translate(72,138)">
-      <line x1="-4" y1="36" x2="-9" y2="57" stroke="${G.sil}" stroke-width="3.5" stroke-linecap="round"/>
-      <line x1="4"  y1="36" x2="3"  y2="58" stroke="${G.sil}" stroke-width="3.5" stroke-linecap="round"/>
-      <path d="M-10,10 Q-12,24 -10,36 Q0,40 10,36 Q12,24 10,10 Z" fill="${G.sil}"/>
-      <circle cx="0" cy="3" r="8" fill="${G.sil}"/>
-      <line x1="-10" y1="18" x2="-26" y2="28" stroke="${G.sil}" stroke-width="3" stroke-linecap="round"/>
-      <path d="M-26,28 Q-36,34 -38,40" stroke="${G.leash}" stroke-width="1.8" fill="none"/>
-    </g>
-    <g transform="translate(108,172)">
-      <ellipse cx="0" cy="0" rx="11" ry="7" fill="${G.sil}"/>
-      <circle cx="-7" cy="-5" r="6" fill="${G.sil}"/>
-      <path d="M-11,-6 Q-20,-14 -13,2" fill="${G.sil}"/>
-      <path d="M-4,-7  Q2,-16  0,1"   fill="${G.sil}"/>
-      <line x1="-6" y1="6"  x2="-8"  y2="18" stroke="${G.sil}" stroke-width="2.5" stroke-linecap="round"/>
-      <line x1="0"  y1="6"  x2="-1"  y2="18" stroke="${G.sil}" stroke-width="2.5" stroke-linecap="round"/>
-      <line x1="5"  y1="5"  x2="6"   y2="18" stroke="${G.sil}" stroke-width="2.5" stroke-linecap="round"/>
-      <path d="M10,-2 Q18,-12 16,-4" stroke="${G.sil}" stroke-width="2" fill="none" stroke-linecap="round"/>
-    </g>
-    <ellipse cx="72"  cy="196" rx="14" ry="3" fill="rgba(0,0,0,0.4)"/>
-    <ellipse cx="112" cy="196" rx="10" ry="2.5" fill="rgba(0,0,0,0.3)"/>
-    <rect x="0" y="196" width="400" height="2" fill="${G.light}" opacity="0.3"/>`;
+    <!-- afternoon sun -->
+    <ellipse cx="340" cy="20" rx="100" ry="70" fill="rgba(255,220,140,0.05)"/>
+    ${TREELINE}
+    ${DRIVEWAY}
+    ${GROUND}
+    ${CABIN_L}
+    ${teenaSVG(78, 140, 'walking')}
+    ${calypsoDogSVG(115, 175)}
+    <rect x="0" y="0" width="400" height="32" fill="rgba(0,0,0,0.35)"/>`;
 }
 
 function buildSVGFrame2() {
+  // 2:08 PM — Truck nosing in, plate invisible
   return `
-    ${SKY_BG}${TREELINE}${DRIVEWAY}${GROUND}${CABIN_L}
-    <g transform="translate(258,130)">
-      <rect x="0" y="20" width="145" height="68" fill="${G.truck}" rx="3"/>
-      <rect x="0" y="0" width="95" height="65" fill="${G.truckD}" rx="3"/>
-      <path d="M5,5 L90,5 L90,55 L5,55 Z" fill="${G.mid}" opacity="0.7"/>
-      <path d="M8,8 L30,8 L28,25 L8,25 Z" fill="${G.window}" opacity="0.3"/>
-      <rect x="0" y="48" width="95" height="8" fill="${G.truckD}"/>
-      <rect x="5" y="52" width="16" height="8" fill="${G.window}" opacity="0.5" rx="1"/>
-      <ellipse cx="30" cy="22" rx="10" ry="12" fill="${G.sil}" opacity="0.45"/>
+    ${SKY_BG}
+    ${TREELINE}
+    ${DRIVEWAY}
+    ${GROUND}
+    ${CABIN_L}
+    <!-- Truck corner entering right — only front visible -->
+    <g transform="translate(262,124)">
+      <rect x="0" y="22" width="140" height="72" fill="${G.truckB}" rx="2"/>
+      <rect x="0" y="8" width="98" height="72" fill="url(#truckGrad)" rx="3"/>
+      <path d="M6,12 L92,12 L92,60 L6,60 Z" fill="${G.glass}" opacity="0.9"/>
+      <path d="M8,14 L36,14 L34,34 L8,34 Z" fill="${G.glassH}" opacity="0.35"/>
+      <rect x="0" y="56" width="98" height="12" fill="${G.truckD}"/>
+      <rect x="4" y="62" width="14" height="8" fill="#d0e0f0" rx="1" opacity="0.8"/>
+      <!-- driver barely visible -->
+      <ellipse cx="28" cy="26" rx="11" ry="13" fill="${G.silD}" opacity="0.4"/>
+      <!-- front wheel -->
+      <ellipse cx="34" cy="96" rx="26" ry="12" fill="${G.wheelD}"/>
+      <ellipse cx="34" cy="96" rx="18" ry="8"  fill="${G.wheelM}"/>
+      <ellipse cx="34" cy="96" rx="8"  ry="4"  fill="${G.hubC}"/>
+      <ellipse cx="80" cy="108" rx="60" ry="6" fill="${G.shadow}" opacity="0.35"/>
     </g>
-    <ellipse cx="278" cy="198" rx="20" ry="9" fill="${G.wheel}"/>
-    <ellipse cx="278" cy="198" rx="10" ry="5" fill="${G.dark}"/>
-    <rect x="0" y="196" width="400" height="2" fill="${G.light}" opacity="0.3"/>`;
+    <rect x="0" y="0" width="400" height="32" fill="rgba(0,0,0,0.35)"/>`;
 }
 
 function buildSVGFrame3() {
+  // 2:17 PM — Truck parked, Skinner standing looking at cabin
   return `
-    ${SKY_BG}${TREELINE}${DRIVEWAY}${GROUND}${CABIN_L}
-    <g transform="translate(170,120)">
-      <rect x="88" y="22" width="140" height="70" fill="${G.truck}" rx="2"/>
-      <rect x="88" y="22" width="140" height="6" fill="${G.truckD}"/>
-      <rect x="88" y="82" width="140" height="4" fill="${G.truckD}"/>
-      <rect x="0" y="6" width="96" height="68" fill="${G.truckD}" rx="3"/>
-      <path d="M5,10 L91,10 L91,56 L5,56 Z" fill="${G.mid}" opacity="0.65"/>
-      <path d="M8,12 L35,12 L33,30 L8,30 Z" fill="${G.window}" opacity="0.25"/>
-      <rect x="88" y="28" width="20" height="24" fill="${G.mid}" opacity="0.5" rx="1"/>
-      <ellipse cx="32"  cy="92" rx="24" ry="11" fill="${G.wheel}"/>
-      <ellipse cx="32"  cy="92" rx="13" ry="6"  fill="${G.dark}"/>
-      <ellipse cx="176" cy="92" rx="24" ry="11" fill="${G.wheel}"/>
-      <ellipse cx="176" cy="92" rx="13" ry="6"  fill="${G.dark}"/>
-      <rect x="162" y="68" width="32" height="14" fill="${G.mid}" rx="1" opacity="0.6"/>
-      <text x="178" y="78" font-family="Courier New,monospace" font-size="5" fill="${G.light}" text-anchor="middle" opacity="0.4">SKN-R14</text>
-    </g>
-    <g transform="translate(160,112)">
-      <circle cx="0" cy="0" r="11" fill="${G.sil}"/>
-      <path d="M-12,10 Q-14,30 -11,46 Q0,50 11,46 Q14,30 12,10 Z" fill="${G.sil}"/>
-      <line x1="-12" y1="18" x2="-24" y2="28" stroke="${G.sil}" stroke-width="4.5" stroke-linecap="round"/>
-      <line x1="-24"  y1="28" x2="-20" y2="20" stroke="${G.sil}" stroke-width="3.5" stroke-linecap="round"/>
-      <line x1="12"  y1="18" x2="18"  y2="36" stroke="${G.sil}" stroke-width="4.5" stroke-linecap="round"/>
-      <line x1="-6"  y1="46" x2="-8"  y2="68" stroke="${G.sil}" stroke-width="4.5" stroke-linecap="round"/>
-      <line x1="6"   y1="46" x2="9"   y2="68" stroke="${G.sil}" stroke-width="4.5" stroke-linecap="round"/>
-    </g>
-    <ellipse cx="160" cy="197" rx="16" ry="4" fill="rgba(0,0,0,0.45)"/>
-    <rect x="0" y="196" width="400" height="2" fill="${G.light}" opacity="0.3"/>`;
+    ${SKY_BG}
+    ${TREELINE}
+    ${DRIVEWAY}
+    ${GROUND}
+    ${CABIN_L}
+    ${truckSVG(162, 112, true, true)}
+    ${skinnerSVG(152, 108, 'standing')}
+    <rect x="0" y="0" width="400" height="32" fill="rgba(0,0,0,0.35)"/>`;
 }
 
 function buildSVGFrame4() {
+  // 2:31 PM KEY FRAME — carrying Calypso, plate fully readable
   return `
-    ${SKY_BG}${TREELINE}${DRIVEWAY}${GROUND}${CABIN_L}
-    <g transform="translate(168,120)">
-      <rect x="88" y="22" width="142" height="70" fill="${G.truck}" rx="2"/>
-      <rect x="88" y="22" width="142" height="6" fill="${G.truckD}"/>
-      <rect x="88" y="86" width="142" height="4" fill="${G.truckD}"/>
-      <rect x="0" y="6" width="96" height="68" fill="${G.truckD}" rx="3"/>
-      <path d="M5,10 L91,10 L91,56 L5,56 Z" fill="${G.mid}" opacity="0.65"/>
-      <path d="M8,12 L35,12 L33,30 L8,30 Z" fill="${G.window}" opacity="0.25"/>
-      <rect x="88" y="28" width="20" height="24" fill="${G.mid}" opacity="0.5" rx="1"/>
-      <ellipse cx="32"  cy="92" rx="24" ry="11" fill="${G.wheel}"/>
-      <ellipse cx="32"  cy="92" rx="13" ry="6"  fill="${G.dark}"/>
-      <ellipse cx="176" cy="92" rx="24" ry="11" fill="${G.wheel}"/>
-      <ellipse cx="176" cy="92" rx="13" ry="6"  fill="${G.dark}"/>
-      <rect x="158" y="66" width="58" height="22" fill="${G.plate}" rx="2" stroke="${G.bright}" stroke-width="1.5"/>
-      <rect x="160" y="68" width="54" height="18" fill="${G.plateBg}" rx="1"/>
-      <text x="187" y="80" font-family="Courier New,monospace" font-size="10" fill="${G.plateT}" text-anchor="middle" font-weight="bold" letter-spacing="1">SKN-R14</text>
-    </g>
-    <g transform="translate(155,105)">
-      <circle cx="0" cy="0" r="11" fill="${G.sil}"/>
-      <path d="M-13,10 Q-15,28 -12,44 Q0,48 12,44 Q15,28 13,10 Z" fill="${G.sil}"/>
-      <path d="M-13,16 Q-30,20 -28,34 Q-26,40 -14,38" fill="${G.sil}"/>
-      <path d="M13,16 Q22,20 20,34 L-14,38" fill="${G.sil}"/>
-      <ellipse cx="-3" cy="26" rx="16" ry="11" fill="${G.silDark}" opacity="0.9"/>
-      <circle cx="-6" cy="18" r="8" fill="${G.silDark}"/>
-      <path d="M-13,14 Q-26,4  -18,22" fill="${G.sil}" stroke="${G.bright}" stroke-width="0.8"/>
-      <path d="M1,13  Q12,3   6,22"    fill="${G.sil}" stroke="${G.bright}" stroke-width="0.8"/>
-      <line x1="-6"  y1="44" x2="-9"  y2="66" stroke="${G.sil}" stroke-width="4.5" stroke-linecap="round"/>
-      <line x1="6"   y1="44" x2="10"  y2="64" stroke="${G.sil}" stroke-width="4.5" stroke-linecap="round"/>
-    </g>
-    <ellipse cx="155" cy="197" rx="16" ry="4" fill="rgba(0,0,0,0.5)"/>
-    <ellipse cx="340" cy="170" rx="50" ry="30" fill="${G.glow}"/>
-    <rect x="0" y="196" width="400" height="2" fill="${G.bright}" opacity="0.5"/>`;
+    ${SKY_BG}
+    ${TREELINE}
+    ${DRIVEWAY}
+    ${GROUND}
+    ${CABIN_L}
+    ${truckSVG(162, 112, true, false)}
+    ${skinnerSVG(146, 102, 'carrying')}
+    <!-- warm highlight around key subject -->
+    <ellipse cx="148" cy="155" rx="55" ry="40" fill="rgba(255,200,100,0.05)"/>
+    <rect x="0" y="0" width="400" height="32" fill="rgba(0,0,0,0.35)"/>`;
 }
 
 function buildSVGFrame5() {
+  // 2:45 PM — Empty driveway, Teena returns, realises
   return `
     ${SKY_BG}
-    <rect x="0" y="0" width="400" height="200" fill="rgba(0,0,0,0.1)"/>
-    ${TREELINE}${DRIVEWAY}${GROUND}${CABIN_L}
-    <g transform="translate(158,122)">
-      <circle cx="0" cy="0" r="9" fill="${G.sil}"/>
-      <path d="M-10,9 Q-12,26 -9,40 Q0,44 9,40 Q12,26 10,9 Z" fill="${G.sil}"/>
-      <line x1="-10" y1="16" x2="-18" y2="2"  stroke="${G.sil}" stroke-width="4.5" stroke-linecap="round"/>
-      <line x1="10"  y1="16" x2="18"  y2="2"  stroke="${G.sil}" stroke-width="4.5" stroke-linecap="round"/>
-      <circle cx="-18" cy="0" r="5" fill="${G.sil}"/>
-      <circle cx="18"  cy="0" r="5" fill="${G.sil}"/>
-      <line x1="-4"  y1="40" x2="-5" y2="62" stroke="${G.sil}" stroke-width="4.5" stroke-linecap="round"/>
-      <line x1="4"   y1="40" x2="6"  y2="62" stroke="${G.sil}" stroke-width="4.5" stroke-linecap="round"/>
-    </g>
-    <ellipse cx="158" cy="197" rx="12" ry="3" fill="rgba(0,0,0,0.35)"/>
-    <rect x="0" y="196" width="400" height="2" fill="${G.light}" opacity="0.3"/>`;
+    <!-- Slightly darker — mood -->
+    <rect x="0" y="0" width="400" height="300" fill="rgba(0,0,20,0.12)"/>
+    ${TREELINE}
+    ${DRIVEWAY}
+    ${GROUND}
+    ${CABIN_L}
+    <!-- No truck. No dog. -->
+    ${teenaSVG(162, 118, 'hands-face')}
+    <!-- Emptiness emphasis — wide open driveway -->
+    <rect x="0" y="0" width="400" height="32" fill="rgba(0,0,0,0.35)"/>`;
 }
 
 function renderCamFrame(state) {
@@ -4102,18 +4250,8 @@ function renderCamFrame(state) {
     frame5: buildSVGFrame5(),
   }[frame] || buildSVGEmpty();
 
-  // Add green tint filter and noise to SVG
-  svg.innerHTML = `
-    <defs>
-      <filter id="cam-filter" color-interpolation-filters="sRGB">
-        <feColorMatrix type="matrix" values="
-          0.15 0.5  0.1  0 0.02
-          0.15 0.75 0.1  0 0.04
-          0.1  0.3  0.15 0 0.01
-          0    0    0    1 0"/>
-      </filter>
-    </defs>
-    <g filter="url(#cam-filter)">${svgContent}</g>`;
+  // No color filter — render SVG directly
+  svg.innerHTML = svgContent;
 
   // Timestamp
   const mm  = String(state.month).padStart(2,'0');
